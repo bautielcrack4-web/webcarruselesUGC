@@ -248,13 +248,13 @@ export default function StudioPage() {
                         </div>
                         <div className={styles.selectorGroup}>
                             <label>Edad aparente</label>
-                            <select value={age} onChange={(e) => setAge(e.target.value)}>
+                            <select className={styles.selectBox} value={age} onChange={(e) => setAge(e.target.value)}>
                                 {AVATAR_AGES.map(opt => <option key={opt}>{opt}</option>)}
                             </select>
                         </div>
                         <div className={styles.selectorGroup}>
                             <label>Estilo</label>
-                            <select value={avatarStyle} onChange={(e) => setAvatarStyle(e.target.value)}>
+                            <select className={styles.selectBox} value={avatarStyle} onChange={(e) => setAvatarStyle(e.target.value)}>
                                 {AVATAR_STYLES.map(opt => <option key={opt}>{opt}</option>)}
                             </select>
                         </div>
@@ -276,19 +276,19 @@ export default function StudioPage() {
                     <div className={styles.blockContent}>
                         <div className={styles.selectorGroup}>
                             <label>Escena</label>
-                            <select value={location} onChange={(e) => setLocation(e.target.value)}>
+                            <select className={styles.selectBox} value={location} onChange={(e) => setLocation(e.target.value)}>
                                 {SCENE_LOCATIONS.map(opt => <option key={opt}>{opt}</option>)}
                             </select>
                         </div>
                         <div className={styles.selectorGroup}>
                             <label>Tipo de toma</label>
-                            <select value={shotType} onChange={(e) => setShotType(e.target.value)}>
+                            <select className={styles.selectBox} value={shotType} onChange={(e) => setShotType(e.target.value)}>
                                 {SHOT_TYPES.map(opt => <option key={opt}>{opt}</option>)}
                             </select>
                         </div>
                         <div className={styles.selectorGroup}>
                             <label>Estilo de video</label>
-                            <select value={videoStyle} onChange={(e) => setVideoStyle(e.target.value)}>
+                            <select className={styles.selectBox} value={videoStyle} onChange={(e) => setVideoStyle(e.target.value)}>
                                 {VIDEO_STYLES.map(opt => <option key={opt}>{opt}</option>)}
                             </select>
                         </div>
