@@ -168,6 +168,21 @@ export default function StudioPage() {
         </div>
     );
 
+    // UI Helper: Pill Selector (Chips)
+    const PillSelector = ({ options, value, onChange }: any) => (
+        <div className={styles.pillContainer}>
+            {options.map((opt: string) => (
+                <button
+                    key={opt}
+                    className={`${styles.pillButton} ${value === opt ? styles.pillActive : ''}`}
+                    onClick={() => onChange(opt)}
+                >
+                    {opt}
+                </button>
+            ))}
+        </div>
+    );
+
     return (
         <div className={styles.studioContainer}>
             <div className={styles.previewSection}>
@@ -262,33 +277,21 @@ export default function StudioPage() {
                             <div className={styles.iosGroup}>
                                 <div className={styles.iosItem}>
                                     <div className={styles.iosHeader}><User size={14} /><span className={styles.iosTitle}>Personalizar Avatar</span></div>
-                                    <div className={styles.grid2}>
-                                        <div className={styles.selectorGroup}>
-                                            <label>Género</label>
-                                            <select className={styles.selectBox} value={gender} onChange={(e) => setGender(e.target.value)}>
-                                                {AVATAR_GENDERS.map(o => <option key={o}>{o}</option>)}
-                                            </select>
-                                        </div>
-                                        <div className={styles.selectorGroup}>
-                                            <label>Edad</label>
-                                            <select className={styles.selectBox} value={age} onChange={(e) => setAge(e.target.value)}>
-                                                {AVATAR_AGES.map(o => <option key={o}>{o}</option>)}
-                                            </select>
-                                        </div>
+                                    <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Género</label>
+                                        <PillSelector options={AVATAR_GENDERS} value={gender} onChange={setGender} />
                                     </div>
-                                    <div className={styles.grid2}>
-                                        <div className={styles.selectorGroup}>
-                                            <label>Mood</label>
-                                            <select className={styles.selectBox} value={mood} onChange={(e) => setMood(e.target.value)}>
-                                                {AVATAR_MOODS.map(o => <option key={o}>{o}</option>)}
-                                            </select>
-                                        </div>
-                                        <div className={styles.selectorGroup}>
-                                            <label>Ropa</label>
-                                            <select className={styles.selectBox} value={clothing} onChange={(e) => setClothing(e.target.value)}>
-                                                {AVATAR_CLOTHING.map(o => <option key={o}>{o}</option>)}
-                                            </select>
-                                        </div>
+                                    <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Edad</label>
+                                        <PillSelector options={AVATAR_AGES} value={age} onChange={setAge} />
+                                    </div>
+                                    <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Mood / Actitud</label>
+                                        <PillSelector options={AVATAR_MOODS} value={mood} onChange={setMood} />
+                                    </div>
+                                    <div className={styles.iosItem} style={{ borderBottom: 'none', padding: '10px 0' }}>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Ropa</label>
+                                        <PillSelector options={AVATAR_CLOTHING} value={clothing} onChange={setClothing} />
                                     </div>
                                 </div>
                             </div>
@@ -296,33 +299,21 @@ export default function StudioPage() {
                             <div className={styles.iosGroup}>
                                 <div className={styles.iosItem}>
                                     <div className={styles.iosHeader}><Camera size={14} /><span className={styles.iosTitle}>Escena & Cámara</span></div>
-                                    <div className={styles.grid2}>
-                                        <div className={styles.selectorGroup}>
-                                            <label>Iluminación</label>
-                                            <select className={styles.selectBox} value={lighting} onChange={(e) => setLighting(e.target.value)}>
-                                                {LIGHTING_STYLES.map(o => <option key={o}>{o}</option>)}
-                                            </select>
-                                        </div>
-                                        <div className={styles.selectorGroup}>
-                                            <label>Entorno</label>
-                                            <select className={styles.selectBox} value={location} onChange={(e) => setLocation(e.target.value)}>
-                                                {SCENE_LOCATIONS.map(o => <option key={o}>{o}</option>)}
-                                            </select>
-                                        </div>
+                                    <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Iluminación</label>
+                                        <PillSelector options={LIGHTING_STYLES} value={lighting} onChange={setLighting} />
                                     </div>
-                                    <div className={styles.grid2}>
-                                        <div className={styles.selectorGroup}>
-                                            <label>Toma</label>
-                                            <select className={styles.selectBox} value={shotType} onChange={(e) => setShotType(e.target.value)}>
-                                                {SHOT_TYPES.map(o => <option key={o}>{o}</option>)}
-                                            </select>
-                                        </div>
-                                        <div className={styles.selectorGroup}>
-                                            <label>Estilo</label>
-                                            <select className={styles.selectBox} value={pace} onChange={(e) => setPace(e.target.value)}>
-                                                {EDITING_PACE.map(o => <option key={o}>{o}</option>)}
-                                            </select>
-                                        </div>
+                                    <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Entorno</label>
+                                        <PillSelector options={SCENE_LOCATIONS} value={location} onChange={setLocation} />
+                                    </div>
+                                    <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Toma</label>
+                                        <PillSelector options={SHOT_TYPES} value={shotType} onChange={setShotType} />
+                                    </div>
+                                    <div className={styles.iosItem} style={{ borderBottom: 'none', padding: '10px 0' }}>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Ritmo de Edición</label>
+                                        <PillSelector options={EDITING_PACE} value={pace} onChange={setPace} />
                                     </div>
                                 </div>
                             </div>
