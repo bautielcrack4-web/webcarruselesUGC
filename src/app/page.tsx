@@ -1,25 +1,36 @@
 'use client';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import styles from "./page.module.css";
-import { Button } from "@/components/ui/Button/Button";
-import { GlassCard } from "@/components/ui/GlassCard/GlassCard";
-import { supabase } from "@/lib/supabase";
+import React from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { ArrowRight, Play, CheckCircle2, Zap, Layout, Smartphone } from 'lucide-react';
+import styles from './page.module.css';
+import { Button } from '@/components/ui/Button/Button';
+import { GlassCard } from '@/components/ui/GlassCard/GlassCard';
+
+/* Animation Variants */
+const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }
+  })
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
 
 export default function Home() {
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
-    };
-    checkUser();
-  }, []);
-
   return (
     <main className={styles.main}>
+      <div className="nebula-bg" />
+
       {/* Navigation */}
       <nav className={styles.nav}>
         <div className={styles.container}>
@@ -28,22 +39,16 @@ export default function Home() {
               UGC<span className="text-gradient">Creator</span>
             </Link>
             <div className={styles.navLinks}>
-              <a href="#features">Características</a>
-              <a href="#pricing">Precios</a>
-              {user ? (
-                <Link href="/dashboard">
-                  <Button variant="glass" size="sm">Dashboard</Button>
+              <a href="#features">Features</a>
+              <a href="#pricing">Pricing</a>
+              <div className={styles.authActions}>
+                <Link href="/login">
+                  <Button variant="minimal" size="sm">Log in</Button>
                 </Link>
-              ) : (
-                <>
-                  <Link href="/login">
-                    <Button variant="glass" size="sm">Iniciar sesión</Button>
-                  </Link>
-                  <Link href="/signup">
-                    <Button size="sm">Empieza ya</Button>
-                  </Link>
-                </>
-              )}
+                <Link href="/signup">
+                  <Button size="sm">Get Started</Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -52,108 +57,123 @@ export default function Home() {
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.container}>
-          <div className={styles.heroBadge}>
-            <span className={styles.badgeText}>La IA que revoluciona los anuncios</span>
-          </div>
-          <h1 className={styles.title}>
-            Escala tus Ventas con <br />
-            <span className="text-gradient">Videos UGC que Convierten</span>
-          </h1>
-          <p className={styles.subtitle}>
-            Genera contenido auténtico, persuasivo y visualmente impactante en minutos. Diseñado para marcas que no se conforman con lo ordinario.
-          </p>
-          <div className={styles.heroActions}>
-            <Link href="/signup">
-              <Button size="lg">Probar AtlasCloud IA Gratis</Button>
-            </Link>
-            <Button variant="secondary" size="lg">Ver ejemplos</Button>
-          </div>
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            custom={0}
+            variants={fadeIn}
+            className={styles.heroBadge}
+          >
+            <Zap size={14} className={styles.badgeIcon} />
+            <span>Powering the next generation of ads</span>
+          </motion.div>
 
-          <div className={styles.previewContainer}>
+          <motion.h1
+            initial="hidden"
+            animate="visible"
+            custom={1}
+            variants={fadeIn}
+            className={styles.title}
+          >
+            Create High-Converting <br />
+            <span className="text-gradient">UGC Ads with AI</span>
+          </motion.h1>
+
+          <motion.p
+            initial="hidden"
+            animate="visible"
+            custom={2}
+            variants={fadeIn}
+            className={styles.subtitle}
+          >
+            Generate authentic, persuasive content in seconds.
+            Designed for brands that value professional results over noise.
+          </motion.p>
+
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            custom={3}
+            variants={fadeIn}
+            className={styles.heroActions}
+          >
+            <Link href="/signup">
+              <Button size="lg">Try it for Free <ArrowRight size={18} /></Button>
+            </Link>
+            <Button variant="secondary" size="lg">Watch Demo</Button>
+          </motion.div>
+
+          {/* Visual Piece */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 1.2, ease: "easeOut" }}
+            className={styles.previewContainer}
+          >
             <GlassCard className={styles.previewCard}>
-              <div className={styles.editorMockup}>
-                <div className={styles.mockupHeader}>
-                  <div className={styles.dots}><span /><span /><span /></div>
-                  <div className={styles.url}>ugc-creator.ai/editor</div>
+              <div className={styles.mockupHeader}>
+                <div className={styles.dots}><span /><span /><span /></div>
+                <div className={styles.url}>ugc-creator.ai/studio</div>
+              </div>
+              <div className={styles.mockupBody}>
+                <div className={styles.mockupSidebar}>
+                  {[1, 2, 3].map(i => <div key={i} className={styles.mockupItem} />)}
                 </div>
-                <div className={styles.mockupContent}>
-                  <div className={styles.sidebar}>
-                    {[1, 2, 3, 4].map(i => <div key={i} className={styles.item} />)}
-                  </div>
-                  <div className={styles.stage}>
-                    <div className={styles.videoPlayer}>
-                      <div className={styles.playBtn} />
-                    </div>
+                <div className={styles.mockupStage}>
+                  <div className={styles.videoWindow}>
+                    <Play size={32} fill="white" color="white" />
                   </div>
                 </div>
               </div>
             </GlassCard>
-          </div>
+            <div className={styles.previewGlow} />
+          </motion.div>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features */}
       <section id="features" className={styles.features}>
         <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Todo lo que necesitas para <span className="text-gradient">volverte viral</span></h2>
-          </div>
-          <div className={styles.featureGrid}>
-            <GlassCard className={styles.featureCard}>
-              <h3>AtlasCloud IA</h3>
-              <p>Generación de video y audio ultra-realista que no parece IA.</p>
-            </GlassCard>
-            <GlassCard className={styles.featureCard}>
-              <h3>Editor Intuitivo</h3>
-              <p>Arrastra y suelta para crear variaciones infinitas de tus anuncios.</p>
-            </GlassCard>
-            <GlassCard className={styles.featureCard}>
-              <h3>Optimizado para TikTok</h3>
-              <p>Formatos 9:16 diseñados específicamente para el algoritmo actual.</p>
-            </GlassCard>
-          </div>
-        </div>
-      </section>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeIn}
+            custom={0}
+            className={styles.centerHeader}
+          >
+            <h2 className={styles.sectionTitle}>Built for <span className="text-gradient">performance</span></h2>
+          </motion.div>
 
-      {/* Pricing Section */}
-      <section id="pricing" className={styles.pricing}>
-        <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Planes que <span className="text-gradient">crecen contigo</span></h2>
-          </div>
-          <div className={styles.priceGrid}>
-            <GlassCard className={styles.priceCard}>
-              <div className={styles.planName}>Gratis</div>
-              <div className={styles.price}>$0<span>/mes</span></div>
-              <ul className={styles.planFeatures}>
-                <li>1 Proyecto activo</li>
-                <li>Créditos limitados</li>
-                <li>Watermark</li>
-              </ul>
-              <Link href="/signup">
-                <Button variant="secondary" className={styles.planBtn}>Empezar ahora</Button>
-              </Link>
-            </GlassCard>
-            <GlassCard className={`${styles.priceCard} ${styles.featured}`}>
-              <div className={styles.planName}>Pro 🚀</div>
-              <div className={styles.price}>$29<span>/mes</span></div>
-              <ul className={styles.planFeatures}>
-                <li>Proyectos ilimitados</li>
-                <li>Sin Watermark</li>
-                <li>Soporte 24/7</li>
-              </ul>
-              <Link href="/signup">
-                <Button className={styles.planBtn}>Sliar al Pro</Button>
-              </Link>
-            </GlassCard>
-          </div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className={styles.featureGrid}
+          >
+            {[
+              { icon: <Zap />, title: "Instant Generation", desc: "Craft entire ad scripts and videos in seconds using AtlasCloud AI." },
+              { icon: <Layout />, title: "Pro Workflow", desc: "A clean, distraction-free environment to manage all your UGC projects." },
+              { icon: <Smartphone />, title: "Mobile Ready", desc: "Optimized 9:16 formats for TikTok, Meta and YouTube Shorts." }
+            ].map((f, i) => (
+              <GlassCard key={i} className={styles.featureCard}>
+                <div className={styles.featureIcon}>{f.icon}</div>
+                <h3>{f.title}</h3>
+                <p>{f.desc}</p>
+              </GlassCard>
+            ))}
+          </motion.div>
         </div>
       </section>
 
       {/* Footer */}
       <footer className={styles.footer}>
         <div className={styles.container}>
-          <p>© 2024 UGC Creator. Todos los derechos reservados.</p>
+          <div className={styles.footerContent}>
+            <div className={styles.logo}>UGC<span className="text-gradient">Creator</span></div>
+            <p>© 2024 Nebula Pro Design. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </main>

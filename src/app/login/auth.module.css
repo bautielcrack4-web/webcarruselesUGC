@@ -1,67 +1,105 @@
 .container {
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 40px 20px;
-    background: radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+}
+
+.backBtn {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--fg-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.backBtn:hover {
+    color: white;
 }
 
 .authCard {
     width: 100%;
-    max-width: 400px;
-    padding: 40px !important;
-    background: rgba(10, 10, 10, 0.2) !important;
+    max-width: 420px;
+    background: rgba(10, 10, 10, 0.4) !important;
     border: 1px solid rgba(255, 255, 255, 0.04) !important;
-    border-radius: 24px !important;
-    box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.6) !important;
+    padding: 48px !important;
+    border-radius: 28px !important;
+    box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.8) !important;
 }
 
 .header {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 40px;
 }
 
 .title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: white;
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #fff;
+    letter-spacing: -0.03em;
 }
 
 .subtitle {
     color: var(--fg-muted);
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.95rem;
+    line-height: 1.6;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 24px;
 }
 
 .inputGroup {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+}
+
+.labelRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .inputGroup label {
-    font-size: 0.8rem;
-    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
     color: var(--fg-dim);
-    padding-left: 2px;
+}
+
+.forgotLink {
+    font-size: 0.8rem;
+    color: var(--fg-dim);
+    text-decoration: none;
+}
+
+.forgotLink:hover {
+    color: white;
 }
 
 .inputGroup input {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 12px 14px;
+    padding: 14px 16px;
     border-radius: 12px;
     color: white;
     font-size: 0.95rem;
-    transition: all 0.2s ease;
+    transition: all 0.2s;
+    width: 100%;
 }
 
 .inputGroup input:focus {
@@ -71,42 +109,52 @@
 
 .submitBtn {
     width: 100%;
-    margin-top: 8px;
-    font-weight: 700;
+    margin-top: 12px;
+    font-size: 1rem;
 }
 
 .errorMessage {
     color: #ff6b6b;
     font-size: 0.85rem;
     text-align: center;
-    background: rgba(255, 107, 107, 0.05);
-    padding: 10px;
-    border-radius: 10px;
+    background: rgba(255, 107, 107, 0.08);
+    padding: 12px;
+    border-radius: 12px;
 }
 
 .successMessage {
+    background: rgba(81, 207, 102, 0.08);
     color: #51cf66;
-    font-size: 0.9rem;
-    text-align: center;
     padding: 24px;
-    border: 1px dashed rgba(81, 207, 102, 0.2);
     border-radius: 16px;
+    text-align: center;
 }
 
 .footer {
-    margin-top: 32px;
+    margin-top: 40px;
     text-align: center;
-    font-size: 0.85rem;
-    color: var(--fg-dim);
+    font-size: 0.9rem;
+    color: var(--fg-muted);
 }
 
 .footer a {
     color: white;
     text-decoration: none;
-    font-weight: 600;
-    margin-left: 4px;
+    font-weight: 700;
+    margin-left: 6px;
 }
 
 .footer a:hover {
     text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .authCard {
+        padding: 32px !important;
+    }
+
+    .backBtn {
+        top: 20px;
+        left: 20px;
+    }
 }
