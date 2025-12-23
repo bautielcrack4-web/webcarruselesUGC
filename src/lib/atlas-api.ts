@@ -14,7 +14,7 @@ export interface GenerationParams {
 
 export interface PredictionResponse {
     id: string;
-    status: 'starting' | 'processing' | 'completed' | 'failed';
+    status: 'starting' | 'processing' | 'completed' | 'succeeded' | 'failed' | 'created';
     outputs?: string[];
     error?: string;
 }
@@ -23,48 +23,44 @@ export interface PredictionResponse {
  * Starts the video generation process
  */
 export async function generateVideo(params: GenerationParams): Promise<string> {
-    const response = await fetch(`${ATLAS_API_BASE}/generateVideo`, {
+    console.log('Client: Starting generation via API route...', params);
+    const response = await fetch('/api/generate-video', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${API_KEY}`
-        },
-        body: JSON.stringify({
-            model: "openai/sora-2/image-to-video-developer",
-            ...params
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(params)
     });
 
     const json = await response.json();
+    console.log('Client: API route response:', json);
 
-    if (!response.ok || json.code !== 200) {
-        throw new Error(json.message || 'Failed to start video generation');
+    if (!response.ok) {
+        throw new Error(json.error || 'Failed to start video generation');
     }
 
-    return json.data.id;
+    const data = json.data || json;
+    return data.id;
 }
 
 /**
  * Polls for the status of a specific prediction
  */
 export async function getPredictionStatus(predictionId: string): Promise<PredictionResponse> {
-    const response = await fetch(`${ATLAS_API_BASE}/prediction/${predictionId}`, {
-        headers: {
-            'Authorization': `Bearer ${API_KEY}`
-        }
-    });
+    const response = await fetch(`/api/prediction/${predictionId}`);
 
     const json = await response.json();
+    console.log(`Client: API status for ${predictionId}:`, json);
 
     if (!response.ok) {
         throw new Error('Failed to fetch prediction status');
     }
 
+    const data = json.data || json;
+
     return {
         id: predictionId,
-        status: json.status,
-        outputs: json.outputs,
-        error: json.error
+        status: data.status,
+        outputs: data.outputs,
+        error: data.error
     };
 }
 
@@ -82,7 +78,7 @@ export async function waitForVideo(
 
                 if (onProgress) onProgress(result.status);
 
-                if (result.status === 'completed' && result.outputs?.[0]) {
+                if ((result.status === 'completed' || result.status === 'succeeded') && result.outputs?.[0]) {
                     resolve(result.outputs[0]);
                 } else if (result.status === 'failed') {
                     reject(new Error(result.error || 'Generation failed'));
