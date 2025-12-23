@@ -1,11 +1,23 @@
 'use client';
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./page.module.css";
 import { Button } from "@/components/ui/Button/Button";
 import { GlassCard } from "@/components/ui/GlassCard/GlassCard";
+import { supabase } from "@/lib/supabase";
 
 export default function Home() {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+    };
+    checkUser();
+  }, []);
+
   return (
     <main className={styles.main}>
       {/* Navigation */}
@@ -18,12 +30,20 @@ export default function Home() {
             <div className={styles.navLinks}>
               <a href="#features">Características</a>
               <a href="#pricing">Precios</a>
-              <Link href="/login">
-                <Button variant="glass" size="sm">Iniciar sesión</Button>
-              </Link>
-              <Link href="/signup">
-                <Button size="sm">Empieza ya</Button>
-              </Link>
+              {user ? (
+                <Link href="/dashboard">
+                  <Button variant="glass" size="sm">Dashboard</Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <Button variant="glass" size="sm">Iniciar sesión</Button>
+                  </Link>
+                  <Link href="/signup">
+                    <Button size="sm">Empieza ya</Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
