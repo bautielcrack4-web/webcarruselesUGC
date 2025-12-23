@@ -1,34 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Colors - Nebula Pro Theme */
-  --bg-main: #020202;
-  --bg-card: rgba(13, 13, 13, 0.6);
-  --bg-card-border: rgba(255, 255, 255, 0.06);
+  /* Colors - Nebula Clean Theme */
+  --bg-main: #050505;
+  --bg-card: rgba(15, 15, 15, 0.4);
+  --bg-card-border: rgba(255, 255, 255, 0.04);
 
   --fg-main: #ffffff;
-  --fg-muted: #94a3b8;
-  --fg-dim: #64748b;
+  --fg-muted: #8a8a8a;
+  --fg-dim: #4a4a4a;
 
   --accent-primary: #8b5cf6;
   --accent-secondary: #ec4899;
-  --accent-tertiary: #06b6d4;
-  --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #06b6d4 100%);
+  --accent-gradient: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  /* Sutil, un solo color base */
 
-  --glass-bg: rgba(255, 255, 255, 0.02);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: blur(24px);
+  --glass-bg: rgba(255, 255, 255, 0.01);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-blur: blur(30px);
 
-  /* Shadows - Layered & Subtle */
+  /* Shadows - Minimal & Sharp */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 10px 10px -5px rgb(0 0 0 / 0.1);
-  --shadow-glow: 0 0 50px -10px rgba(139, 92, 246, 0.4);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 30px -5px rgba(139, 92, 246, 0.2);
+  /* Reducido */
 
   /* Radii */
-  --radius-sm: 8px;
-  --radius-md: 14px;
-  --radius-lg: 28px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 20px;
   --radius-full: 9999px;
 
   /* Fonts */
@@ -61,11 +62,11 @@ h5,
 h6 {
   font-family: var(--font-heading);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
   line-height: 1.1;
 }
 
-/* Luxury Background Aurora */
+/* Subtle Background Aurora */
 .nebula-bg {
   position: fixed;
   top: 0;
@@ -74,73 +75,47 @@ h6 {
   height: 100vh;
   z-index: -1;
   overflow: hidden;
-  background: radial-gradient(circle at 50% 50%, #0a0a0a 0%, #020202 100%);
-}
-
-.nebula-bg::before,
-.nebula-bg::after {
-  content: "";
-  position: absolute;
-  width: 80vw;
-  height: 80vw;
-  border-radius: 50%;
-  filter: blur(140px);
-  opacity: 0.2;
-  z-index: -1;
-  animation: float 25s infinite alternate ease-in-out;
+  background: #050505;
 }
 
 .nebula-bg::before {
+  content: "";
+  position: absolute;
+  width: 50vw;
+  height: 50vw;
+  border-radius: 50%;
+  filter: blur(150px);
+  opacity: 0.1;
+  /* Mucho más sutil */
   background: var(--accent-primary);
-  top: -20%;
-  left: -20%;
-}
-
-.nebula-bg::after {
-  background: var(--accent-tertiary);
-  bottom: -20%;
-  right: -20%;
-  animation-delay: -12s;
+  top: -10%;
+  right: -5%;
+  animation: float 30s infinite alternate ease-in-out;
 }
 
 @keyframes float {
   0% {
-    transform: translate(0, 0) rotate(0deg) scale(1);
+    transform: translate(0, 0) scale(1);
   }
 
   100% {
-    transform: translate(150px, 100px) rotate(10deg) scale(1.1);
+    transform: translate(50px, 30px) scale(1.05);
   }
 }
 
-/* Professional Utilities */
+/* Utilities */
 .glass {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
 }
 
 .text-gradient {
-  background: var(--accent-gradient);
+  background: linear-gradient(to bottom right, #fff 30%, #a5a5a5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-.section-padding {
-  padding: 120px 20px;
-}
-
-.container {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
-/* Transitions */
-.transition-all {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 ::selection {

@@ -1,12 +1,12 @@
 .sidebar {
     width: 260px;
     height: 100vh;
-    background: rgba(10, 10, 10, 0.4);
-    backdrop-filter: blur(20px);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(8, 8, 8, 0.4);
+    backdrop-filter: blur(40px);
+    border-right: 1px solid rgba(255, 255, 255, 0.03);
     display: flex;
     flex-direction: column;
-    padding: 32px 20px;
+    padding: 40px 24px;
     position: fixed;
     left: 0;
     top: 0;
@@ -16,26 +16,27 @@
 .logo {
     font-family: var(--font-heading);
     font-weight: 800;
-    font-size: 1.25rem;
-    margin-bottom: 48px;
-    padding-left: 12px;
+    font-size: 1.1rem;
+    margin-bottom: 56px;
+    color: white;
+    letter-spacing: -0.02em;
 }
 
 .nav {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
 }
 
 .navItem {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 12px 16px;
-    border-radius: 12px;
+    padding: 10px 16px;
+    border-radius: 10px;
     color: var(--fg-muted);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     font-weight: 500;
     transition: all 0.2s ease;
     text-decoration: none;
@@ -47,33 +48,35 @@
 }
 
 .navItem.active {
-    background: rgba(139, 92, 246, 0.1);
-    color: var(--accent-primary);
-    border: 1px solid rgba(139, 92, 246, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .icon {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+    opacity: 0.7;
 }
 
 .footer {
     margin-top: auto;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .userProfile {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 8px;
+    padding: 4px;
 }
 
 .avatar {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background: var(--accent-gradient);
+    background: #222;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .userInfo {
@@ -81,16 +84,14 @@
 }
 
 .userName {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
     margin: 0;
+    color: white;
 }
 
 .userEmail {
     font-size: 0.75rem;
     color: var(--fg-dim);
     margin: 0;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
 }

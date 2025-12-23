@@ -5,88 +5,86 @@
     border-radius: var(--radius-md);
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease-in-out;
     border: 1px solid transparent;
     font-family: var(--font-heading);
     letter-spacing: -0.01em;
     position: relative;
-    overflow: hidden;
 }
 
 .btn:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
-/* Variants */
+/* Variants - Cleaner & More Minimal */
 .primary {
-    background: var(--accent-gradient);
-    color: white;
-    box-shadow: var(--shadow-glow);
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
 
 .primary:hover:not(:disabled) {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-    box-shadow: 0 10px 30px -5px rgba(139, 92, 246, 0.5);
+    transform: translateY(-1px);
+    background: #f0f0f0;
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.15);
 }
 
 .secondary {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
     color: white;
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.08);
 }
 
 .secondary:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
 }
 
 .glass {
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    border-color: var(--glass-border);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    border-color: rgba(255, 255, 255, 0.05);
     color: white;
 }
 
 .glass:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .outline {
     background: transparent;
-    border-color: var(--accent-primary);
-    color: var(--accent-primary);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
 }
 
 .outline:hover:not(:disabled) {
-    background: rgba(139, 92, 246, 0.1);
+    border-color: white;
 }
 
 /* Sizes */
 .sm {
-    padding: 8px 16px;
+    padding: 6px 14px;
     font-size: 0.85rem;
 }
 
 .md {
-    padding: 12px 24px;
-    font-size: 0.95rem;
+    padding: 10px 20px;
+    font-size: 0.9rem;
 }
 
 .lg {
-    padding: 16px 36px;
-    font-size: 1.1rem;
+    padding: 14px 32px;
+    font-size: 1rem;
 }
 
 /* Loader */
 .loader {
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
-    border-top-color: white;
+    border-top-color: currentColor;
     animation: spin 0.8s linear infinite;
 }
 
