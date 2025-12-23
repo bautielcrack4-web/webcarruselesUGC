@@ -10,8 +10,12 @@ export const Sidebar = () => {
 
             <nav className={styles.nav}>
                 <Link href="/dashboard" className={`${styles.navItem} ${styles.active}`}>
-                    <span className={styles.icon}>📊</span>
+                    <span className={styles.icon}>📁</span>
                     Proyectos
+                </Link>
+                <Link href="/dashboard/studio" className={styles.navItem}>
+                    <span className={styles.icon}>🎬</span>
+                    Studio (IA)
                 </Link>
                 <Link href="/dashboard/assets" className={styles.navItem}>
                     <span className={styles.icon}>🖼️</span>
