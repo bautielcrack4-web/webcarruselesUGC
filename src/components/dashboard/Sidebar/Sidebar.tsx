@@ -23,7 +23,7 @@ export const Sidebar = () => {
                     <Link
                         key={item.href}
                         href={item.href}
-                        className={`${styles.navItem} ${pathname === item.href ? styles.active : ''}`}
+                        className={`${styles.navItem} ${pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href)) ? styles.active : ''}`}
                     >
                         <span className={styles.icon}>{item.icon}</span>
                         {item.label}

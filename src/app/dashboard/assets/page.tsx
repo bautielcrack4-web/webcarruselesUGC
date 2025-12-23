@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { GlassCard } from '@/components/ui/GlassCard/GlassCard';
 import { Image as ImageIcon, Video as VideoIcon, Download } from 'lucide-react';
