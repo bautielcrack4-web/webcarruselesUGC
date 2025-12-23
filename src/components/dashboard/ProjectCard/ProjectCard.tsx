@@ -15,7 +15,7 @@ export const ProjectCard = ({ name, status, updatedAt, videoUrl, thumbnailUrl }:
     };
 
     return (
-        <GlassCard className={styles.card} onClick={handlePlay}>
+        <GlassCard className={`${styles.card} glow-card`} onClick={handlePlay}>
             <div className={styles.preview}>
                 {thumbnailUrl || videoUrl ? (
                     <video src={videoUrl} className={styles.previewMedia} muted />
@@ -32,6 +32,19 @@ export const ProjectCard = ({ name, status, updatedAt, videoUrl, thumbnailUrl }:
                     <span className={`${styles.status} ${styles[status.toLowerCase()]}`}>{status}</span>
                     <span className={styles.date}>{updatedAt}</span>
                 </div>
+                {videoUrl && (
+                    <div className={styles.actions}>
+                        <button
+                            className={styles.downloadBtn}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                window.open(videoUrl, '_blank');
+                            }}
+                        >
+                            Descargar ↓
+                        </button>
+                    </div>
+                )}
             </div>
         </GlassCard>
     );

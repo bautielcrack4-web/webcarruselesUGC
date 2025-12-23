@@ -1,7 +1,17 @@
 import styles from './Sidebar.module.css';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export const Sidebar = () => {
+    const pathname = usePathname();
+
+    const menuItems = [
+        { href: '/dashboard', label: 'Proyectos', icon: '📁' },
+        { href: '/dashboard/studio', label: 'Studio (IA)', icon: '🎬' },
+        { href: '/dashboard/assets', label: 'Mis Assets', icon: '🖼️' },
+        { href: '/dashboard/settings', label: 'Ajustes', icon: '⚙️' },
+    ];
+
     return (
         <aside className={styles.sidebar}>
             <div className={styles.logo}>
@@ -9,22 +19,16 @@ export const Sidebar = () => {
             </div>
 
             <nav className={styles.nav}>
-                <Link href="/dashboard" className={`${styles.navItem} ${styles.active}`}>
-                    <span className={styles.icon}>📁</span>
-                    Proyectos
-                </Link>
-                <Link href="/dashboard/studio" className={styles.navItem}>
-                    <span className={styles.icon}>🎬</span>
-                    Studio (IA)
-                </Link>
-                <Link href="/dashboard/assets" className={styles.navItem}>
-                    <span className={styles.icon}>🖼️</span>
-                    Mis Assets
-                </Link>
-                <Link href="/dashboard/settings" className={styles.navItem}>
-                    <span className={styles.icon}>⚙️</span>
-                    Ajustes
-                </Link>
+                {menuItems.map((item) => (
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        className={`${styles.navItem} ${pathname === item.href ? styles.active : ''}`}
+                    >
+                        <span className={styles.icon}>{item.icon}</span>
+                        {item.label}
+                    </Link>
+                ))}
                 <button
                     onClick={() => {
                         const { handleSignOut } = require('@/lib/auth-helpers');

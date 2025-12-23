@@ -43,7 +43,9 @@ export default function DashboardPage() {
                     <h1 className={styles.title}>Mis Proyectos</h1>
                     <p className={styles.subtitle}>Gestiona y crea tus anuncios UGC impulsados por IA.</p>
                 </div>
-                <Button>+ Nuevo Proyecto</Button>
+                <Button onClick={() => window.location.href = '/dashboard/studio'}>
+                    + Nuevo Proyecto
+                </Button>
             </header>
 
             <div className={styles.grid}>

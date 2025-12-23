@@ -1,10 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Colors - Nebula Pro Luxury Clean */
-  --bg-main: #020202;
-  --bg-card: rgba(10, 10, 10, 0.4);
-  --bg-card-border: rgba(255, 255, 255, 0.03);
+  /* Colors - Nebula Pro Ultra Modern */
+  --bg-main: #050505;
+  --bg-sidebar: rgba(10, 10, 12, 0.8);
+  --bg-card: rgba(255, 255, 255, 0.02);
+  --bg-card-hover: rgba(255, 255, 255, 0.04);
+  --bg-card-border: rgba(255, 255, 255, 0.06);
 
   --fg-main: #ffffff;
   --fg-muted: #94a3b8;
@@ -12,29 +14,16 @@
 
   --accent-primary: #8b5cf6;
   --accent-secondary: #06b6d4;
-  --accent-gradient: linear-gradient(to right, #ffffff, #8b5cf6);
-  /* Gradiente a blanco para lujo */
+  --accent-glow: rgba(139, 92, 246, 0.5);
+  --accent-gradient: linear-gradient(135deg, #ffffff 0%, #8b5cf6 100%);
 
   --glass-bg: rgba(255, 255, 255, 0.01);
-  --glass-border: rgba(255, 255, 255, 0.04);
-  --glass-blur: blur(40px);
-
-  /* Elevation - Multi-layered shadows for depth */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-  --shadow-glow: 0 0 40px -10px rgba(139, 92, 246, 0.3);
-
-  /* Radii */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 24px;
-  --radius-full: 9999px;
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-blur: blur(24px);
 
   /* Fonts */
   --font-heading: 'Outfit', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
 }
 
 * {
@@ -105,11 +94,33 @@ h6 {
 
 /* Text Refinement */
 .text-gradient {
-  background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+  background: linear-gradient(135deg, #fff 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   display: inline-block;
+}
+
+.glow-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.glow-card:hover::before {
+  opacity: 1;
 }
 
 /* Global Autofill & Link Fixes */
