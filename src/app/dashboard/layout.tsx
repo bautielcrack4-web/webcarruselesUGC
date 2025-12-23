@@ -40,6 +40,7 @@ export default function DashboardLayout({
                     </div>
                     <div className={styles.actions}>
                         <button className={styles.notificationBtn}>🔔</button>
+                        <div className={styles.userCircle}>B</div>
                     </div>
                 </header>
                 <div className={styles.content}>

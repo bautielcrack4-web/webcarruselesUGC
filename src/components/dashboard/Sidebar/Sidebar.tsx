@@ -21,6 +21,17 @@ export const Sidebar = () => {
                     <span className={styles.icon}>⚙️</span>
                     Ajustes
                 </Link>
+                <button
+                    onClick={() => {
+                        const { handleSignOut } = require('@/lib/auth-helpers');
+                        handleSignOut();
+                    }}
+                    className={styles.navItem}
+                    style={{ background: 'none', border: 'none', width: '100%', cursor: 'pointer', textAlign: 'left' }}
+                >
+                    <span className={styles.icon}>🚪</span>
+                    Cerrar sesión
+                </button>
             </nav>
 
             <div className={styles.footer}>
