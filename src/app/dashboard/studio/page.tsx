@@ -6,10 +6,12 @@ import { Upload, Video, Wand2, Monitor, Smartphone, Clock, X, Play } from 'lucid
 import { Button } from '@/components/ui/Button/Button';
 import { GlassCard } from '@/components/ui/GlassCard/GlassCard';
 import { generateVideo, waitForVideo } from '@/lib/atlas-api';
+import { supabase } from '@/lib/supabase';
 import styles from './studio.module.css';
 
 export default function StudioPage() {
     const [image, setImage] = useState<string | null>(null);
+    const [imageFile, setImageFile] = useState<File | null>(null);
     const [prompt, setPrompt] = useState('');
     const [duration, setDuration] = useState<10 | 15>(10);
     const [size, setSize] = useState<'720*1280' | '1280*720'>('720*1280');
@@ -22,8 +24,7 @@ export default function StudioPage() {
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            // In a real app, we would upload to Supabase Storage here
-            // For now, we use a data URL for UI preview
+            setImageFile(file);
             const reader = new FileReader();
             reader.onload = (event) => {
                 setImage(event.target?.result as string);
@@ -33,35 +34,64 @@ export default function StudioPage() {
     };
 
     const handleGenerate = async () => {
-        if (!image || !prompt) return;
+        if (!imageFile || !prompt) return;
 
         setLoading(true);
-        setStatus('Iniciando IA...');
+        setStatus('Subiendo imagen del producto...');
         setVideoUrl(null);
 
         try {
-            // 1. In a production app: Upload image to Supabase and get URL
-            // Since we don't have a backend image store ready in this mock, 
-            // we'll assume the URL is gathered.
-            const mockImageURL = "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=1000";
+            // 1. Subir imagen a Supabase Storage
+            const fileExt = imageFile.name.split('.').pop();
+            const fileName = `${Math.random()}.${fileExt}`;
+            const filePath = `product-uploads/${fileName}`;
 
-            // 2. Start generation
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('assets')
+                .upload(filePath, imageFile);
+
+            if (uploadError) throw uploadError;
+
+            // Obtener URL pública
+            const { data: { publicUrl } } = supabase.storage
+                .from('assets')
+                .getPublicUrl(filePath);
+
+            setStatus('Analizando producto con IA...');
+
+            // Simular pasos pro para mejor UX
+            setTimeout(() => setStatus('Generando hook de marketing...'), 2000);
+            setTimeout(() => setStatus('Renderizando escena (Sora 2)...'), 5000);
+
+            // 2. Iniciar generación en AtlasCloud
             const id = await generateVideo({
-                image: mockImageURL,
+                image: publicUrl,
                 prompt,
                 duration,
                 size
             });
 
-            // 3. Wait for result (Polling)
+            // 3. Polling (esperar resultado)
             const finalVideo = await waitForVideo(id, (s) => {
-                if (s === 'processing') setStatus('Generando video (Sora 2)...');
+                if (s === 'processing') setStatus('Finalizando renderizado de video...');
             });
 
+            // 4. Guardar en base de datos como un proyecto
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                await supabase.from('projects').insert({
+                    user_id: user.id,
+                    name: `UGC Video - ${new Date().toLocaleDateString()}`,
+                    video_url: finalVideo,
+                    status: 'Ready',
+                    settings: { prompt, duration, size }
+                });
+            }
+
             setVideoUrl(finalVideo);
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            alert('Error en la generación. Asegúrate de tener la API KEY configurada.');
+            alert(`Error: ${err.message || 'Falló la generación'}`);
         } finally {
             setLoading(false);
         }
@@ -184,7 +214,7 @@ export default function StudioPage() {
                     className={styles.generateBtn}
                     onClick={handleGenerate}
                     loading={loading}
-                    disabled={!image || !prompt}
+                    disabled={!imageFile || !prompt}
                 >
                     <Wand2 size={18} style={{ marginRight: 8 }} />
                     Generar Video UGC

@@ -5,12 +5,23 @@ interface ProjectCardProps {
     name: string;
     status: string;
     updatedAt: string;
+    videoUrl?: string;
+    thumbnailUrl?: string;
 }
 
-export const ProjectCard = ({ name, status, updatedAt }: ProjectCardProps) => {
+export const ProjectCard = ({ name, status, updatedAt, videoUrl, thumbnailUrl }: ProjectCardProps) => {
+    const handlePlay = () => {
+        if (videoUrl) window.open(videoUrl, '_blank');
+    };
+
     return (
-        <GlassCard className={styles.card}>
+        <GlassCard className={styles.card} onClick={handlePlay}>
             <div className={styles.preview}>
+                {thumbnailUrl || videoUrl ? (
+                    <video src={videoUrl} className={styles.previewMedia} muted />
+                ) : (
+                    <div className={styles.placeholderIcon}>🎬</div>
+                )}
                 <div className={styles.playOverlay}>
                     <span className={styles.playIcon}>▶</span>
                 </div>

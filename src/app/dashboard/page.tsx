@@ -1,14 +1,40 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button/Button';
 import { ProjectCard } from '@/components/dashboard/ProjectCard/ProjectCard';
+import { supabase } from '@/lib/supabase';
 import styles from './page.module.css';
 
+interface Project {
+    id: string;
+    name: string;
+    status: string;
+    updated_at: string;
+}
+
 export default function DashboardPage() {
-    // Mock data for initial design validation
-    const projects = [
-        { id: '1', name: 'Zapatillas Summer 2024', status: 'Ready', updatedAt: 'Hace 2 horas' },
-        { id: '2', name: 'Perfume Noir Promo', status: 'Draft', updatedAt: 'Ayer' },
-        { id: '3', name: 'Gaming Chair Review', status: 'Draft', updatedAt: 'Hace 3 días' },
-    ];
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProjects = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (user) {
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false });
+
+                if (data) setProjects(data);
+            }
+            setLoading(false);
+        };
+
+        fetchProjects();
+    }, []);
 
     return (
         <div className={styles.container}>
@@ -21,21 +47,32 @@ export default function DashboardPage() {
             </header>
 
             <div className={styles.grid}>
-                {projects.map((project) => (
-                    <ProjectCard
-                        key={project.id}
-                        name={project.name}
-                        status={project.status}
-                        updatedAt={project.updatedAt}
-                    />
-                ))}
-
-                {/* Empty state / placeholder for adding first project */}
-                {projects.length === 0 && (
-                    <div className={styles.emptyState}>
-                        <p>Aún no tienes proyectos creados.</p>
-                        <Button variant="secondary">Crear mi primer anuncio</Button>
+                {loading ? (
+                    <div style={{ padding: '40px', gridColumn: '1 / -1', textAlign: 'center' }}>
+                        <div className="loader-orbit" /> {/* Assumes a global loader exists or style inline */}
+                        <p>Cargando tus proyectos...</p>
                     </div>
+                ) : (
+                    <>
+                        {projects.map((project: any) => (
+                            <ProjectCard
+                                key={project.id}
+                                name={project.name}
+                                status={project.status || 'Ready'}
+                                updatedAt={new Date(project.updated_at).toLocaleDateString()}
+                                videoUrl={project.video_url}
+                            />
+                        ))}
+
+                        {projects.length === 0 && (
+                            <div className={styles.emptyState}>
+                                <p>Aún no tienes proyectos creados.</p>
+                                <Button variant="secondary" onClick={() => window.location.href = '/dashboard/studio'}>
+                                    Crear mi primer anuncio
+                                </Button>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
         </div>

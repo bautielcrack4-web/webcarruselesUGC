@@ -112,20 +112,31 @@ h6 {
   display: inline-block;
 }
 
-/* Fix Autofill Background */
+/* Global Autofill & Link Fixes */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0 30px #111 inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #0a0a0a inset !important;
   -webkit-text-fill-color: white !important;
+  caret-color: white !important;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Base Link Styles */
-a {
-  color: inherit;
-  text-decoration: none;
+a,
+.backBtn {
+  color: var(--fg-muted) !important;
+  text-decoration: none !important;
+  transition: color 0.2s ease;
+}
+
+a:hover,
+.backBtn:hover {
+  color: white !important;
+}
+
+a:visited {
+  color: var(--fg-muted) !important;
 }
 
 ::-webkit-scrollbar-track {
