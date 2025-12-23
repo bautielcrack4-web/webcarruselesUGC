@@ -1,3 +1,8 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 import { Sidebar } from '@/components/dashboard/Sidebar/Sidebar';
 import styles from './layout.module.css';
 
@@ -6,6 +11,25 @@ export default function DashboardLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const router = useRouter();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const checkUser = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                router.push('/login');
+            } else {
+                setLoading(false);
+            }
+        };
+        checkUser();
+    }, [router]);
+
+    if (loading) {
+        return <div className={styles.loadingContainer}>Cargando...</div>;
+    }
+
     return (
         <div className={styles.layout}>
             <Sidebar />
