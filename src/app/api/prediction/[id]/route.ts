@@ -5,10 +5,10 @@ const API_KEY = process.env.NEXT_PUBLIC_ATLASCLOUD_API_KEY;
 
 export async function GET(
     req: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const id = params.id;
+        const { id } = await params;
         const response = await fetch(`${ATLAS_API_BASE}/prediction/${id}`, {
             headers: {
                 'Authorization': `Bearer ${API_KEY}`
