@@ -242,7 +242,7 @@ export default function StudioPage() {
                     <div className={styles.blockContent}>
                         <div className={styles.selectorGroup}>
                             <label>Género</label>
-                            <select value={gender} onChange={(e) => setGender(e.target.value)}>
+                            <select className={styles.selectBox} value={gender} onChange={(e) => setGender(e.target.value)}>
                                 {AVATAR_GENDERS.map(opt => <option key={opt}>{opt}</option>)}
                             </select>
                         </div>
