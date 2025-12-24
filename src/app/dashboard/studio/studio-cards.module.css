@@ -1,14 +1,132 @@
 /* STUDIO CARDS ARCHITECTURE (Premium Card Stack) */
+/* FLUID RESPONSIVE SYSTEM */
 
 .container {
+    width: 100%;
+    max-width: 1600px;
+    /* Limit ultra-wide screens */
+    margin: 0 auto;
+    padding: clamp(16px, 3vw, 40px);
+    /* Fluid padding */
+
+    /* Fluid Grid Layout */
     display: grid;
+    /* Desktop: Canvas (1.2fr) | Stack (0.8fr but min 400px) */
+    /* Mobile: Stacks naturally thanks to media query or auto-placement */
     grid-template-columns: 1fr 440px;
-    gap: 40px;
-    height: calc(100vh - 100px);
-    padding: 20px 40px;
+    gap: clamp(20px, 4vw, 40px);
+
+    height: calc(100vh - 80px);
+    /* Subtract header */
     overflow: hidden;
-    max-width: 100%;
-    margin: 0;
+    /* Prevent body scroll on Desktop */
+}
+
+/* LEFT PANEL - CANVAS */
+.canvasArea {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 0;
+    /* Important for grid child scrolling/sizing */
+}
+
+.canvasCard {
+    width: 100%;
+    height: 100%;
+    /* Maintain aspect ratio logic or fill available space cleanly */
+    background: rgba(10, 10, 12, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: clamp(20px, 3vw, 32px);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* RIGHT PANEL - THE STACK */
+.stackPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    /* Independent Scroll */
+    padding-right: 6px;
+    /* Space for scrollbar trigger */
+    padding-bottom: 20px;
+
+    /* Hide Scrollbar but keep functionality */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.panelTitle {
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    font-weight: 700;
+    color: white;
+    margin-bottom: 16px;
+    padding-left: 4px;
+}
+
+/* UI CARD COMPONENT */
+.card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    padding: clamp(20px, 2vw, 24px);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* ... (Keep existing inner card styles for upload, inputs, pills) ... */
+
+/* ... (Keep existing advanced options) ... */
+
+/* RESPONSIVE BREAKPOINT - Switch to Vertical Stack */
+/* Using a logical breakpoint where the side-by-side becomes too cramped */
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: 1fr;
+        /* Stack vertically */
+        height: auto;
+        /* Allow content to grow */
+        min-height: 100vh;
+        overflow-y: visible;
+        /* Use window scroll */
+    }
+
+    .canvasArea {
+        height: auto;
+        aspect-ratio: 16/9;
+        /* Force cinematic ratio on mobile/tablet */
+        max-height: 50vh;
+    }
+
+    .stackPanel {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        padding-right: 0;
+        overflow-y: visible;
+    }
+
+    .stickyFooter {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.95);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 16px 20px;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+    }
 }
 
 /* LEFT PANEL - CANVAS */
