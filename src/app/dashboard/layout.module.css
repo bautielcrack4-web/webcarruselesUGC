@@ -89,13 +89,32 @@
     flex: 1;
 }
 
+/* Mobile Menu Button */
+.mobileMenuBtn {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-right: 16px;
+    padding: 4px;
+}
+
 @media (max-width: 1024px) {
     .main {
         margin-left: 0;
     }
 
-    .sidebar {
-        display: none;
-        /* Mejoraremos esto luego con un menu mobile */
+    .mobileMenuBtn {
+        display: block;
+    }
+
+    .header {
+        padding: 0 20px;
+    }
+
+    .content {
+        padding: 20px;
     }
 }

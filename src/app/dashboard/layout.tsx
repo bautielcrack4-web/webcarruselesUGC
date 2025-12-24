@@ -13,6 +13,7 @@ export default function DashboardLayout({
 }) {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         const checkUser = async () => {
@@ -32,10 +33,11 @@ export default function DashboardLayout({
 
     return (
         <div className={styles.layout}>
-            <Sidebar />
+            <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
             <main className={styles.main}>
                 <header className={styles.header}>
                     <div className={styles.search}>
+                        <button className={styles.mobileMenuBtn} onClick={() => setSidebarOpen(true)}>☰</button>
                         <input type="text" placeholder="Buscar proyectos..." className={styles.searchInput} />
                     </div>
                     <div className={styles.actions}>
