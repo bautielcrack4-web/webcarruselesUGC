@@ -1,0 +1,358 @@
+/* STUDIO CARDS ARCHITECTURE (Premium Card Stack) */
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 440px;
+    gap: 40px;
+    height: calc(100vh - 100px);
+    padding: 20px 40px;
+    overflow: hidden;
+    max-width: 1800px;
+    margin: 0 auto;
+}
+
+/* LEFT PANEL - CANVAS */
+.canvasArea {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    /* Clean, focus on content */
+}
+
+.canvasCard {
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 10, 12, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 32px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Empty State / Guided State */
+.emptyState {
+    text-align: center;
+    opacity: 0.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 300px;
+}
+
+.emptyIcon {
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.emptyTitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: white;
+    line-height: 1.5;
+}
+
+/* RIGHT PANEL - THE STACK */
+.stackPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+    padding-right: 10px;
+    /* Space for scrollbar if needed */
+    padding-bottom: 40px;
+    scrollbar-width: none;
+    /* Hide scrollbar for cleaner look */
+}
+
+.stackPanel::-webkit-scrollbar {
+    display: none;
+}
+
+.panelTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+    padding-left: 4px;
+}
+
+/* UI CARD COMPONENT */
+.card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    /* Big Radius */
+    padding: 24px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.cardTitle {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* CARD 1: PRODUCT HERO */
+.uploadArea {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.uploadArea:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.uploadPlaceholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.productInput {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 12px 0;
+    color: white;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.productInput:focus {
+    outline: none;
+    border-color: white;
+}
+
+.productInput::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* CARD 2: FORMAT & LENGTH */
+.pillGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.pillButton {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 16px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.pillButton:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pillActive {
+    background: white;
+    color: black;
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+    font-weight: 600;
+}
+
+.pillActive:hover {
+    /* Override hover for active state */
+    background: white;
+}
+
+.subLabel {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    font-weight: 400;
+}
+
+/* CARD 3: MESSAGE */
+.messageInput {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    min-height: 140px;
+    resize: none;
+    font-family: inherit;
+}
+
+.messageInput:focus {
+    outline: none;
+}
+
+.messageInput::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.helperText {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* CARD 4: ADVANCED */
+.advancedToggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.advancedContent {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.tagsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    padding: 6px 12px;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8rem;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tag:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.tagActive {
+    background: white;
+    color: black;
+    border-color: white;
+}
+
+/* FOOTER ACTIONS */
+.stickyFooter {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background: linear-gradient(to top, #000 80%, transparent);
+    /* Fade out top */
+    padding-top: 20px;
+    margin-top: auto;
+}
+
+.costDisplay {
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 12px;
+}
+
+.generateBtn {
+    width: 100%;
+    height: 64px;
+    background: white;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.generateBtn:hover:not(:disabled) {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+.generateBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #333;
+    color: #888;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .container {
+        grid-template-columns: 1fr;
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .canvasArea {
+        min-height: 400px;
+    }
+}
