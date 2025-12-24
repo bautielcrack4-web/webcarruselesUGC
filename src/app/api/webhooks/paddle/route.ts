@@ -17,7 +17,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
         }
 
-        const event = paddle.webhooks.unmarshal(body, process.env.PADDLE_WEBHOOK_SECRET || '', signature);
+        const event = await paddle.webhooks.unmarshal(body, process.env.PADDLE_WEBHOOK_SECRET || '', signature);
 
         if (!event) {
             return NextResponse.json({ error: 'Invalid event' }, { status: 400 });
