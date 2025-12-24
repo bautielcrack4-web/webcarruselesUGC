@@ -54,6 +54,13 @@ const EXAMPLES = [
         image: '/hero-examples/imagen de video 5.png',
         language: '🇮🇹 Italian',
         prompt: "Tutorial di cucina veloce con utensili moderni."
+    },
+    {
+        id: 6,
+        video: '/hero-examples/video 6.mp4',
+        image: '/hero-examples/imagen video 6.png',
+        language: '🇦🇷 Spanish (ARG)',
+        prompt: "Review de botas de invierno, estilo porteño y auténtico."
     }
 ];
 
@@ -89,7 +96,7 @@ export const VideoCarousel = () => {
             </div>
 
             <div className={styles.carouselTrack} ref={scrollRef}>
-                {EXAMPLES.slice(1).map((item) => ( // Skipping 1 as unmatched for now, using 2-5
+                {EXAMPLES.slice(1).map((item) => ( // Skipping 1 for now as it lacks a clear pair, showing 2-6
                     <motion.div
                         key={item.id}
                         className={styles.card}
