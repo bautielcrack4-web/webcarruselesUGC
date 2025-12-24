@@ -52,9 +52,9 @@ export const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
                     <Image
                         src="/logo-white.png"
                         alt="Adfork"
-                        width={120}
-                        height={40}
-                        style={{ height: '32px', width: 'auto', objectFit: 'contain' }}
+                        width={140}
+                        height={46}
+                        style={{ height: '40px', width: 'auto', objectFit: 'contain' }}
                         priority
                     />
                 </div>
