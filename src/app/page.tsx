@@ -36,20 +36,27 @@ export default function Home() {
       <nav className={styles.nav}>
         <div className={styles.container}>
           <div className={styles.navInner}>
+            {/* Logo Left */}
             <Link href="/" className={styles.logo}>
-              <Image src="/logo-white.png" alt="Adfork" width={160} height={50} style={{ height: '48px', width: 'auto' }} priority />
+              <Image src="/logo-white.png" alt="Adfork" width={160} height={50} style={{ height: '40px', width: 'auto' }} priority />
             </Link>
+
+            {/* Links Center */}
             <div className={styles.navLinks}>
-              <a href="#features">Features</a>
-              <a href="#pricing">Pricing</a>
-              <div className={styles.authActions}>
-                <Link href="/login">
-                  <Button variant="minimal" size="sm">Log in</Button>
-                </Link>
-                <Link href="/signup">
-                  <Button size="sm">Get Started</Button>
-                </Link>
-              </div>
+              <a href="#products">Productos</a>
+              <a href="#pricing">Precios</a>
+              <a href="#examples">Ejemplos</a>
+              <a href="#support">Soporte</a>
+            </div>
+
+            {/* Auth Right */}
+            <div className={styles.authActions}>
+              <Link href="/login" className={styles.secondaryLink}>
+                Ejemplos
+              </Link>
+              <Link href="/login">
+                <Button className={styles.whiteBtn}>Iniciar sesión</Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -58,17 +65,19 @@ export default function Home() {
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.container}>
+
+          {/* Badge Pill */}
           <motion.div
             initial="hidden"
             animate="visible"
             custom={0}
             variants={fadeIn}
-            className={styles.heroBadge}
+            className={styles.pillBadge}
           >
-            <Zap size={14} className={styles.badgeIcon} />
-            <span>Powering the next generation of ads</span>
+            <span className={styles.pillText}>Escribe tu Script <span className={styles.arrow}>→</span> Selecciona Un Avatar <span className={styles.arrow}>→</span> Genera tu video</span>
           </motion.div>
 
+          {/* Title */}
           <motion.h1
             initial="hidden"
             animate="visible"
@@ -76,10 +85,11 @@ export default function Home() {
             variants={fadeIn}
             className={styles.title}
           >
-            Create High-Converting <br />
-            <span className="text-gradient">UGC Ads with AI</span>
+            Crea UGCs con IA, <br />
+            Efectivos y Rápido
           </motion.h1>
 
+          {/* Subtitle */}
           <motion.p
             initial="hidden"
             animate="visible"
@@ -87,10 +97,11 @@ export default function Home() {
             variants={fadeIn}
             className={styles.subtitle}
           >
-            Generate authentic, persuasive content in seconds.
-            Designed for brands that value professional results over noise.
+            Genera contenido que conecta con tu audiencia y aumenta tus <br className="hidden md:block" />
+            conversiones, todo desde una plataforma fácil de usar.
           </motion.p>
 
+          {/* CTA */}
           <motion.div
             initial="hidden"
             animate="visible"
@@ -98,37 +109,17 @@ export default function Home() {
             variants={fadeIn}
             className={styles.heroActions}
           >
-            <Link href="/signup">
-              <Button size="lg">Try it for Free <ArrowRight size={18} /></Button>
+            <Link href="/dashboard/studio">
+              <button className={styles.mainCta}>
+                Haz tu primer video ahora
+              </button>
             </Link>
-            <Button variant="secondary" size="lg">Watch Demo</Button>
           </motion.div>
 
-          {/* Visual Piece */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 40 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 1.2, ease: "easeOut" }}
-            className={styles.previewContainer}
-          >
-            <GlassCard className={styles.previewCard}>
-              <div className={styles.mockupHeader}>
-                <div className={styles.dots}><span /><span /><span /></div>
-                <div className={styles.url}>adfork.ai/studio</div>
-              </div>
-              <div className={styles.mockupBody}>
-                <div className={styles.mockupSidebar}>
-                  {[1, 2, 3].map(i => <div key={i} className={styles.mockupItem} />)}
-                </div>
-                <div className={styles.mockupStage}>
-                  <div className={styles.videoWindow}>
-                    <Play size={32} fill="white" color="white" />
-                  </div>
-                </div>
-              </div>
-            </GlassCard>
-            <div className={styles.previewGlow} />
-          </motion.div>
+          {/* Video Showcase Placeholder (Waiting for user uploads) */}
+          <div className={styles.showcasePlaceholder}>
+            {/* We will implement the carousel here in the next step */}
+          </div>
         </div>
       </section>
 

@@ -10,7 +10,7 @@
 
 /* Nav */
 .nav {
-  height: 90px;
+  height: 80px;
   display: flex;
   align-items: center;
   position: fixed;
@@ -18,9 +18,9 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(2, 2, 2, 0.4);
-  backdrop-filter: blur(40px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  background: black;
+  /* Solid black as per reference, or very dark */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .navInner {
@@ -39,18 +39,20 @@
   /* Safe space */
   display: flex;
   align-items: center;
+  width: 200px;
+  /* Fixed width area for logo */
 }
 
 .navLinks {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 32px;
 }
 
 .navLinks a {
-  color: var(--fg-muted);
+  color: #888;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 500;
   transition: color 0.2s;
 }
@@ -62,50 +64,107 @@
 .authActions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 24px;
+  width: 200px;
+  /* Balance logo width */
+  justify-content: flex-end;
+}
+
+.secondaryLink {
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.whiteBtn {
+  background: white !important;
+  color: black !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  padding: 0 20px !important;
+  height: 40px !important;
+  font-size: 0.9rem !important;
+}
+
+.whiteBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
 }
 
 /* Hero */
 .hero {
-  padding-top: 220px;
-  padding-bottom: 120px;
+  padding-top: 180px;
+  padding-bottom: 100px;
   text-align: center;
+  background: black;
+  color: white;
+  min-height: 100vh;
+  /* Full screen feel */
 }
 
-.heroBadge {
+/* Badge Pill */
+.pillBadge {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 16px;
-  background: rgba(139, 92, 246, 0.06);
-  border: 1px solid rgba(139, 92, 246, 0.1);
-  border-radius: var(--radius-full);
+  padding: 10px 24px;
+  background: linear-gradient(90deg, rgba(30, 10, 50, 0.8), rgba(10, 10, 20, 0.8));
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 100px;
   margin-bottom: 40px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--accent-primary);
-  letter-spacing: 0.02em;
+}
+
+.pillText {
+  color: #ccc;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.arrow {
+  color: #a855f7;
+  /* Purple arrow */
+  margin: 0 8px;
 }
 
 .title {
-  font-size: clamp(3rem, 7vw, 5rem);
-  margin-bottom: 32px;
+  font-size: clamp(3.5rem, 6vw, 5.5rem);
+  font-weight: 800;
+  /* Extra bold */
+  margin-bottom: 24px;
   color: #fff;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
 }
 
 .subtitle {
-  font-size: 1.15rem;
-  color: var(--fg-muted);
-  max-width: 600px;
-  margin: 0 auto 56px;
-  line-height: 1.7;
+  font-size: 1.2rem;
+  color: #888;
+  max-width: 700px;
+  margin: 0 auto 48px;
+  line-height: 1.6;
 }
 
 .heroActions {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  margin-bottom: 120px;
+  margin-bottom: 80px;
+}
+
+.mainCta {
+  background: white;
+  color: black;
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mainCta:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
 /* Preview Studio */
