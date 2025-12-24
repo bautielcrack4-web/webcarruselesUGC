@@ -329,7 +329,13 @@
     border-radius: 16px;
     background: white;
     color: black;
-    transition: transform 0.2s;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.createBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    /* Glow suave */
 }
 
 .createBtn:active {

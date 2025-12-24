@@ -413,6 +413,8 @@
     background: white !important;
     color: black !important;
     border-color: white !important;
+    box-shadow: 0 0 15px var(--pack-shadow);
+    /* Glow con el color del pack */
 }
 
 @media (max-width: 1024px) {
