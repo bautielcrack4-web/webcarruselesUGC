@@ -13,43 +13,11 @@ import { supabase } from '@/lib/supabase';
 import styles from './studio.module.css';
 
 // Opciones de configuración
-const AVATAR_PRESETS = [
-    {
-        id: 'mia',
-        name: 'Mia',
-        tag: 'Influencer',
-        thumb: '/avatars/mia.jpg',
-        prompt: 'Shot on iPhone Pro Max, attractive young woman selfie in modern apartment, natural light, realistic skin texture, casual influencer style, authentic UGC look'
-    },
-    {
-        id: 'sofia',
-        name: 'Sofia',
-        tag: 'Profesional',
-        thumb: '/avatars/sofia.png',
-        prompt: 'iPhone Pro Max portrait of professional woman in modern office, clean natural lighting, realistic mobile photo style'
-    },
-    {
-        id: 'tomas',
-        name: 'Tomás',
-        tag: 'Confianza',
-        thumb: '/avatars/tomas.jpg',
-        prompt: 'Shot on iPhone selfie of adult man in casual setting, authentic UGC style, realistic lighting and texture'
-    },
-    {
-        id: 'marta',
-        name: 'Marta',
-        tag: 'Hogar',
-        thumb: '/avatars/marta.jpg',
-        prompt: 'Realistic iPhone photo of older woman at home, natural light, authentic UGC style, no retouching'
-    },
-    {
-        id: 'arturo',
-        name: 'Arturo',
-        tag: 'Senior',
-        thumb: '/avatars/arturo.jpg',
-        prompt: 'Shot on iPhone Pro Max, elderly man in home environment, natural lighting, realistic smartphone capture'
-    }
-];
+const AVATAR_GENDERS = ['Mujer', 'Hombre', 'No especificar'];
+const AVATAR_AGES = ['Joven', 'Adulto', 'Adulto+', 'No especificar'];
+const AVATAR_STYLES = ['Natural', 'Fitness', 'Lifestyle', 'Elegante', 'No especificar'];
+const AVATAR_CLOTHING = ['Casual', 'Deportivo', 'Oficina', 'Formal', 'No especificar'];
+const AVATAR_MOODS = ['Entusiasta', 'Profesional', 'Cercano', 'Enérgico', 'No especificar'];
 
 const SCENE_LOCATIONS = ['Interior', 'Exterior', 'No especificar'];
 const LIGHTING_STYLES = ['Natural', 'Estudio', 'Neón', 'Atardecer', 'No especificar'];
@@ -113,8 +81,12 @@ export default function StudioPage() {
         if (shotType !== 'No especificar') parts.push(`${shotType} shot`);
         if (pace !== 'No especificar') parts.push(`with ${pace.toLowerCase()} edit`);
 
-        const avatar = AVATAR_PRESETS.find(a => a.id === selectedAvatarId);
-        let avatarDesc = avatar ? avatar.prompt : 'A person';
+        let avatarDesc = 'A person';
+        if (gender !== 'No especificar') avatarDesc = `A ${gender.toLowerCase()}`;
+        if (age !== 'No especificar') avatarDesc += ` ${age.toLowerCase()}`;
+        if (avatarStyle !== 'No especificar') avatarDesc += ` ${avatarStyle.toLowerCase()} style`;
+        if (clothing !== 'No especificar') avatarDesc += ` wearing ${clothing.toLowerCase()}`;
+        if (mood !== 'No especificar') avatarDesc += ` ${mood.toLowerCase()}`;
 
         if (avatarDetails) avatarDesc += `, ${avatarDetails}`;
         parts.push(avatarDesc);
@@ -305,30 +277,22 @@ export default function StudioPage() {
                         <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className={styles.advancedContainer}>
                             <div className={styles.iosGroup}>
                                 <div className={styles.iosItem}>
-                                    <div className={styles.iosHeader}><User size={14} /><span className={styles.iosTitle}>Elegir Avatar AI</span></div>
-                                    <div className={styles.avatarScroll}>
-                                        {AVATAR_PRESETS.map((avatar) => (
-                                            <div
-                                                key={avatar.id}
-                                                className={`${styles.avatarCard} ${selectedAvatarId === avatar.id ? styles.avatarActive : ''}`}
-                                                onClick={() => setSelectedAvatarId(avatar.id)}
-                                            >
-                                                <div className={styles.avatarImageWrapper}>
-                                                    <img src={avatar.thumb} alt={avatar.name} className={styles.avatarThumb} />
-                                                    <div className={styles.avatarTag}>{avatar.tag}</div>
-                                                </div>
-                                                <span className={styles.avatarName}>{avatar.name}</span>
-                                            </div>
-                                        ))}
+                                    <div className={styles.iosHeader}><User size={14} /><span className={styles.iosTitle}>Personalizar Avatar</span></div>
+                                    <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Género</label>
+                                        <PillSelector options={AVATAR_GENDERS} value={gender} onChange={setGender} />
+                                    </div>
+                                    <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Edad</label>
+                                        <PillSelector options={AVATAR_AGES} value={age} onChange={setAge} />
+                                    </div>
+                                    <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Mood / Actitud</label>
+                                        <PillSelector options={AVATAR_MOODS} value={mood} onChange={setMood} />
                                     </div>
                                     <div className={styles.iosItem} style={{ borderBottom: 'none', padding: '10px 0' }}>
-                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Detalles extra (Opcional)</label>
-                                        <input
-                                            className={styles.input}
-                                            placeholder="Ej: con anteojos, gorra roja..."
-                                            value={avatarDetails}
-                                            onChange={(e) => setAvatarDetails(e.target.value)}
-                                        />
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Ropa</label>
+                                        <PillSelector options={AVATAR_CLOTHING} value={clothing} onChange={setClothing} />
                                     </div>
                                 </div>
                             </div>
