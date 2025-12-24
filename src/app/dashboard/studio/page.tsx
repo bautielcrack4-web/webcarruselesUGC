@@ -23,6 +23,17 @@ const SCENE_LIGHTING = ['Natural', 'Studio', 'Neon', 'Sunset', 'Any'];
 const SCENE_SHOT_TYPES = ['Selfie', 'Static', 'Moving', 'Any'];
 const SCENE_PACE = ['Fast', 'Relaxed', 'Cinematic', 'Any'];
 
+// Loading Messages for Animation
+const LOADING_MESSAGES = [
+    "Analyzing your product...",
+    "Writing the perfect script...",
+    "Hiring the AI actor...",
+    "Setting up the lighting...",
+    "Recording voiceover...",
+    "Editing final cut...",
+    "Polishing pixels..."
+];
+
 export default function StudioPage() {
     // UI State
     const [showAdvanced, setShowAdvanced] = useState(false);
@@ -48,18 +59,26 @@ export default function StudioPage() {
 
     // System State
     const [loading, setLoading] = useState(false);
-    const [status, setStatus] = useState('');
+    const [loadingMessage, setLoadingMessage] = useState('Initializing AI...');
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const [userCredits, setUserCredits] = useState<number | null>(null);
-    const [logs, setLogs] = useState<string[]>([]); // Debug logs
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
 
-    const addLog = (msg: string) => {
-        console.log(msg);
-        setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
-    };
+    // Cycling Loading Messages
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (loading) {
+            let i = 0;
+            setLoadingMessage(LOADING_MESSAGES[0]);
+            interval = setInterval(() => {
+                i++;
+                setLoadingMessage(LOADING_MESSAGES[i % LOADING_MESSAGES.length]);
+            }, 3000);
+        }
+        return () => clearInterval(interval);
+    }, [loading]);
 
     useEffect(() => {
         const fetchCredits = async () => {
@@ -97,38 +116,24 @@ export default function StudioPage() {
         try {
             setLoading(true);
             setVideoUrl(null);
-            setLogs([]); // Clear logs
-            addLog('Starting generation process...');
-            addLog(`Prompt: ${message}`);
 
             // Upload Logic
             let publicUrl = "";
 
             if (imageFile instanceof File) {
-                addLog('Allocating file upload...');
                 const fileName = `${Math.random()}.${imageFile.name.split('.').pop()}`;
                 const filePath = `product-uploads/${fileName}`;
 
-                addLog(`Uploading to ${filePath}...`);
                 const { error: uploadError } = await supabase.storage.from('assets').upload(filePath, imageFile);
-                if (uploadError) {
-                    addLog(`Upload failed: ${uploadError.message}`);
-                    throw uploadError;
-                }
+                if (uploadError) throw uploadError;
 
                 const { data } = supabase.storage.from('assets').getPublicUrl(filePath);
                 publicUrl = data.publicUrl;
-                addLog(`Upload successful. URL: ${publicUrl}`);
             } else {
-                addLog('Using string URL for image.');
                 publicUrl = imageFile as string;
             }
 
-            setStatus('Producing magic...');
-            addLog('Calling generateVideo API...');
-
             const fullPrompt = `UGC video of a ${gender} ${age} holding the product. ${location} setting. Talking to camera saying: "${message}". Product: ${productDesc}. Authentic, 4k.`;
-            addLog(`Full Prompt: ${fullPrompt}`);
 
             const id = await generateVideo({
                 image: publicUrl,
@@ -137,30 +142,30 @@ export default function StudioPage() {
                 size: format
             });
 
-            addLog(`Generation ID received: ${id}`);
+            const finalVideo = await waitForVideo(id);
 
-            const finalVideo = await waitForVideo(id, (s) => {
-                addLog(`Polling status: ${s}`);
-                if (s === 'processing') setStatus('Rendering final pixels...');
-                if (s === 'completed' || s === 'succeeded') setStatus('Ready!');
-            });
-
-            addLog(`Video finished! URL: ${finalVideo}`);
             setVideoUrl(finalVideo);
 
-            // Refresh credits
+            // PERSISTENCE: Save to History (projects table)
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
+                await supabase.from('projects').insert({
+                    user_id: user.id,
+                    name: productDesc || message.slice(0, 30) || `Gen ${new Date().toLocaleTimeString()}`,
+                    video_url: finalVideo,
+                    // 'created_at' is mostly default NOW() in schema
+                });
+
+                // Refresh credits
                 const { data } = await supabase.from('user_subscriptions').select('credits_remaining').eq('user_id', user.id).single();
                 if (data) setUserCredits(data.credits_remaining);
             }
 
         } catch (err: any) {
-            addLog(`ERROR: ${err.message}`);
+            console.error(err);
             alert(`Generation Failed: ${err.message}`);
         } finally {
             setLoading(false);
-            addLog('Process finished.');
         }
     };
 
@@ -184,11 +189,28 @@ export default function StudioPage() {
                                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                             />
                         ) : loading ? (
-                            <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={styles.emptyState}>
-                                <div className={styles.emptyIcon} style={{ animation: 'spin 1s infinite linear', borderRadius: '50%' }}>
-                                    <Sparkles size={32} />
+                            <motion.div
+                                key="loading"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className={styles.emptyState}
+                            >
+                                <div className={styles.loadingContainer}>
+                                    <div className={styles.loadingOrb}>
+                                        <Sparkles size={40} className={styles.pulsingIcon} />
+                                    </div>
+                                    <h3 className={styles.loadingTitle}>Creating Magic</h3>
+                                    <p className={styles.loadingValid}>{loadingMessage}</p>
+                                    <div className={styles.progressBar}>
+                                        <motion.div
+                                            className={styles.progressFill}
+                                            initial={{ width: "0%" }}
+                                            animate={{ width: "100%" }}
+                                            transition={{ duration: 40, ease: "linear" }}
+                                        />
+                                    </div>
                                 </div>
-                                <p className={styles.emptyTitle}>{status}</p>
                             </motion.div>
                         ) : (
                             <div className={styles.emptyState}>
@@ -430,11 +452,7 @@ export default function StudioPage() {
                     </div>
                 </div>
 
-                {/* DEBUG CONSOLE */}
-                <div style={{ marginTop: 20, padding: 10, background: '#111', color: '#0f0', border: '1px solid #333', borderRadius: 8, fontFamily: 'monospace', fontSize: 12, maxHeight: 200, overflowY: 'auto' }}>
-                    <strong>DEBUG CONSOLE:</strong>
-                    {logs.map((log, i) => <div key={i}>{log}</div>)}
-                </div>
+                {/* No DEBUG CONSOLE here */}
             </div>
         </div>
     );
