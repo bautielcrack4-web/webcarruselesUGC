@@ -7,8 +7,8 @@
     height: calc(100vh - 100px);
     padding: 20px 40px;
     overflow: hidden;
-    max-width: 1800px;
-    margin: 0 auto;
+    max-width: 100%;
+    margin: 0;
 }
 
 /* LEFT PANEL - CANVAS */
@@ -376,14 +376,106 @@
 }
 
 /* Responsive */
-@media (max-width: 1200px) {
+/* RESPONSIVE LAYOUT */
+@media (max-width: 1280px) {
+
+    /* LAPTOPS & TABLETS/MOBILE -> VERTICAL STACK MODE */
     .container {
         grid-template-columns: 1fr;
+        /* Single column */
         height: auto;
-        overflow-y: auto;
+        /* Allow full page scroll */
+        min-height: 100vh;
+        overflow-y: visible;
+        /* No internal scroll, use window scroll */
+        padding: 20px;
+        gap: 32px;
+    }
+
+    /* Canvas becomes a distinct section at the top */
+    .canvasArea {
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 16/9;
+        /* Maintain ratio for preview */
+        max-height: 60vh;
+        /* Don't take up entire mobile screen */
+    }
+
+    .canvasCard {
+        border-radius: 24px;
+    }
+
+    /* Stack Panel fills width */
+    .stackPanel {
+        width: 100%;
+        max-width: 600px;
+        /* Readability constraint */
+        margin: 0 auto;
+        /* Center it */
+        overflow-y: visible;
+        /* Page scroll handles it */
+        padding: 0;
+        padding-bottom: 100px;
+        /* Space for sticky footer */
+    }
+
+    .panelTitle {
+        text-align: center;
+        margin-bottom: 24px;
+        font-size: 1.75rem;
+    }
+
+    /* Sticky Footer needs to be fixed to viewport bottom on mobile */
+    .stickyFooter {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 100;
+        margin-top: 0;
+    }
+
+    .generateBtn {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* MOBILE PHONES */
+    .container {
+        padding: 16px;
+        gap: 24px;
     }
 
     .canvasArea {
-        min-height: 400px;
+        aspect-ratio: 1;
+        /* More compact on mobile? Or keep 16/9 */
+    }
+
+    .panelTitle {
+        font-size: 1.5rem;
+        text-align: left;
+        /* Align left usually better on mobile */
+    }
+
+    .stackPanel {
+        max-width: 100%;
+        /* Use full width */
+    }
+
+    .card {
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .stickyFooter {
+        padding: 16px;
     }
 }
