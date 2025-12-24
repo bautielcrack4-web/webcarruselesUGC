@@ -53,8 +53,9 @@ export default function StudioPage() {
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const [userCredits, setUserCredits] = useState<number | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const router = useRouter(); // Initialize router
 
-    React.useEffect(() => {
+    useEffect(() => {
         const fetchCredits = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
@@ -111,6 +112,13 @@ export default function StudioPage() {
 
             // Save project logic...
             setVideoUrl(finalVideo);
+            // Refresh credits
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                const { data } = await supabase.from('user_subscriptions').select('credits_remaining').eq('user_id', user.id).single();
+                if (data) setUserCredits(data.credits_remaining);
+            }
+
         } catch (err: any) {
             alert(`Error: ${err.message}`);
         } finally {
@@ -173,7 +181,7 @@ export default function StudioPage() {
                         ) : (
                             <div className={styles.uploadPlaceholder}>
                                 <Upload size={32} />
-                                <span>Upload product image</span>
+                                <span className={styles.uploadLabel}>Upload product image</span>
                             </div>
                         )}
                         <input type="file" hidden ref={fileInputRef} onChange={handleImageUpload} accept="image/*" />
@@ -364,10 +372,8 @@ export default function StudioPage() {
                         loading={loading}
                         onClick={() => {
                             if (!canGenerate) {
-                                // "Premium Flow": Trigger Paywall / Upsell
-                                if (confirm(`You need ${currentCost - (userCredits || 0)} more credits to generate this ad. Get more credits?`)) {
-                                    window.location.href = '/dashboard/billing';
-                                }
+                                // "Premium Flow": Trigger Paywall / Upsell immediately
+                                router.push('/dashboard/billing');
                                 return;
                             }
                             handleGenerate();
