@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
 const ATLAS_API_BASE = 'https://api.atlascloud.ai/api/v1/model';
@@ -10,8 +10,27 @@ export async function POST(req: Request) {
         const body = await req.json();
         const { image, prompt, duration = 10, size = '720*1280' } = body;
 
-        // 1. Get User Session
-        const supabase = createRouteHandlerClient({ cookies });
+        // 1. Get User Session using @supabase/ssr
+        const cookieStore = await cookies();
+
+        const supabase = createServerClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            {
+                cookies: {
+                    get(name: string) {
+                        return cookieStore.get(name)?.value;
+                    },
+                    set(name: string, value: string, options: CookieOptions) {
+                        cookieStore.set({ name, value, ...options });
+                    },
+                    remove(name: string, options: CookieOptions) {
+                        cookieStore.set({ name, value: '', ...options });
+                    },
+                },
+            }
+        );
+
         const { data: { user } } = await supabase.auth.getUser();
 
         if (!user) {
