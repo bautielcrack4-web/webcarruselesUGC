@@ -14,7 +14,13 @@ import styles from './studio-cards.module.css';
 const AVATAR_GENDERS = ['Female', 'Male', 'Any'];
 const AVATAR_AGES = ['Young', 'Adult', 'Senior', 'Any'];
 const AVATAR_STYLES = ['Natural', 'Fitness', 'Professional', 'Elegant', 'Any'];
+const AVATAR_CLOTHING = ['Casual', 'Sport', 'Business', 'Formal', 'Any'];
+const AVATAR_MOODS = ['Enthusiastic', 'Professional', 'Friendly', 'Energetic', 'Any'];
+
 const SCENE_LOCATIONS = ['Indoor', 'Outdoor', 'Studio', 'Any'];
+const SCENE_LIGHTING = ['Natural', 'Studio', 'Neon', 'Sunset', 'Any'];
+const SCENE_SHOT_TYPES = ['Selfie', 'Static', 'Moving', 'Any'];
+const SCENE_PACE = ['Fast', 'Relaxed', 'Cinematic', 'Any'];
 
 export default function StudioPage() {
     // UI State
@@ -31,8 +37,16 @@ export default function StudioPage() {
     // Advanced State
     const [gender, setGender] = useState('Any');
     const [age, setAge] = useState('Any');
+    const [avatarStyle, setAvatarStyle] = useState('Any');
+    const [clothing, setClothing] = useState('Any');
+    const [mood, setMood] = useState('Any');
     const [location, setLocation] = useState('Any');
+    const [lighting, setLighting] = useState('Any');
+    const [shotType, setShotType] = useState('Any');
+    const [pace, setPace] = useState('Any');
 
+    // (Optional) If you used avatarDetails in prompt:
+    const [avatarDetails, setAvatarDetails] = useState('');
     // System State
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState('');
