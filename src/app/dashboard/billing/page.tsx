@@ -162,7 +162,9 @@ export default function BillingPage() {
 
             <div className={styles.addonsSection}>
                 <h2 className={styles.addonsTitle}>¿Necesitás más créditos?</h2>
-                <div className={styles.addonsContent}>
+                <div className={styles.addonsContent}
+                // Deploy trigger: Billing plans v1.1
+                >
                     <div className={styles.addonCard}>
                         <span>Pack 90 créditos</span>
                         <Button variant="outline" size="sm">$9</Button>
