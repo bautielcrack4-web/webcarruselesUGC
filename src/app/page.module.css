@@ -35,6 +35,10 @@
   text-decoration: none;
   color: white;
   letter-spacing: -0.02em;
+  margin-right: 48px;
+  /* Safe space */
+  display: flex;
+  align-items: center;
 }
 
 .navLinks {
