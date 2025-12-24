@@ -6,6 +6,7 @@ import { Check, Zap, Star, Flame, Building2, CreditCard } from 'lucide-react';
 import { Button } from '@/components/ui/Button/Button';
 import { GlassCard } from '@/components/ui/GlassCard/GlassCard';
 import { supabase } from '@/lib/supabase';
+import { initializePaddle, Paddle } from '@paddle/paddle-js';
 import styles from './billing.module.css';
 
 const PLANS = [
@@ -13,6 +14,7 @@ const PLANS = [
         id: 'starter',
         name: 'TRY',
         price: '9',
+        priceId: 'pri_01kcqt266h5v2b6w8a2t9f1h5v',
         description: 'Probá anuncios realistas en minutos',
         credits: 90,
         features: [
@@ -27,6 +29,7 @@ const PLANS = [
         id: 'creator',
         name: 'CREATOR',
         price: '29',
+        priceId: 'pri_01kcqt0m6p3y6h8v2nvs9k2edd',
         description: 'Creá anuncios que parecen grabados por personas reales',
         credits: 360,
         features: [
@@ -43,6 +46,7 @@ const PLANS = [
         id: 'pro',
         name: 'PRO',
         price: '59',
+        priceId: 'pri_01j78y5q9m336h0f9q9z5g9v3a',
         description: 'Escalá creatividades sin depender de UGC real',
         credits: 900,
         features: [
@@ -58,6 +62,7 @@ const PLANS = [
         id: 'agency',
         name: 'AGENCY',
         price: '99',
+        priceId: 'pri_01j78y6m683m58g670v6z23zgh',
         description: 'Volumen, velocidad y control total',
         credits: 1800,
         features: [
@@ -74,11 +79,14 @@ const PLANS = [
 export default function BillingPage() {
     const [currentPlan, setCurrentPlan] = useState<string | null>(null);
     const [credits, setCredits] = useState<number>(0);
+    const [paddle, setPaddle] = useState<Paddle | undefined>(undefined);
+    const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
         const fetchSubscription = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
+                setUser(user);
                 const { data } = await supabase
                     .from('user_subscriptions')
                     .select('*')
@@ -92,12 +100,40 @@ export default function BillingPage() {
             }
         };
         fetchSubscription();
+
+        // Initialize Paddle
+        initializePaddle({
+            environment: 'sandbox', // Use sandbox for testing
+            token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN || ''
+        }).then((paddleInstance: Paddle | undefined) => {
+            if (paddleInstance) {
+                setPaddle(paddleInstance);
+            }
+        });
     }, []);
 
-    const handleSelectPlan = (planId: string) => {
-        // Logic for Paddle Checkout initialization
-        console.log('Selecting plan:', planId);
-        alert('Paddle Checkout se inicializará aquí para el plan: ' + planId);
+    const handleSelectPlan = (plan: any) => {
+        if (!paddle || !user) return;
+
+        if (plan.id === 'agency') {
+            window.location.href = 'mailto:ventas@ugccreator.ai';
+            return;
+        }
+
+        paddle.Checkout.open({
+            items: [
+                {
+                    priceId: plan.priceId,
+                    quantity: 1,
+                },
+            ],
+            customData: {
+                userId: user.id,
+            },
+            customer: {
+                email: user.email,
+            }
+        });
     };
 
     return (
@@ -151,9 +187,9 @@ export default function BillingPage() {
                             <Button
                                 className={styles.planBtn}
                                 variant={plan.popular ? 'primary' : 'outline'}
-                                onClick={() => handleSelectPlan(plan.id)}
+                                onClick={() => handleSelectPlan(plan)}
                             >
-                                {plan.id === 'agency' ? 'Contactar ventas' : (currentPlan === plan.id ? 'Tu plan actual' : `Elegir ${plan.name}`)}
+                                {plan.id === 'agency' ? 'Contactar ventas' : (currentPlan === plan.priceId ? 'Tu plan actual' : `Elegir ${plan.name}`)}
                             </Button>
                         </GlassCard>
                     </motion.div>
@@ -162,20 +198,30 @@ export default function BillingPage() {
 
             <div className={styles.addonsSection}>
                 <h2 className={styles.addonsTitle}>¿Necesitás más créditos?</h2>
-                <div className={styles.addonsContent}
-                // Deploy trigger: Billing plans v1.1
-                >
+                <div className={styles.addonsContent}>
                     <div className={styles.addonCard}>
                         <span>Pack 90 créditos</span>
-                        <Button variant="outline" size="sm">$9</Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleSelectPlan({ priceId: 'pri_01kcqt266h5v2b6w8a2t9f1h5v' })}
+                        >$9</Button>
                     </div>
                     <div className={styles.addonCard}>
                         <span>Pack 240 créditos</span>
-                        <Button variant="outline" size="sm">$19</Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleSelectPlan({ priceId: 'pri_01j78y7f8v3m58g670v6z23zgh' })} // Assuming a price ID for this
+                        >$19</Button>
                     </div>
                     <div className={styles.addonCard}>
                         <span>Pack 540 créditos</span>
-                        <Button variant="outline" size="sm">$39</Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleSelectPlan({ priceId: 'pri_01j78y8m683m58g670v6z23zgh' })} // Assuming a price ID for this
+                        >$39</Button>
                     </div>
                 </div>
             </div>
