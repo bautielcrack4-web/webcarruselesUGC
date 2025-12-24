@@ -48,9 +48,6 @@ export default function SignupPage() {
             >
                 <GlassCard className={styles.authCard}>
                     <div className={styles.header}>
-                        <div className={styles.iconCircle}>
-                            <UserPlus size={24} className={styles.accentIcon} />
-                        </div>
                         <h1 className={styles.title}>Create account</h1>
                         <p className={styles.subtitle}>Join top brands creating high-converting UGC ads</p>
                     </div>
@@ -61,9 +58,9 @@ export default function SignupPage() {
                             animate={{ scale: 1, opacity: 1 }}
                             className={styles.successMessage}
                         >
-                            <CheckCircle2 size={40} strokeWidth={1} style={{ marginBottom: 16 }} />
-                            <h3>Welcome aboard!</h3>
-                            <p>Your account has been created. Redirecting to login...</p>
+                            <CheckCircle2 size={40} strokeWidth={1} style={{ marginBottom: 16, color: '#10b981' }} />
+                            <h3 style={{ fontSize: '1.2rem', marginBottom: 8 }}>Welcome aboard!</h3>
+                            <p style={{ opacity: 0.7 }}>Your account has been created. Redirecting to login...</p>
                         </motion.div>
                     ) : (
                         <form onSubmit={handleSignup} className={styles.form}>
@@ -81,7 +78,7 @@ export default function SignupPage() {
                                 <label><Lock size={14} /> Password</label>
                                 <input
                                     type="password"
-                                    placeholder="Create a strong password"
+                                    placeholder="••••••••"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
