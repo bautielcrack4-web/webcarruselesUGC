@@ -4,6 +4,8 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 
+import Image from 'next/image';
+
 interface SidebarProps {
     isOpen?: boolean;
     onClose?: () => void;
@@ -47,7 +49,14 @@ export const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
 
             <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
                 <div className={styles.logo}>
-                    Ad<span className="text-gradient">fork</span>
+                    <Image
+                        src="/logo-white.png"
+                        alt="Adfork"
+                        width={120}
+                        height={40}
+                        style={{ height: '32px', width: 'auto', objectFit: 'contain' }}
+                        priority
+                    />
                 </div>
 
                 <nav className={styles.nav}>

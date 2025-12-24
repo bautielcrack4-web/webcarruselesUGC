@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight, Play, CheckCircle2, Zap, Layout, Smartphone } from 'lucide-react';
 import styles from './page.module.css';
@@ -36,7 +37,7 @@ export default function Home() {
         <div className={styles.container}>
           <div className={styles.navInner}>
             <Link href="/" className={styles.logo}>
-              Ad<span className="text-gradient">fork</span>
+              <Image src="/logo-white.png" alt="Adfork" width={100} height={32} style={{ height: '28px', width: 'auto' }} />
             </Link>
             <div className={styles.navLinks}>
               <a href="#features">Features</a>
@@ -171,7 +172,9 @@ export default function Home() {
       <footer className={styles.footer}>
         <div className={styles.container}>
           <div className={styles.footerContent}>
-            <div className={styles.logo}>Ad<span className="text-gradient">fork</span></div>
+            <div className={styles.logo}>
+              <Image src="/logo-white.png" alt="Adfork" width={100} height={32} style={{ height: '24px', width: 'auto', opacity: 0.8 }} />
+            </div>
             <p>© 2024 Nebula Pro Design. All rights reserved.</p>
           </div>
         </div>
