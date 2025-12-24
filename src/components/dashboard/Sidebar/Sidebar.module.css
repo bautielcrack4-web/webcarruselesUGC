@@ -43,19 +43,29 @@
 }
 
 .navItem:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.05);
     color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateX(2px);
 }
 
 .navItem.active {
-    background: rgba(255, 255, 255, 0.05);
+    background: linear-gradient(90deg, rgba(139, 92, 246, 0.15) 0%, rgba(139, 92, 246, 0.02) 100%);
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
 }
 
 .icon {
     font-size: 1.1rem;
     opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.navItem:hover .icon,
+.navItem.active .icon {
+    opacity: 1;
+    color: var(--accent-primary);
 }
 
 .creditBadge {
@@ -68,13 +78,14 @@
     gap: 10px;
     margin-bottom: 24px;
     text-decoration: none;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .creditBadge:hover {
     background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.1);
-    transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .creditIcon {
@@ -104,30 +115,53 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 4px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    transition: background 0.2s;
+}
+
+.userProfile:hover {
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .avatar {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: #222;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .userInfo {
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .userName {
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.9rem;
+    font-weight: 700;
     margin: 0;
     color: white;
+    line-height: 1.2;
 }
 
 .userEmail {
     font-size: 0.75rem;
     color: var(--fg-dim);
     margin: 0;
+}
+
+/* PRO Badge text */
+.proBadge {
+    font-size: 0.65rem;
+    background: var(--accent-primary);
+    color: white;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-left: auto;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }

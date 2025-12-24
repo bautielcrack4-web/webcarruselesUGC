@@ -71,7 +71,10 @@ export const Sidebar = () => {
                 <div className={styles.userProfile}>
                     <div className={styles.avatar} />
                     <div className={styles.userInfo}>
-                        <p className={styles.userName}>Usuario Pro</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <p className={styles.userName}>Usuario Pro</p>
+                            <span className={styles.proBadge}>PRO</span>
+                        </div>
                         <p className={styles.userEmail}>bauti@example.com</p>
                     </div>
                 </div>

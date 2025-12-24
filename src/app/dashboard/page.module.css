@@ -1,42 +1,97 @@
 .container {
-    max-width: 1200px;
+    padding: 40px;
+    max-width: 1400px;
     margin: 0 auto;
 }
 
 .header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 48px;
+    align-items: center;
+    margin-bottom: 40px;
 }
 
 .title {
     font-size: 2rem;
-    font-weight: 700;
-    margin: 0 0 8px 0;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: white;
 }
 
 .subtitle {
     color: var(--fg-muted);
-    margin: 0;
+    font-size: 1rem;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 32px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+/* EMPTY STATE - PREMIUM */
+.emptyStateWrapper {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
 }
 
 .emptyState {
-    grid-column: 1 / -1;
-    padding: 100px 40px;
     text-align: center;
-    background: rgba(255, 255, 255, 0.02);
-    border: 2px dashed rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
+    position: relative;
+    max-width: 480px;
 }
 
-.emptyState p {
+.emptyIconGlow {
+    width: 60px;
+    height: 60px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    margin: 0 auto 32px;
+    filter: blur(40px);
+    opacity: 0.4;
+    animation: pulse 4s infinite ease-in-out;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+}
+
+.emptyTitle {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, white 0%, rgba(255, 255, 255, 0.7) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+}
+
+.emptySubtitle {
     color: var(--fg-muted);
-    margin-bottom: 24px;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    line-height: 1.5;
+}
+
+.emptyCta {
+    box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25);
+    transition: transform 0.2s, box-shadow 0.2s !important;
+}
+
+.emptyCta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(139, 92, 246, 0.35);
 }

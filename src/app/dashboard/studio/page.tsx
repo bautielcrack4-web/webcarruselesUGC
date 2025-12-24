@@ -343,18 +343,27 @@ export default function StudioPage() {
                 <div className={styles.footer}>
                     <div className={styles.costInfo}>
                         <span>Costo: <strong style={{ color: '#fff' }}>{duration === 15 ? 45 : 30} créditos</strong></span>
-                        {userCredits !== null && userCredits < (duration === 15 ? 45 : 30) && (
-                            <span className={styles.insufficientCredits}>Saldo insuficiente. <a href="/dashboard/billing">Cargar créditos</a></span>
-                        )}
+                        {/* Remove old error message to clean up UI */}
                     </div>
-                    <Button
-                        className={styles.createBtn}
-                        onClick={handleGenerate}
-                        loading={loading}
-                        disabled={!imageFile || !message || (userCredits !== null && userCredits < (duration === 15 ? 45 : 30))}
-                    >
-                        Crear anuncio
-                    </Button>
+                    {userCredits !== null && userCredits < (duration === 15 ? 45 : 30) ? (
+                        <Button
+                            className={styles.createBtn} // Reuse style but maybe add a 'locked' variant class if needed, or stick to primary to invite clicks
+                            onClick={() => window.location.href = '/dashboard/billing'}
+                            disabled={false} // Enable it!
+                            style={{ background: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)', border: 'none', color: 'white' }}
+                        >
+                            Desbloquear (Faltan {(duration === 15 ? 45 : 30) - userCredits} créditos)
+                        </Button>
+                    ) : (
+                        <Button
+                            className={styles.createBtn}
+                            onClick={handleGenerate}
+                            loading={loading}
+                            disabled={!imageFile || !message}
+                        >
+                            Crear anuncio
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>

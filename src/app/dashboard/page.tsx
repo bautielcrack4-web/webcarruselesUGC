@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button/Button';
 import { ProjectCard } from '@/components/dashboard/ProjectCard/ProjectCard';
 import { supabase } from '@/lib/supabase';
+import { motion } from 'framer-motion';
 import styles from './page.module.css';
 
 interface Project {
@@ -56,22 +57,37 @@ export default function DashboardPage() {
                     </div>
                 ) : (
                     <>
-                        {projects.map((project: any) => (
-                            <ProjectCard
-                                key={project.id}
-                                name={project.name}
-                                status={project.status || 'Ready'}
-                                updatedAt={new Date(project.updated_at).toLocaleDateString()}
-                                videoUrl={project.video_url}
-                            />
-                        ))}
+                        <div className={styles.grid}>
+                            {projects.map((project: any) => (
+                                <ProjectCard
+                                    key={project.id}
+                                    name={project.name}
+                                    status={project.status || 'Ready'}
+                                    updatedAt={new Date(project.updated_at).toLocaleDateString()}
+                                    videoUrl={project.video_url}
+                                />
+                            ))}
+                        </div>
 
                         {projects.length === 0 && (
-                            <div className={styles.emptyState}>
-                                <p>Aún no tienes proyectos creados.</p>
-                                <Button variant="secondary" onClick={() => window.location.href = '/dashboard/studio'}>
-                                    Crear mi primer anuncio
-                                </Button>
+                            <div className={styles.emptyStateWrapper}>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 15 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.6, ease: "easeOut" }}
+                                    className={styles.emptyState}
+                                >
+                                    <div className={styles.emptyIconGlow} />
+                                    <h2 className={styles.emptyTitle}>Este es tu espacio creativo</h2>
+                                    <p className={styles.emptySubtitle}>Acá se crean anuncios que convierten. Empezá ahora.</p>
+                                    <Button
+                                        size="lg"
+                                        className={styles.emptyCta}
+                                        onClick={() => window.location.href = '/dashboard/studio'}
+                                    >
+                                        Crear anuncio
+                                    </Button>
+                                </motion.div>
                             </div>
                         )}
                     </>
