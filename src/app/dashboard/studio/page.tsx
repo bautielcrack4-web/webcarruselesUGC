@@ -46,15 +46,20 @@ export default function StudioPage() {
     const [shotType, setShotType] = useState('Any');
     const [pace, setPace] = useState('Any');
 
-    // (Optional) If you used avatarDetails in prompt:
-    const [avatarDetails, setAvatarDetails] = useState('');
     // System State
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState('');
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const [userCredits, setUserCredits] = useState<number | null>(null);
+    const [logs, setLogs] = useState<string[]>([]); // Debug logs
+
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const router = useRouter(); // Initialize router
+    const router = useRouter();
+
+    const addLog = (msg: string) => {
+        console.log(msg);
+        setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
+    };
 
     useEffect(() => {
         const fetchCredits = async () => {
@@ -84,359 +89,353 @@ export default function StudioPage() {
     };
 
     const handleGenerate = async () => {
-        if (!imageFile || !message) return;
-        setLoading(true);
-        setVideoUrl(null);
+        if (!imageFile || !message) {
+            alert("Missing image or prompt");
+            return;
+        }
+
         try {
-            // ... (Same logic as before, just ensuring copy is handled if needed in prompt building manually or kept simple)
-            // Simplified prompt construction for this demo
-            const prompt = `UGC video of a ${gender} ${age} holding the product. ${location} setting. Talking to camera saying: "${message}". Product: ${productDesc}. Authentic, 4k.`;
+            setLoading(true);
+            setVideoUrl(null);
+            setLogs([]); // Clear logs
+            addLog('Starting generation process...');
+            addLog(`Prompt: ${message}`);
 
-            const fileName = `${Math.random()}.${imageFile.name.split('.').pop()}`;
-            const filePath = `product-uploads/${fileName}`;
-            const { error: uploadError } = await supabase.storage.from('assets').upload(filePath, imageFile);
-            if (uploadError) throw uploadError;
-            const { data: { publicUrl } } = supabase.storage.from('assets').getPublicUrl(filePath);
-            const handleGenerate = async () => {
-                try {
-                    setLoading(true);
-                    setVideoUrl(null);
-                    setLogs([]); // Clear logs
-                    addLog('Starting generation process...');
-                    addLog(`Prompt: ${message}`);
+            // Upload Logic
+            let publicUrl = "";
 
-                    // Upload Image first (Mock for public URL if local)
-                    // In a real app, we'd upload to Supabase Storage here if it's a File object
-                    // For now assuming imageFile is a string URL or we handle upload
-                    let publicUrl = imageFile;
-                    if (imageFile instanceof File) {
-                        // Temporary: Use a placeholder or handle upload
-                        addLog('Allocating file upload...');
-                        // We need a real upload here usually, but for now assuming the user provided a URL string in the 'imageFile' 
-                        // variable logic if it was a URL input. 
-                        // If it is a File object, this WILL fail API side if we send [object File].
-                        // IMPORTANT: The current component mocks the "upload".
-                        // Let's assume for this debug that we need to verify what publicUrl is.
-                        addLog(`Image File Type: ${imageFile.type}`);
-                        // Quick fix hack for local testing if needed:
-                        // publicUrl = "https://some-public-url.com/image.jpg"; 
-                    }
-                    addLog(`Using Image URL: ${typeof publicUrl === 'string' ? publicUrl.substring(0, 50) + '...' : 'FILE OBJECT'}`);
+            if (imageFile instanceof File) {
+                addLog('Allocating file upload...');
+                const fileName = `${Math.random()}.${imageFile.name.split('.').pop()}`;
+                const filePath = `product-uploads/${fileName}`;
 
-                    setStatus('Producing magic...');
-                    addLog('Calling generateVideo...');
-
-                    const prompt = message;
-                    const format = "720*1280"; // Default
-                    const duration = 15; // Default
-
-                    const id = await generateVideo({
-                        image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff", // HARDCODED TEST URL to rule out upload issues
-                        prompt: prompt,
-                        duration: duration,
-                        size: format
-                    });
-
-                    addLog(`Generation ID received: ${id}`);
-
-                    const finalVideo = await waitForVideo(id, (s) => {
-                        addLog(`Polling status: ${s}`);
-                        if (s === 'processing') setStatus('Rendering final pixels...');
-                        if (s === 'completed' || s === 'succeeded') setStatus('Ready!');
-                    });
-
-                    addLog(`Video finished! URL: ${finalVideo}`);
-                    setVideoUrl(finalVideo);
-
-                    // Refresh credits
-                    const { data: { user } } = await supabase.auth.getUser();
-                    if (user) {
-                        const { data } = await supabase.from('user_subscriptions').select('credits_remaining').eq('user_id', user.id).single();
-                        if (data) setUserCredits(data.credits_remaining);
-                    }
-
-                } catch (err: any) {
-                    addLog(`ERROR: ${err.message}`);
-                    // console.error('Generation Error:', err); // Already logged in addLog
-                    alert(`Generation Failed: ${err.message}`);
-                } finally {
-                    setLoading(false);
-                    addLog('Process finished (finally block).');
+                addLog(`Uploading to ${filePath}...`);
+                const { error: uploadError } = await supabase.storage.from('assets').upload(filePath, imageFile);
+                if (uploadError) {
+                    addLog(`Upload failed: ${uploadError.message}`);
+                    throw uploadError;
                 }
-            };
 
-            const currentCost = duration === 15 ? 45 : 30;
-            const canGenerate = userCredits !== null && userCredits >= currentCost;
+                const { data } = supabase.storage.from('assets').getPublicUrl(filePath);
+                publicUrl = data.publicUrl;
+                addLog(`Upload successful. URL: ${publicUrl}`);
+            } else {
+                addLog('Using string URL for image.');
+                publicUrl = imageFile as string;
+            }
 
-            return (
-                <div className={styles.container}>
-                    {/* LEFT PANEL: CANVAS */}
-                    <div className={styles.canvasArea}>
-                        <div className={styles.canvasCard}>
-                            <AnimatePresence mode="wait">
-                                {videoUrl ? (
-                                    <motion.video
-                                        key="video"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        src={videoUrl}
-                                        controls
-                                        autoPlay
-                                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                                    />
-                                ) : loading ? (
-                                    <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={styles.emptyState}>
-                                        <div className={styles.emptyIcon} style={{ animation: 'spin 1s infinite linear', borderRadius: '50%' }}>
-                                            <Sparkles size={32} />
-                                        </div>
-                                        <p className={styles.emptyTitle}>{status}</p>
-                                    </motion.div>
-                                ) : (
-                                    <div className={styles.emptyState}>
-                                        <div className={styles.emptyIcon}>
-                                            <Video size={32} />
-                                        </div>
-                                        <h3 className={styles.emptyTitle}>
-                                            Upload an image and write a message.<br />
-                                            We'll do the rest.
-                                        </h3>
-                                    </div>
-                                )}
-                            </AnimatePresence>
-                        </div>
+            setStatus('Producing magic...');
+            addLog('Calling generateVideo API...');
+
+            const fullPrompt = `UGC video of a ${gender} ${age} holding the product. ${location} setting. Talking to camera saying: "${message}". Product: ${productDesc}. Authentic, 4k.`;
+            addLog(`Full Prompt: ${fullPrompt}`);
+
+            const id = await generateVideo({
+                image: publicUrl,
+                prompt: fullPrompt,
+                duration: duration,
+                size: format
+            });
+
+            addLog(`Generation ID received: ${id}`);
+
+            const finalVideo = await waitForVideo(id, (s) => {
+                addLog(`Polling status: ${s}`);
+                if (s === 'processing') setStatus('Rendering final pixels...');
+                if (s === 'completed' || s === 'succeeded') setStatus('Ready!');
+            });
+
+            addLog(`Video finished! URL: ${finalVideo}`);
+            setVideoUrl(finalVideo);
+
+            // Refresh credits
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                const { data } = await supabase.from('user_subscriptions').select('credits_remaining').eq('user_id', user.id).single();
+                if (data) setUserCredits(data.credits_remaining);
+            }
+
+        } catch (err: any) {
+            addLog(`ERROR: ${err.message}`);
+            alert(`Generation Failed: ${err.message}`);
+        } finally {
+            setLoading(false);
+            addLog('Process finished.');
+        }
+    };
+
+    const currentCost = duration === 15 ? 45 : 30;
+    const canGenerate = userCredits !== null && userCredits >= currentCost;
+
+    return (
+        <div className={styles.container}>
+            {/* LEFT PANEL: CANVAS */}
+            <div className={styles.canvasArea}>
+                <div className={styles.canvasCard}>
+                    <AnimatePresence mode="wait">
+                        {videoUrl ? (
+                            <motion.video
+                                key="video"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                src={videoUrl}
+                                controls
+                                autoPlay
+                                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                            />
+                        ) : loading ? (
+                            <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={styles.emptyState}>
+                                <div className={styles.emptyIcon} style={{ animation: 'spin 1s infinite linear', borderRadius: '50%' }}>
+                                    <Sparkles size={32} />
+                                </div>
+                                <p className={styles.emptyTitle}>{status}</p>
+                            </motion.div>
+                        ) : (
+                            <div className={styles.emptyState}>
+                                <div className={styles.emptyIcon}>
+                                    <Video size={32} />
+                                </div>
+                                <h3 className={styles.emptyTitle}>
+                                    Upload an image and write a message.<br />
+                                    We'll do the rest.
+                                </h3>
+                            </div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </div>
+
+            {/* RIGHT PANEL: CARD STACK */}
+            <div className={styles.stackPanel}>
+                <h1 className={styles.panelTitle}>Create new ad</h1>
+
+                {/* CARD 1: PRODUCT */}
+                <motion.div className={styles.card} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
+                    <div className={styles.cardTitle}><ImageIcon size={14} /> Your Product</div>
+
+                    <div className={styles.uploadArea} onClick={() => fileInputRef.current?.click()}>
+                        {image ? (
+                            <img src={image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Product" />
+                        ) : (
+                            <div className={styles.uploadPlaceholder}>
+                                <Upload size={32} />
+                                <span className={styles.uploadLabel}>Upload product image</span>
+                            </div>
+                        )}
+                        <input type="file" hidden ref={fileInputRef} onChange={handleImageUpload} accept="image/*" />
                     </div>
 
-                    {/* RIGHT PANEL: CARD STACK */}
-                    <div className={styles.stackPanel}>
-                        <h1 className={styles.panelTitle}>Create new ad</h1>
+                    <input
+                        className={styles.productInput}
+                        placeholder="What are you selling? (e.g. Nike Sneakers)"
+                        value={productDesc}
+                        onChange={(e) => setProductDesc(e.target.value)}
+                    />
+                </motion.div>
 
-                        {/* CARD 1: PRODUCT */}
-                        <motion.div className={styles.card} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
-                            <div className={styles.cardTitle}><ImageIcon size={14} /> Your Product</div>
+                {/* CARD 2: FORMAT */}
+                <motion.div className={styles.card} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
+                    <div className={styles.cardTitle}><Zap size={14} /> Format & Length</div>
 
-                            <div className={styles.uploadArea} onClick={() => fileInputRef.current?.click()}>
-                                {image ? (
-                                    <img src={image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Product" />
-                                ) : (
-                                    <div className={styles.uploadPlaceholder}>
-                                        <Upload size={32} />
-                                        <span className={styles.uploadLabel}>Upload product image</span>
-                                    </div>
-                                )}
-                                <input type="file" hidden ref={fileInputRef} onChange={handleImageUpload} accept="image/*" />
-                            </div>
+                    {/* Ratio Pills */}
+                    <div className={styles.pillGrid} style={{ marginBottom: 16 }}>
+                        <button
+                            className={`${styles.pillButton} ${format === '720*1280' ? styles.pillActive : ''}`}
+                            onClick={() => setFormat('720*1280')}
+                        >
+                            <span>9:16</span>
+                            <span className={styles.subLabel}>TikTok / Reels</span>
+                        </button>
+                        <button
+                            className={`${styles.pillButton} ${format === '1280*720' ? styles.pillActive : ''}`}
+                            onClick={() => setFormat('1280*720')}
+                        >
+                            <span>16:9</span>
+                            <span className={styles.subLabel}>YouTube</span>
+                        </button>
+                    </div>
 
-                            <input
-                                className={styles.productInput}
-                                placeholder="What are you selling? (e.g. Nike Sneakers)"
-                                value={productDesc}
-                                onChange={(e) => setProductDesc(e.target.value)}
-                            />
-                        </motion.div>
+                    {/* Duration Pills */}
+                    <div className={styles.pillGrid} style={{ marginBottom: 0 }}>
+                        <button
+                            className={`${styles.pillButton} ${duration === 10 ? styles.pillActive : ''}`}
+                            onClick={() => setDuration(10)}
+                        >
+                            <span>10s</span>
+                            <span className={styles.subLabel}>30 credits</span>
+                        </button>
+                        <button
+                            className={`${styles.pillButton} ${duration === 15 ? styles.pillActive : ''}`}
+                            onClick={() => setDuration(15)}
+                        >
+                            <span>15s</span>
+                            <span className={styles.subLabel}>45 credits</span>
+                        </button>
+                    </div>
+                </motion.div>
 
-                        {/* CARD 2: FORMAT */}
-                        <motion.div className={styles.card} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
-                            <div className={styles.cardTitle}><Zap size={14} /> Format & Length</div>
+                {/* CARD 3: MESSAGE */}
+                <motion.div className={styles.card} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
+                    <div className={styles.cardTitle}><Sparkles size={14} /> Message</div>
 
-                            {/* Ratio Pills */}
-                            <div className={styles.pillGrid} style={{ marginBottom: 16 }}>
-                                <button
-                                    className={`${styles.pillButton} ${format === '720*1280' ? styles.pillActive : ''}`}
-                                    onClick={() => setFormat('720*1280')}
-                                >
-                                    <span>9:16</span>
-                                    <span className={styles.subLabel}>TikTok / Reels</span>
-                                </button>
-                                <button
-                                    className={`${styles.pillButton} ${format === '1280*720' ? styles.pillActive : ''}`}
-                                    onClick={() => setFormat('1280*720')}
-                                >
-                                    <span>16:9</span>
-                                    <span className={styles.subLabel}>YouTube</span>
-                                </button>
-                            </div>
+                    <textarea
+                        className={styles.messageInput}
+                        placeholder="Since I started using this product, my sales doubled. It's incredible how easy it is to use..."
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                    />
 
-                            {/* Duration Pills */}
-                            <div className={styles.pillGrid} style={{ marginBottom: 0 }}>
-                                <button
-                                    className={`${styles.pillButton} ${duration === 10 ? styles.pillActive : ''}`}
-                                    onClick={() => setDuration(10)}
-                                >
-                                    <span>10s</span>
-                                    <span className={styles.subLabel}>30 credits</span>
-                                </button>
-                                <button
-                                    className={`${styles.pillButton} ${duration === 15 ? styles.pillActive : ''}`}
-                                    onClick={() => setDuration(15)}
-                                >
-                                    <span>15s</span>
-                                    <span className={styles.subLabel}>45 credits</span>
-                                </button>
-                            </div>
-                        </motion.div>
+                    <div className={styles.helperText}>
+                        <Sparkles size={12} color="#8b5cf6" />
+                        Don't worry if it's not perfect. The AI will optimize it.
+                    </div>
+                </motion.div>
 
-                        {/* CARD 3: MESSAGE */}
-                        <motion.div className={styles.card} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
-                            <div className={styles.cardTitle}><Sparkles size={14} /> Message</div>
+                {/* CARD 4: ADVANCED (Collapsed) */}
+                <motion.div className={styles.card} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
+                    <button className={styles.advancedToggle} onClick={() => setShowAdvanced(!showAdvanced)}>
+                        <span>Advanced Options</span>
+                        {showAdvanced ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                    </button>
 
-                            <textarea
-                                className={styles.messageInput}
-                                placeholder="Since I started using this product, my sales doubled. It's incredible how easy it is to use..."
-                                value={message}
-                                onChange={(e) => setMessage(e.target.value)}
-                            />
-
-                            <div className={styles.helperText}>
-                                <Sparkles size={12} color="#8b5cf6" />
-                                Don't worry if it's not perfect. The AI will optimize it.
-                            </div>
-                        </motion.div>
-
-                        {/* CARD 4: ADVANCED (Collapsed) */}
-                        <motion.div className={styles.card} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.3 }}>
-                            <button className={styles.advancedToggle} onClick={() => setShowAdvanced(!showAdvanced)}>
-                                <span>Advanced Options</span>
-                                {showAdvanced ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                            </button>
-
-                            <AnimatePresence>
-                                {showAdvanced && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        className={styles.advancedContent}
-                                    >
-                                        {/* AVATAR SECTION */}
-                                        <div className={styles.advancedSection}>
-                                            <h4 className={styles.sectionTitle}>Avatar Personality</h4>
-
-                                            <div className={styles.optionGroup}>
-                                                <label className={styles.subLabel}>Gender</label>
-                                                <div className={styles.tagsContainer}>
-                                                    {AVATAR_GENDERS.map(opt => (
-                                                        <button key={opt} className={`${styles.tag} ${gender === opt ? styles.tagActive : ''}`} onClick={() => setGender(opt)}>{opt}</button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className={styles.optionGroup}>
-                                                <label className={styles.subLabel}>Age</label>
-                                                <div className={styles.tagsContainer}>
-                                                    {AVATAR_AGES.map(opt => (
-                                                        <button key={opt} className={`${styles.tag} ${age === opt ? styles.tagActive : ''}`} onClick={() => setAge(opt)}>{opt}</button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className={styles.optionGroup}>
-                                                <label className={styles.subLabel}>Style</label>
-                                                <div className={styles.tagsContainer}>
-                                                    {AVATAR_STYLES.map(opt => (
-                                                        <button key={opt} className={`${styles.tag} ${avatarStyle === opt ? styles.tagActive : ''}`} onClick={() => setAvatarStyle(opt)}>{opt}</button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className={styles.optionGroup}>
-                                                <label className={styles.subLabel}>Clothing</label>
-                                                <div className={styles.tagsContainer}>
-                                                    {AVATAR_CLOTHING.map(opt => (
-                                                        <button key={opt} className={`${styles.tag} ${clothing === opt ? styles.tagActive : ''}`} onClick={() => setClothing(opt)}>{opt}</button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className={styles.optionGroup}>
-                                                <label className={styles.subLabel}>Mood</label>
-                                                <div className={styles.tagsContainer}>
-                                                    {AVATAR_MOODS.map(opt => (
-                                                        <button key={opt} className={`${styles.tag} ${mood === opt ? styles.tagActive : ''}`} onClick={() => setMood(opt)}>{opt}</button>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* SCENE SECTION */}
-                                        <div className={styles.advancedSection}>
-                                            <h4 className={styles.sectionTitle}>Scene & Camera</h4>
-
-                                            <div className={styles.optionGroup}>
-                                                <label className={styles.subLabel}>Location</label>
-                                                <div className={styles.tagsContainer}>
-                                                    {SCENE_LOCATIONS.map(opt => (
-                                                        <button key={opt} className={`${styles.tag} ${location === opt ? styles.tagActive : ''}`} onClick={() => setLocation(opt)}>{opt}</button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className={styles.optionGroup}>
-                                                <label className={styles.subLabel}>Lighting</label>
-                                                <div className={styles.tagsContainer}>
-                                                    {SCENE_LIGHTING.map(opt => (
-                                                        <button key={opt} className={`${styles.tag} ${lighting === opt ? styles.tagActive : ''}`} onClick={() => setLighting(opt)}>{opt}</button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className={styles.optionGroup}>
-                                                <label className={styles.subLabel}>Shot Type</label>
-                                                <div className={styles.tagsContainer}>
-                                                    {SCENE_SHOT_TYPES.map(opt => (
-                                                        <button key={opt} className={`${styles.tag} ${shotType === opt ? styles.tagActive : ''}`} onClick={() => setShotType(opt)}>{opt}</button>
-                                                    ))}
-                                                </div>
-                                            </div>
-
-                                            <div className={styles.optionGroup}>
-                                                <label className={styles.subLabel}>Pace</label>
-                                                <div className={styles.tagsContainer}>
-                                                    {SCENE_PACE.map(opt => (
-                                                        <button key={opt} className={`${styles.tag} ${pace === opt ? styles.tagActive : ''}`} onClick={() => setPace(opt)}>{opt}</button>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </motion.div>
-
-                        {/* STICKY FOOTER - CONVERSION OPTIMIZED */}
-                        <div className={styles.stickyFooter}>
-                            <Button
-                                className={styles.generateBtn}
-                                // disabled={!imageFile || !message || loading} // Comented out for debugging
-                                disabled={loading}
-                                loading={loading}
-                                onClick={() => {
-                                    console.log('Generate button clicked');
-                                    if (!imageFile) { alert('Please upload an image first.'); return; }
-                                    if (!message) { alert('Please enter a prompt.'); return; }
-
-                                    if (!canGenerate) {
-                                        router.push('/dashboard/billing');
-                                        return;
-                                    }
-                                    handleGenerate();
-                                }}
+                    <AnimatePresence>
+                        {showAdvanced && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className={styles.advancedContent}
                             >
-                                {loading ? 'Creating magic...' : (canGenerate ? 'Generate ad' : 'Unlock ad')}
-                                {!loading && <Sparkles size={18} fill={canGenerate ? "black" : "currentColor"} />}
-                            </Button>
+                                {/* AVATAR SECTION */}
+                                <div className={styles.advancedSection}>
+                                    <h4 className={styles.sectionTitle}>Avatar Personality</h4>
 
-                            <div className={styles.costDisplay}>
-                                Cost: {currentCost} credits
-                                {!canGenerate && (
-                                    <span className={styles.insufficientFunds}>
-                                        • You need more credits
-                                    </span>
-                                )}
-                            </div>
-                        </div>
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Gender</label>
+                                        <div className={styles.tagsContainer}>
+                                            {AVATAR_GENDERS.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${gender === opt ? styles.tagActive : ''}`} onClick={() => setGender(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
 
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Age</label>
+                                        <div className={styles.tagsContainer}>
+                                            {AVATAR_AGES.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${age === opt ? styles.tagActive : ''}`} onClick={() => setAge(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Style</label>
+                                        <div className={styles.tagsContainer}>
+                                            {AVATAR_STYLES.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${avatarStyle === opt ? styles.tagActive : ''}`} onClick={() => setAvatarStyle(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Clothing</label>
+                                        <div className={styles.tagsContainer}>
+                                            {AVATAR_CLOTHING.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${clothing === opt ? styles.tagActive : ''}`} onClick={() => setClothing(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Mood</label>
+                                        <div className={styles.tagsContainer}>
+                                            {AVATAR_MOODS.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${mood === opt ? styles.tagActive : ''}`} onClick={() => setMood(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* SCENE SECTION */}
+                                <div className={styles.advancedSection}>
+                                    <h4 className={styles.sectionTitle}>Scene & Camera</h4>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Location</label>
+                                        <div className={styles.tagsContainer}>
+                                            {SCENE_LOCATIONS.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${location === opt ? styles.tagActive : ''}`} onClick={() => setLocation(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Lighting</label>
+                                        <div className={styles.tagsContainer}>
+                                            {SCENE_LIGHTING.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${lighting === opt ? styles.tagActive : ''}`} onClick={() => setLighting(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Shot Type</label>
+                                        <div className={styles.tagsContainer}>
+                                            {SCENE_SHOT_TYPES.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${shotType === opt ? styles.tagActive : ''}`} onClick={() => setShotType(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Pace</label>
+                                        <div className={styles.tagsContainer}>
+                                            {SCENE_PACE.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${pace === opt ? styles.tagActive : ''}`} onClick={() => setPace(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </motion.div>
+
+                {/* STICKY FOOTER - CONVERSION OPTIMIZED */}
+                <div className={styles.stickyFooter}>
+                    <Button
+                        className={styles.generateBtn}
+                        disabled={loading}
+                        loading={loading}
+                        onClick={() => {
+                            if (!canGenerate) {
+                                router.push('/dashboard/billing');
+                                return;
+                            }
+                            handleGenerate();
+                        }}
+                    >
+                        {loading ? 'Creating magic...' : (canGenerate ? 'Generate ad' : 'Unlock ad')}
+                        {!loading && <Sparkles size={18} fill={canGenerate ? "black" : "currentColor"} />}
+                    </Button>
+
+                    <div className={styles.costDisplay}>
+                        Cost: {currentCost} credits
+                        {!canGenerate && (
+                            <span className={styles.insufficientFunds}>
+                                • You need more credits
+                            </span>
+                        )}
                     </div>
                 </div>
-            );
-        }
+
+                {/* DEBUG CONSOLE */}
+                <div style={{ marginTop: 20, padding: 10, background: '#111', color: '#0f0', border: '1px solid #333', borderRadius: 8, fontFamily: 'monospace', fontSize: 12, maxHeight: 200, overflowY: 'auto' }}>
+                    <strong>DEBUG CONSOLE:</strong>
+                    {logs.map((log, i) => <div key={i}>{log}</div>)}
+                </div>
+            </div>
+        </div>
+    );
+}
