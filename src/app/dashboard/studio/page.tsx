@@ -70,7 +70,11 @@ export default function StudioPage() {
     const [productDesc, setProductDesc] = useState('');
 
     // 2. Estados del bloque "Avatar"
-    const [selectedAvatarId, setSelectedAvatarId] = useState<string>(AVATAR_PRESETS[0].id);
+    const [gender, setGender] = useState('No especificar');
+    const [age, setAge] = useState('No especificar');
+    const [avatarStyle, setAvatarStyle] = useState('No especificar');
+    const [clothing, setClothing] = useState('No especificar');
+    const [mood, setMood] = useState('No especificar');
     const [avatarDetails, setAvatarDetails] = useState('');
 
     // 3. Estados del bloque "Escena & Cámara"
@@ -165,7 +169,7 @@ export default function StudioPage() {
                         original_message: message,
                         duration,
                         size: format,
-                        avatar: { selectedAvatarId, extraDetails: avatarDetails },
+                        avatar: { gender, age, style: avatarStyle, clothing, mood },
                         scene: { location, lighting, shotType, pace }
                     }
                 });
