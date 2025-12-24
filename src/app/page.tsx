@@ -116,10 +116,20 @@ export default function Home() {
             </Link>
           </motion.div>
 
-          {/* Video Showcase Placeholder (Waiting for user uploads) */}
-          <div className={styles.showcasePlaceholder}>
-            {/* We will implement the carousel here in the next step */}
-          </div>
+          import {VideoCarousel} from '@/components/landing/VideoCarousel/VideoCarousel';
+
+          // ... (inside component)
+
+          {/* Video Showcase (Replaces Placeholder) */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            custom={4}
+            variants={fadeIn}
+            className={styles.showcaseSection}
+          >
+            <VideoCarousel />
+          </motion.div>
         </div>
       </section>
 

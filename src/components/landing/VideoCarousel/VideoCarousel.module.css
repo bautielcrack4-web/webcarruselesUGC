@@ -1,0 +1,184 @@
+.carouselWrapper {
+    width: 100%;
+    margin: 60px 0;
+    position: relative;
+    z-index: 10;
+}
+
+.carouselHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 0 1rem;
+}
+
+.carouselTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.titleIcon {
+    color: var(--accent-primary);
+}
+
+.navButtons {
+    display: flex;
+    gap: 12px;
+}
+
+.navBtn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.navBtn:hover {
+    background: white;
+    color: black;
+}
+
+.carouselTrack {
+    display: flex;
+    overflow-x: auto;
+    gap: 24px;
+    padding: 10px 1rem 40px 1rem;
+    /* Bottom padding for hover expansion */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.carouselTrack::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+}
+
+.card {
+    flex: 0 0 280px;
+    background: rgba(20, 20, 22, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(139, 92, 246, 0.3);
+}
+
+.videoContainer {
+    position: relative;
+    aspect-ratio: 9/16;
+    background: black;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.langBadge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.playHint {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.videoContainer:hover .playHint {
+    opacity: 1;
+}
+
+.cardFooter {
+    padding: 16px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.inputPreview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.inputLabel {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--fg-muted);
+    font-weight: 600;
+    min-width: 45px;
+}
+
+.imgWrapper {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.inputImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.promptPreview {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.promptText {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
