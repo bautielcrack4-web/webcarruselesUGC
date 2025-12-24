@@ -121,7 +121,8 @@ export default function StudioPage() {
             }
 
         } catch (err: any) {
-            alert(`Error: ${err.message}`);
+            console.error('Generation Error:', err);
+            alert(`Generation Failed: ${err.message || 'Unknown error'}`);
         } finally {
             setLoading(false);
         }

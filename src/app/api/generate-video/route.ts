@@ -56,9 +56,14 @@ export async function POST(req: Request) {
             }, { status: 402 });
         }
 
+        if (!API_KEY) {
+            console.error('API Route Error: Missing NEXT_PUBLIC_ATLASCLOUD_API_KEY');
+            return NextResponse.json({ error: 'Server Misconfiguration: Missing API Key' }, { status: 500 });
+        }
+
         console.log(`API Route: Credits deducted (${creditCost}) for user ${user.email}`);
 
-        const response = await fetch(`${ATLAS_API_BASE}/generateVideo`, {
+        const atlasResponse = await fetch(`${ATLAS_API_BASE}/generateVideo`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,7 +78,16 @@ export async function POST(req: Request) {
             })
         });
 
-        const json = await response.json();
+        const json = await atlasResponse.json();
+
+        if (!atlasResponse.ok) {
+            console.error('Atlas API Error:', json);
+            return NextResponse.json({
+                error: 'Atlas API Failed',
+                details: json
+            }, { status: atlasResponse.status });
+        }
+
         return NextResponse.json(json);
     } catch (err: any) {
         console.error('API Route Error:', err);
