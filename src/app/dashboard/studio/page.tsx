@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import {
     Upload, Video, Sparkles, ChevronDown, ChevronUp, Zap, Image as ImageIcon
 } from 'lucide-react';
