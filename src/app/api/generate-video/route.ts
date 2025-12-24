@@ -13,6 +13,10 @@ export async function POST(req: Request) {
         // 1. Get User Session using @supabase/ssr
         const cookieStore = await cookies();
 
+        // DEBUG: Log received cookies
+        const allCookies = cookieStore.getAll();
+        console.log('API Route: Cookies received:', allCookies.map(c => c.name));
+
         const supabase = createServerClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL!,
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -22,19 +26,40 @@ export async function POST(req: Request) {
                         return cookieStore.get(name)?.value;
                     },
                     set(name: string, value: string, options: CookieOptions) {
-                        cookieStore.set({ name, value, ...options });
+                        try {
+                            cookieStore.set({ name, value, ...options });
+                        } catch (error) {
+                            // The `set` method was called from a Server Component.
+                            // This can be ignored if you have middleware refreshing
+                            // user sessions.
+                        }
                     },
                     remove(name: string, options: CookieOptions) {
-                        cookieStore.set({ name, value: '', ...options });
+                        try {
+                            cookieStore.set({ name, value: '', ...options });
+                        } catch (error) {
+                            // The `delete` method was called from a Server Component.
+                            // This can be ignored if you have middleware refreshing
+                            // user sessions.
+                        }
                     },
                 },
             }
         );
 
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+        if (authError) {
+            console.error('API Route: Auth Error:', authError);
+        }
 
         if (!user) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+            console.error('API Route: User lookup failed (User is null)');
+            return NextResponse.json({
+                error: 'Unauthorized',
+                debug_cookies: allCookies.map(c => c.name),
+                auth_error: authError
+            }, { status: 401 });
         }
 
         // 2. Calculate Credit Cost
