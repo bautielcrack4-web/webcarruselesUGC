@@ -89,8 +89,27 @@ export default function AssetsPage() {
                                         {new Date(asset.created_at).toLocaleDateString()}
                                     </span>
                                     <button
-                                        onClick={() => window.open(asset.url, '_blank')}
+                                        onClick={async () => {
+                                            try {
+                                                const response = await fetch(asset.url);
+                                                const blob = await response.blob();
+                                                const url = window.URL.createObjectURL(blob);
+                                                const a = document.createElement('a');
+                                                a.style.display = 'none';
+                                                a.href = url;
+                                                // Ensure .mp4 extension
+                                                const cleanName = asset.name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+                                                a.download = `${cleanName}.mp4`;
+                                                document.body.appendChild(a);
+                                                a.click();
+                                                window.URL.revokeObjectURL(url);
+                                            } catch (error) {
+                                                console.error('Download failed', error);
+                                                window.open(asset.url, '_blank');
+                                            }
+                                        }}
                                         style={{ background: 'none', border: 'none', color: 'var(--accent-primary)', cursor: 'pointer' }}
+                                        title="Download MP4"
                                     >
                                         <Download size={18} />
                                     </button>
