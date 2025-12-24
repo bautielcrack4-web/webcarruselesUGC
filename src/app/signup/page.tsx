@@ -21,15 +21,29 @@ export default function SignupPage() {
         setLoading(true);
         setError(null);
 
-        const { error } = await supabase.auth.signUp({ email, password });
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                emailRedirectTo: `${window.location.origin}/auth/callback`,
+            },
+        });
 
         if (error) {
             setError(error.message);
             setLoading(false);
         } else {
-            setSuccess(true);
-            setLoading(false);
-            setTimeout(() => { window.location.href = '/login'; }, 2000);
+            if (data.session) {
+                // Auto-login successful (Email confirmation disabled or not required)
+                window.location.href = '/dashboard/studio';
+            } else {
+                // Email confirmation required
+                setSuccess(true);
+                setLoading(false);
+                // Optional: You could still redirect to login after a delay, 
+                // but keeping the user informed about the email check is better.
+                setTimeout(() => { window.location.href = '/login'; }, 3000);
+            }
         }
     };
 

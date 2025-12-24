@@ -157,9 +157,11 @@ export default function BillingPage() {
                 {PLANS.map((plan) => (
                     <motion.div
                         key={plan.id}
-                        whileHover={{ y: -5 }}
+                        whileHover={{ y: -8 }}
+                        transition={{ duration: 0.3, ease: 'easeOut' }}
                         className={`${styles.planWrapper} ${plan.popular ? styles.popularWrapper : ''}`}
                     >
+                        {plan.popular && <div className={styles.glow} />}
                         {plan.popular && <div className={styles.popularBadge}>Más elegido</div>}
                         <GlassCard className={`${styles.planCard} ${plan.popular ? styles.popularCard : ''}`}>
                             <div className={styles.planHeader}>

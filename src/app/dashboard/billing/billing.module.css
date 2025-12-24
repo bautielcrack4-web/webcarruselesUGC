@@ -1,30 +1,45 @@
+/* BILLING PREMIUM AESTHETIC */
+
 .container {
-    padding: 40px;
-    max-width: 1200px;
+    padding: 60px 20px;
+    max-width: 1280px;
     margin: 0 auto;
+    position: relative;
+    /* Fondo con profundidad (Gradients sutiles) */
+    background:
+        radial-gradient(circle at 50% 10%, rgba(120, 119, 198, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 40%, rgba(99, 102, 241, 0.08) 0%, transparent 30%);
 }
 
+/* Header Hierarchy */
 .header {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 80px;
+    position: relative;
+    z-index: 2;
 }
 
 .title {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
+    /* Título grande */
     font-weight: 800;
-    margin-bottom: 12px;
-    letter-spacing: -0.04em;
-    background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0.7));
+    margin-bottom: 16px;
+    letter-spacing: -0.03em;
+    background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .subtitle {
-    color: var(--fg-muted);
-    font-size: 1.1rem;
-    margin-bottom: 32px;
+    color: #94a3b8;
+    /* Subtítulo gris azulado */
+    font-size: 1.25rem;
+    margin-bottom: 40px;
+    font-weight: 400;
 }
 
+/* Stats Row */
 .statsRow {
     display: flex;
     justify-content: center;
@@ -34,6 +49,9 @@
 .statCard {
     padding: 24px 40px !important;
     text-align: center;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .statHeader {
@@ -41,7 +59,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    color: var(--fg-dim);
+    color: rgba(255, 255, 255, 0.6);
     font-size: 0.85rem;
     font-weight: 600;
     margin-bottom: 8px;
@@ -50,16 +68,20 @@
 }
 
 .statValue {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 800;
     color: white;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
+/* Plans Grid */
 .plansGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 columnas en desktop */
     gap: 24px;
-    margin-bottom: 60px;
+    margin-bottom: 80px;
+    align-items: flex-start;
 }
 
 .planWrapper {
@@ -67,148 +89,275 @@
     height: 100%;
 }
 
-.popularBadge {
+/* Glow detrás del plan destacado */
+.glow {
     position: absolute;
-    top: -12px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    background: var(--accent-primary);
-    color: white;
-    padding: 4px 16px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    z-index: 5;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 60%);
+    filter: blur(40px);
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.8;
 }
 
+/* Badges y Estado */
+.popularBadge {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #6366f1;
+    color: white;
+    padding: 6px 20px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    z-index: 10;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
+    letter-spacing: 0.02em;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+/* Cards con "Material" */
 .planCard {
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 40px !important;
+    padding: 32px 28px !important;
+    /* Padding grande */
     background: rgba(255, 255, 255, 0.03) !important;
+    /* Fondo sutil */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    /* Borde sutil */
+    border-radius: 24px !important;
+    /* Radius grande */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* Plan Destacado */
 .popularCard {
-    background: rgba(139, 92, 246, 0.05) !important;
-    border: 1px solid rgba(139, 92, 246, 0.2) !important;
+    background: linear-gradient(180deg, rgba(30, 27, 75, 0.8) 0%, rgba(15, 15, 20, 0.9) 100%) !important;
+    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(99, 102, 241, 0.1) !important;
+    position: relative;
+    transform: scale(1.02);
+    /* Slight scale up always */
 }
 
+/* Typography Hierarchy inside Card */
 .planHeader {
     text-align: center;
     margin-bottom: 32px;
 }
 
-.planIcon {
-    margin-bottom: 16px;
-}
-
 .planName {
-    font-size: 1.25rem;
-    font-weight: 800;
-    margin-bottom: 16px;
-    letter-spacing: 0.05em;
+    font-size: 0.9rem;
+    /* "Plan" pequeño */
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .priceContainer {
     display: flex;
-    align-items: baseline;
+    align-items: flex-start;
     justify-content: center;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
+    line-height: 1;
 }
 
 .currency {
     font-size: 1.5rem;
-    font-weight: 600;
-    margin-right: 2px;
+    font-weight: 500;
+    margin-right: 4px;
+    margin-top: 8px;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .price {
-    font-size: 3.5rem;
-    font-weight: 900;
-    letter-spacing: -0.05em;
+    font-size: 4rem;
+    /* Precio gigante */
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: white;
 }
 
 .period {
-    color: var(--fg-muted);
-    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+    /* mes chiquito */
+    font-weight: 500;
+    align-self: flex-end;
+    margin-bottom: 8px;
     margin-left: 4px;
 }
 
 .planDescription {
-    font-size: 0.9rem;
-    color: var(--fg-muted);
-    line-height: 1.5;
-    height: 3em;
+    font-size: 0.95rem;
+    color: #94a3b8;
+    /* Gris azulado */
+    line-height: 1.6;
+    height: 3.2em;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+/* Bullets Impecables */
 .planFeatures {
     flex: 1;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 24px;
 }
 
 .featureItem {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
     font-size: 0.9rem;
-    color: var(--fg-muted);
+    color: #cbd5e1;
     line-height: 1.4;
 }
 
 .checkIcon {
-    color: #10b981;
+    color: white;
+    /* Icono blanco o acento */
+    background: rgba(255, 255, 255, 0.1);
+    padding: 3px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
-    margin-top: 2px;
 }
 
+.popularCard .checkIcon {
+    background: #6366f1;
+    color: white;
+}
+
+/* Botón Premium */
 .planBtn {
     width: 100%;
+    height: 52px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* Botón Outline Tenue (Planes normales) */
+.planBtn[class*="outline"] {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+}
+
+.planBtn[class*="outline"]:hover {
+    border-color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.05);
+}
+
+/* Botón Sólido (Plan Destacado) */
+.popularCard .planBtn {
+    background: white !important;
+    color: black !important;
+    border: none !important;
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+}
+
+.popularCard .planBtn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.25);
+}
+
+/* Section Packs */
 .addonsSection {
     text-align: center;
-    padding-top: 40px;
+    padding-top: 60px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .addonsTitle {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 32px;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .addonsContent {
     display: flex;
     justify-content: center;
-    gap: 24px;
+    gap: 16px;
     flex-wrap: wrap;
 }
 
+/* Packs Pills */
 .addonCard {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 16px 24px;
-    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 8px 8px 8px 20px;
+    /* Padding asimétrico para el botón */
+    border-radius: 100px;
+    /* Full rounded pill */
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
     font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+.addonCard:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+}
+
+.addonCard button {
+    border-radius: 100px !important;
+    padding: 6px 16px !important;
+    height: auto !important;
+    font-size: 0.9rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+@media (max-width: 1024px) {
+    .plansGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 20px;
+        padding: 30px 16px;
     }
 
     .title {
-        font-size: 2rem;
+        font-size: 2.2rem;
+    }
+
+    .plansGrid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .price {
+        font-size: 3.5rem;
     }
 }
