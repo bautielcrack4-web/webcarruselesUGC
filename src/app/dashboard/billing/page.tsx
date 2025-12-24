@@ -137,7 +137,7 @@ export default function BillingPage() {
         }
 
         if (plan.id === 'agency') {
-            window.location.href = 'mailto:ventas@ugccreator.ai';
+            window.location.href = 'mailto:sales@adfork.ai';
             return;
         }
 

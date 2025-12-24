@@ -36,7 +36,7 @@ export default function Home() {
         <div className={styles.container}>
           <div className={styles.navInner}>
             <Link href="/" className={styles.logo}>
-              UGC<span className="text-gradient">Creator</span>
+              Ad<span className="text-gradient">fork</span>
             </Link>
             <div className={styles.navLinks}>
               <a href="#features">Features</a>
@@ -113,7 +113,7 @@ export default function Home() {
             <GlassCard className={styles.previewCard}>
               <div className={styles.mockupHeader}>
                 <div className={styles.dots}><span /><span /><span /></div>
-                <div className={styles.url}>ugc-creator.ai/studio</div>
+                <div className={styles.url}>adfork.ai/studio</div>
               </div>
               <div className={styles.mockupBody}>
                 <div className={styles.mockupSidebar}>
@@ -171,7 +171,7 @@ export default function Home() {
       <footer className={styles.footer}>
         <div className={styles.container}>
           <div className={styles.footerContent}>
-            <div className={styles.logo}>UGC<span className="text-gradient">Creator</span></div>
+            <div className={styles.logo}>Ad<span className="text-gradient">fork</span></div>
             <p>© 2024 Nebula Pro Design. All rights reserved.</p>
           </div>
         </div>

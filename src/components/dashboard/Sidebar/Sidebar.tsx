@@ -47,7 +47,7 @@ export const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
 
             <aside className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
                 <div className={styles.logo}>
-                    UGC<span className="text-gradient">Creator</span>
+                    Ad<span className="text-gradient">fork</span>
                 </div>
 
                 <nav className={styles.nav}>

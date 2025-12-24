@@ -15,7 +15,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "UGC Creator | Crea anuncios virales en segundos",
+  title: "Adfork | Crea anuncios virales en segundos",
   description: "La plataforma #1 para crear contenido UGC impulsado por IA. Rápido, auténtico y diseñado para convertir.",
 };
 
