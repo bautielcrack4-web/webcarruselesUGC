@@ -8,6 +8,7 @@ import { ArrowRight, Play, CheckCircle2, Zap, Layout, Smartphone } from 'lucide-
 import styles from './page.module.css';
 import { Button } from '@/components/ui/Button/Button';
 import { GlassCard } from '@/components/ui/GlassCard/GlassCard';
+import { VideoCarousel } from '@/components/landing/VideoCarousel/VideoCarousel';
 
 /* Animation Variants */
 const fadeIn = {
@@ -116,9 +117,6 @@ export default function Home() {
             </Link>
           </motion.div>
 
-          import {VideoCarousel} from '@/components/landing/VideoCarousel/VideoCarousel';
-
-          // ... (inside component)
 
           {/* Video Showcase (Replaces Placeholder) */}
           <motion.div
