@@ -246,50 +246,131 @@ export default function StudioPage() {
                                 exit={{ height: 0, opacity: 0 }}
                                 className={styles.advancedContent}
                             >
-                                <div>
-                                    <label className={styles.subLabel} style={{ marginBottom: 8, display: 'block' }}>Avatar Gender</label>
-                                    <div className={styles.tagsContainer}>
-                                        {AVATAR_GENDERS.map(opt => (
-                                            <button
-                                                key={opt}
-                                                className={`${styles.tag} ${gender === opt ? styles.tagActive : ''}`}
-                                                onClick={() => setGender(opt)}
-                                            >
-                                                {opt}
-                                            </button>
-                                        ))}
+                                {/* AVATAR SECTION */}
+                                <div className={styles.advancedSection}>
+                                    <h4 className={styles.sectionTitle}>Avatar Personality</h4>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Gender</label>
+                                        <div className={styles.tagsContainer}>
+                                            {AVATAR_GENDERS.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${gender === opt ? styles.tagActive : ''}`} onClick={() => setGender(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Age</label>
+                                        <div className={styles.tagsContainer}>
+                                            {AVATAR_AGES.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${age === opt ? styles.tagActive : ''}`} onClick={() => setAge(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Style</label>
+                                        <div className={styles.tagsContainer}>
+                                            {AVATAR_STYLES.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${avatarStyle === opt ? styles.tagActive : ''}`} onClick={() => setAvatarStyle(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Clothing</label>
+                                        <div className={styles.tagsContainer}>
+                                            {AVATAR_CLOTHING.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${clothing === opt ? styles.tagActive : ''}`} onClick={() => setClothing(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Mood</label>
+                                        <div className={styles.tagsContainer}>
+                                            {AVATAR_MOODS.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${mood === opt ? styles.tagActive : ''}`} onClick={() => setMood(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
-                                {/* Add more advanced options similarly if needed */}
+
+                                {/* SCENE SECTION */}
+                                <div className={styles.advancedSection}>
+                                    <h4 className={styles.sectionTitle}>Scene & Camera</h4>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Location</label>
+                                        <div className={styles.tagsContainer}>
+                                            {SCENE_LOCATIONS.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${location === opt ? styles.tagActive : ''}`} onClick={() => setLocation(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Lighting</label>
+                                        <div className={styles.tagsContainer}>
+                                            {SCENE_LIGHTING.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${lighting === opt ? styles.tagActive : ''}`} onClick={() => setLighting(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Shot Type</label>
+                                        <div className={styles.tagsContainer}>
+                                            {SCENE_SHOT_TYPES.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${shotType === opt ? styles.tagActive : ''}`} onClick={() => setShotType(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.optionGroup}>
+                                        <label className={styles.subLabel}>Pace</label>
+                                        <div className={styles.tagsContainer}>
+                                            {SCENE_PACE.map(opt => (
+                                                <button key={opt} className={`${styles.tag} ${pace === opt ? styles.tagActive : ''}`} onClick={() => setPace(opt)}>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
                             </motion.div>
                         )}
                     </AnimatePresence>
                 </motion.div>
 
-                {/* STICKY FOOTER */}
+                {/* STICKY FOOTER - CONVERSION OPTIMIZED */}
                 <div className={styles.stickyFooter}>
+                    <Button
+                        className={styles.generateBtn}
+                        disabled={!imageFile || !message || loading}
+                        loading={loading}
+                        onClick={() => {
+                            if (!canGenerate) {
+                                // "Premium Flow": Trigger Paywall / Upsell
+                                if (confirm(`You need ${currentCost - (userCredits || 0)} more credits to generate this ad. Get more credits?`)) {
+                                    window.location.href = '/dashboard/billing';
+                                }
+                                return;
+                            }
+                            handleGenerate();
+                        }}
+                    >
+                        {loading ? 'Creating magic...' : (canGenerate ? 'Generate ad' : 'Unlock ad')}
+                        {!loading && <Sparkles size={18} fill={canGenerate ? "black" : "currentColor"} />}
+                    </Button>
+
                     <div className={styles.costDisplay}>
                         Cost: {currentCost} credits
+                        {!canGenerate && (
+                            <span className={styles.insufficientFunds}>
+                                • You need more credits
+                            </span>
+                        )}
                     </div>
-
-                    {!canGenerate ? (
-                        <Button
-                            className={styles.generateBtn}
-                            onClick={() => window.location.href = '/dashboard/billing'}
-                            style={{ background: '#ef4444', color: 'white' }}
-                        >
-                            Check Credits ({userCredits})
-                        </Button>
-                    ) : (
-                        <Button
-                            className={styles.generateBtn}
-                            disabled={!imageFile || !message || loading}
-                            loading={loading}
-                            onClick={handleGenerate}
-                        >
-                            {loading ? 'Creating...' : 'Generate Ad'} <Sparkles size={18} fill="black" />
-                        </Button>
-                    )}
                 </div>
 
             </div>

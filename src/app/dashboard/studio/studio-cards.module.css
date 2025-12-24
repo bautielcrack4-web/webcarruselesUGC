@@ -275,6 +275,28 @@
     gap: 8px;
 }
 
+/* ADVANCED SECTIONS */
+.advancedSection {
+    margin-bottom: 24px;
+}
+
+.advancedSection:last-child {
+    margin-bottom: 0;
+}
+
+.sectionTitle {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.optionGroup {
+    margin-bottom: 16px;
+}
+
 .tag {
     padding: 6px 12px;
     border-radius: 100px;
@@ -309,10 +331,19 @@
 }
 
 .costDisplay {
-    text-align: center;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 12px;
+    margin-bottom: 0;
+}
+
+.insufficientFunds {
+    color: #f87171;
+    /* Soft red for just the text */
+    font-weight: 500;
 }
 
 .generateBtn {
