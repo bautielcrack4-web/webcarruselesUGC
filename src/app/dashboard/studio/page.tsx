@@ -370,11 +370,15 @@ export default function StudioPage() {
                 <div className={styles.stickyFooter}>
                     <Button
                         className={styles.generateBtn}
-                        disabled={!imageFile || !message || loading}
+                        // disabled={!imageFile || !message || loading} // Comented out for debugging
+                        disabled={loading}
                         loading={loading}
                         onClick={() => {
+                            console.log('Generate button clicked');
+                            if (!imageFile) { alert('Please upload an image first.'); return; }
+                            if (!message) { alert('Please enter a prompt.'); return; }
+
                             if (!canGenerate) {
-                                // "Premium Flow": Trigger Paywall / Upsell immediately
                                 router.push('/dashboard/billing');
                                 return;
                             }
