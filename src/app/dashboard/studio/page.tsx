@@ -215,8 +215,12 @@ export default function StudioPage() {
                                 <p className={styles.statusText}>{status}</p>
                             </motion.div>
                         ) : (
-                            <div className={styles.emptyState}>
-                                <Play size={48} opacity={0.1} />
+                            <div className={styles.guidedState}>
+                                <div className={styles.guidedIconBg}>
+                                    <Video size={32} color="white" opacity={0.8} />
+                                </div>
+                                <h3 className={styles.guidedTitle}>Subí una imagen y escribí el mensaje.</h3>
+                                <p className={styles.guidedSubtitle}>Nosotros hacemos el resto.</p>
                             </div>
                         )}
                     </AnimatePresence>
@@ -224,68 +228,82 @@ export default function StudioPage() {
             </div>
 
             <div className={styles.controlsSidebar}>
-                <h2 className={styles.sidebarTitle}>Constructor</h2>
+                <h2 className={styles.sidebarTitle}>Crear nuevo anuncio</h2>
 
-                {/* BLOQUE PRINCIPAL: PRODUCTO & CONFIG */}
-                <div className={styles.iosGroup}>
-                    <div className={styles.iosItem}>
-                        <div className={styles.iosHeader}>
-                            <Upload size={14} className={styles.iosIcon} />
-                            <span className={styles.iosTitle}>Imagen del Producto</span>
-                        </div>
-                        <div className={styles.imageUploadCard} onClick={() => fileInputRef.current?.click()}>
-                            {image ? <img src={image} className={styles.previewThumb} alt="Preview" /> : <Upload size={24} className={styles.uploadIcon} />}
-                            <input type="file" hidden ref={fileInputRef} onChange={handleImageUpload} accept="image/*" />
-                        </div>
-                        <input className={styles.input} placeholder="¿Qué vendes? (Nombre)" value={productDesc} onChange={(e) => setProductDesc(e.target.value)} />
+                {/* PASO 1: PRODUCTO */}
+                <div className={styles.stepContainer}>
+                    <div className={styles.stepHeader}>
+                        <div className={styles.stepNumber}>1</div>
+                        <span className={styles.stepTitle}>Tu Producto</span>
                     </div>
-
-                    <div className={styles.iosItem}>
-                        <div className={styles.iosHeader}>
-                            <Maximize size={14} className={styles.iosIcon} />
-                            <span className={styles.iosTitle}>Formato de Video</span>
+                    <div className={styles.iosGroup}>
+                        <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: 16 }}>
+                            <div className={styles.imageUploadCard} onClick={() => fileInputRef.current?.click()}>
+                                {image ? <img src={image} className={styles.previewThumb} alt="Preview" /> : (
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                                        <Upload size={24} className={styles.uploadIcon} />
+                                        <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>Subir foto</span>
+                                    </div>
+                                )}
+                                <input type="file" hidden ref={fileInputRef} onChange={handleImageUpload} accept="image/*" />
+                            </div>
                         </div>
-                        <Segmented
-                            options={[{ label: '9:16 (TikTok)', val: '720*1280' }, { label: '16:9 (YouTube)', val: '1280*720' }]}
-                            value={format}
-                            onChange={setFormat}
-                        />
-                    </div>
-
-                    <div className={styles.iosItem}>
-                        <div className={styles.iosHeader}>
-                            <Clock size={14} className={styles.iosIcon} />
-                            <span className={styles.iosTitle}>Duración</span>
+                        <div className={styles.iosItem} style={{ borderBottom: 'none', paddingTop: 12 }}>
+                            <input className={styles.input} placeholder="¿Qué vendes? (Ej: Zapatillas Nike)" value={productDesc} onChange={(e) => setProductDesc(e.target.value)} />
                         </div>
-                        <Segmented
-                            options={[{ label: '10 Segundos', val: 10 }, { label: '15 Segundos', val: 15 }]}
-                            value={duration}
-                            onChange={setDuration}
-                        />
                     </div>
                 </div>
 
-                {/* BLOQUE MENSAJE */}
-                <div className={styles.iosGroup}>
-                    <div className={styles.iosItem}>
-                        <div className={styles.iosHeader}>
-                            <MessageSquare size={14} className={styles.iosIcon} />
-                            <span className={styles.iosTitle}>Mensaje del anuncio</span>
+                {/* PASO 2: FORMATO */}
+                <div className={styles.stepContainer}>
+                    <div className={styles.stepHeader}>
+                        <div className={styles.stepNumber}>2</div>
+                        <span className={styles.stepTitle}>Formato</span>
+                    </div>
+                    <div className={styles.iosGroup}>
+                        <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '12px 0' }}>
+                            <div className={styles.iosHeaderSmall}>Relación de aspecto</div>
+                            <Segmented
+                                options={[{ label: '9:16 (TikTok)', val: '720*1280' }, { label: '16:9 (YouTube)', val: '1280*720' }]}
+                                value={format}
+                                onChange={setFormat}
+                            />
                         </div>
-                        <textarea
-                            className={styles.textarea}
-                            placeholder="Escribe el guion aquí..."
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                        />
+                        <div className={styles.iosItem} style={{ borderBottom: 'none', padding: '12px 0' }}>
+                            <div className={styles.iosHeaderSmall}>Duración (Créditos)</div>
+                            <Segmented
+                                options={[{ label: '10s (30c)', val: 10 }, { label: '15s (45c)', val: 15 }]}
+                                value={duration}
+                                onChange={setDuration}
+                            />
+                        </div>
                     </div>
                 </div>
 
-                {/* BOTÓN AVANZADO */}
+                {/* PASO 3: MENSAJE */}
+                <div className={styles.stepContainer}>
+                    <div className={styles.stepHeader}>
+                        <div className={styles.stepNumber}>3</div>
+                        <span className={styles.stepTitle}>Mensaje</span>
+                    </div>
+                    <div className={styles.iosGroup}>
+                        <div className={styles.iosItem}>
+                            <textarea
+                                className={styles.textarea}
+                                placeholder="Ej: 'Desde que uso este producto, mis ventas subieron el doble. Es increíble lo fácil que es de usar...'"
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                            />
+                            <p className={styles.helperText}>No hace falta que sea perfecto. La IA lo optimiza.</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* PASO 4: PRODUCCIÓN (Colapsable) */}
                 <button className={styles.advancedToggle} onClick={() => setShowAdvanced(!showAdvanced)}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <Settings2 size={18} />
-                        <span>Opciones de producción</span>
+                        <div className={styles.stepNumber} style={{ background: showAdvanced ? 'var(--accent-primary)' : 'rgba(255,255,255,0.1)' }}>4</div>
+                        <span style={{ fontWeight: 600 }}>Opciones de producción</span>
                     </div>
                     <ChevronDown size={18} className={`${styles.chevron} ${showAdvanced ? styles.rotated : ''}`} />
                 </button>
@@ -293,7 +311,7 @@ export default function StudioPage() {
                 <AnimatePresence>
                     {showAdvanced && (
                         <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className={styles.advancedContainer}>
-                            <div className={styles.iosGroup}>
+                            <div className={styles.iosGroup} style={{ marginTop: 12 }}>
                                 <div className={styles.iosItem}>
                                     <div className={styles.iosHeader}><User size={14} /><span className={styles.iosTitle}>Personalizar Avatar</span></div>
                                     <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
@@ -315,23 +333,15 @@ export default function StudioPage() {
                                 </div>
                             </div>
 
-                            <div className={styles.iosGroup}>
+                            <div className={styles.iosGroup} style={{ marginTop: 16 }}>
                                 <div className={styles.iosItem}>
                                     <div className={styles.iosHeader}><Camera size={14} /><span className={styles.iosTitle}>Escena & Cámara</span></div>
-                                    <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
-                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Iluminación</label>
-                                        <PillSelector options={LIGHTING_STYLES} value={lighting} onChange={setLighting} />
-                                    </div>
                                     <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
                                         <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Entorno</label>
                                         <PillSelector options={SCENE_LOCATIONS} value={location} onChange={setLocation} />
                                     </div>
-                                    <div className={styles.iosItem} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '10px 0' }}>
-                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Toma</label>
-                                        <PillSelector options={SHOT_TYPES} value={shotType} onChange={setShotType} />
-                                    </div>
                                     <div className={styles.iosItem} style={{ borderBottom: 'none', padding: '10px 0' }}>
-                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Ritmo de Edición</label>
+                                        <label className={styles.iosTitle} style={{ fontSize: '0.7rem', marginBottom: 8, display: 'block' }}>Ritmo</label>
                                         <PillSelector options={EDITING_PACE} value={pace} onChange={setPace} />
                                     </div>
                                 </div>
@@ -341,18 +351,23 @@ export default function StudioPage() {
                 </AnimatePresence>
 
                 <div className={styles.footer}>
-                    <div className={styles.costInfo}>
-                        <span>Costo: <strong style={{ color: '#fff' }}>{duration === 15 ? 45 : 30} créditos</strong></span>
-                        {/* Remove old error message to clean up UI */}
+                    {/* Cost displayed prominently before button */}
+                    <div className={styles.costBadge}>
+                        <div className={styles.costLabel}>Costo del anuncio</div>
+                        <div className={styles.costValue}>{duration === 15 ? 45 : 30} créditos</div>
                     </div>
+
                     {userCredits !== null && userCredits < (duration === 15 ? 45 : 30) ? (
                         <Button
-                            className={styles.createBtn} // Reuse style but maybe add a 'locked' variant class if needed, or stick to primary to invite clicks
+                            className={styles.createBtn}
                             onClick={() => window.location.href = '/dashboard/billing'}
-                            disabled={false} // Enable it!
-                            style={{ background: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)', border: 'none', color: 'white' }}
+                            disabled={false}
+                            style={{ background: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)', border: 'none', color: 'white', height: '56px' }}
                         >
-                            Desbloquear (Faltan {(duration === 15 ? 45 : 30) - userCredits} créditos)
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1.2 }}>
+                                <span>Desbloquear ahora</span>
+                                <span style={{ fontSize: '0.75rem', opacity: 0.8, fontWeight: 400 }}>Faltan {(duration === 15 ? 45 : 30) - userCredits} créditos</span>
+                            </div>
                         </Button>
                     ) : (
                         <Button
@@ -360,8 +375,12 @@ export default function StudioPage() {
                             onClick={handleGenerate}
                             loading={loading}
                             disabled={!imageFile || !message}
+                            style={{ height: '56px' }}
                         >
-                            Crear anuncio
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1.2 }}>
+                                <span>Crear anuncio</span>
+                                <span style={{ fontSize: '0.75rem', opacity: 0.7, fontWeight: 400 }}>Listo para generar</span>
+                            </div>
                         </Button>
                     )}
                 </div>

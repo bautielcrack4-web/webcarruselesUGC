@@ -51,6 +51,7 @@
     letter-spacing: -0.03em;
     background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.7) 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
@@ -333,26 +334,67 @@
 }
 
 /* Packs Pills */
+/* Packs Pills (iPhone Style Reflected Light) */
 .addonCard {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(10, 10, 12, 0.6);
+    /* Darker base */
+    border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 8px 8px 8px 20px;
-    /* Padding asimétrico para el botón */
     border-radius: 100px;
-    /* Full rounded pill */
     display: flex;
     align-items: center;
     gap: 16px;
     font-size: 0.95rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.8);
-    transition: all 0.2s ease;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     cursor: default;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Base reflected light (Gradient radial pastel muy sutil) */
+.packGlow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 120%, var(--pack-color) 0%, transparent 60%);
+    opacity: 0.08;
+    /* Muy sutil */
+    transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .addonCard:hover {
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: scale(1.02);
+    transform: translateY(-2px);
+    border-color: var(--pack-border);
+    box-shadow: 0 4px 20px -5px var(--pack-shadow);
+}
+
+.addonCard:hover .packGlow {
+    opacity: 0.15;
+    /* Sube un poco la luz al hover */
+}
+
+/* Variantes de Color (Reflection) */
+.packBlue {
+    --pack-color: rgba(147, 197, 253, 1);
+    /* Pastel Blue */
+    --pack-border: rgba(147, 197, 253, 0.3);
+    --pack-shadow: rgba(147, 197, 253, 0.25);
+}
+
+.packPurple {
+    --pack-color: rgba(196, 181, 253, 1);
+    /* Pastel Purple */
+    --pack-border: rgba(196, 181, 253, 0.3);
+    --pack-shadow: rgba(196, 181, 253, 0.25);
+}
+
+.packGreen {
+    --pack-color: rgba(110, 231, 183, 1);
+    /* Pastel Mint */
+    --pack-border: rgba(110, 231, 183, 0.3);
+    --pack-shadow: rgba(110, 231, 183, 0.25);
 }
 
 .addonCard button {
@@ -360,7 +402,17 @@
     padding: 6px 16px !important;
     height: auto !important;
     font-size: 0.9rem !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.02);
+    color: white !important;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.addonCard button:hover {
+    background: white !important;
+    color: black !important;
+    border-color: white !important;
 }
 
 @media (max-width: 1024px) {
