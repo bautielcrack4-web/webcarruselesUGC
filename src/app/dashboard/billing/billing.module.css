@@ -5,10 +5,19 @@
     max-width: 1280px;
     margin: 0 auto;
     position: relative;
-    /* Fondo con profundidad (Gradients sutiles) */
+    /* Fondo con profundidad (Gradients sutiles) + Noise */
     background:
-        radial-gradient(circle at 50% 10%, rgba(120, 119, 198, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 80% 40%, rgba(99, 102, 241, 0.08) 0%, transparent 30%);
+        radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.03) 0%, transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(99, 102, 241, 0.05) 0%, transparent 25%);
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
 }
 
 /* Header Hierarchy */
@@ -17,6 +26,21 @@
     margin-bottom: 80px;
     position: relative;
     z-index: 2;
+}
+
+/* Background title glow */
+.header::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    filter: blur(60px);
+    z-index: -1;
+    pointer-events: none;
 }
 
 .title {
@@ -104,23 +128,23 @@
     opacity: 0.8;
 }
 
-/* Badges y Estado */
+/* Badges y Estado Refinado */
 .popularBadge {
     position: absolute;
-    top: -16px;
+    top: -14px;
     left: 50%;
     transform: translateX(-50%);
-    background: #6366f1;
+    background: rgba(99, 102, 241, 0.9);
     color: white;
-    padding: 6px 20px;
+    padding: 4px 16px;
     border-radius: 100px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     z-index: 10;
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
     letter-spacing: 0.02em;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
 }
 
 /* Cards con "Material" */
@@ -178,26 +202,26 @@
     font-size: 1.5rem;
     font-weight: 500;
     margin-right: 4px;
-    margin-top: 8px;
-    color: rgba(255, 255, 255, 0.8);
+    margin-top: 12px;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .price {
-    font-size: 4rem;
-    /* Precio gigante */
+    font-size: 4.2rem;
+    /* 5-8% más grande */
     font-weight: 800;
     letter-spacing: -0.04em;
     color: white;
+    line-height: 1;
 }
 
 .period {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.3);
     font-size: 0.9rem;
-    /* mes chiquito */
     font-weight: 500;
     align-self: flex-end;
-    margin-bottom: 8px;
-    margin-left: 4px;
+    margin-bottom: 10px;
+    margin-left: 6px;
 }
 
 .planDescription {
@@ -232,9 +256,8 @@
 }
 
 .checkIcon {
-    color: white;
-    /* Icono blanco o acento */
-    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.08);
     padding: 3px;
     border-radius: 50%;
     width: 20px;
@@ -243,8 +266,9 @@
 }
 
 .popularCard .checkIcon {
-    background: #6366f1;
-    color: white;
+    background: rgba(99, 102, 241, 0.2);
+    color: #818cf8;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
 }
 
 /* Botón Premium */
@@ -260,14 +284,16 @@
 /* Botón Outline Tenue (Planes normales) */
 .planBtn[class*="outline"] {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    /* Menos contraste */
 }
 
 .planBtn[class*="outline"]:hover {
-    border-color: white !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    color: white !important;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Botón Sólido (Plan Destacado) */

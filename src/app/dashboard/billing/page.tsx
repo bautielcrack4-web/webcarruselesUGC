@@ -193,6 +193,11 @@ export default function BillingPage() {
                             >
                                 {plan.id === 'agency' ? 'Contactar ventas' : (currentPlan === plan.priceId ? 'Tu plan actual' : `Elegir ${plan.name}`)}
                             </Button>
+                            {plan.popular && (
+                                <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', marginTop: 12, textAlign: 'center' }}>
+                                    Usado por marcas que escalan ads cada semana
+                                </p>
+                            )}
                         </GlassCard>
                     </motion.div>
                 ))}
@@ -200,6 +205,7 @@ export default function BillingPage() {
 
             <div className={styles.addonsSection}>
                 <h2 className={styles.addonsTitle}>¿Necesitás más créditos?</h2>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', marginTop: -20, marginBottom: 32 }}>Perfecto para picos de campañas</p>
                 <div className={styles.addonsContent}>
                     <div className={styles.addonCard}>
                         <span>Pack 90 créditos</span>
@@ -225,6 +231,11 @@ export default function BillingPage() {
                             onClick={() => handleSelectPlan({ priceId: 'pri_01j78y8m683m58g670v6z23zgh' })} // Assuming a price ID for this
                         >$39</Button>
                     </div>
+                </div>
+                <div style={{ marginTop: 40, textAlign: 'center', opacity: 0.4, fontSize: '0.8rem', display: 'flex', gap: 16, justifyContent: 'center' }}>
+                    <span>🔒 Pago seguro</span>
+                    <span>•</span>
+                    <span>Cancelá cuando quieras</span>
                 </div>
             </div>
         </div>
