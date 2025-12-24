@@ -58,11 +58,29 @@ export default function StudioPage() {
     const [language, setLanguage] = useState('');
     const [accent, setAccent] = useState('');
 
+    // 6. Estado de Créditos
+    const [userCredits, setUserCredits] = useState<number | null>(null);
+
     // Estados de control
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState('');
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    React.useEffect(() => {
+        const fetchCredits = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                const { data } = await supabase
+                    .from('user_subscriptions')
+                    .select('credits_remaining')
+                    .eq('user_id', user.id)
+                    .single();
+                if (data) setUserCredits(data.credits_remaining);
+            }
+        };
+        fetchCredits();
+    }, []);
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -323,10 +341,20 @@ export default function StudioPage() {
                 </AnimatePresence>
 
                 <div className={styles.footer}>
-                    <Button className={styles.createBtn} onClick={handleGenerate} loading={loading} disabled={!imageFile || !message}>
+                    <div className={styles.costInfo}>
+                        <span>Costo: <strong style={{ color: '#fff' }}>{duration === 15 ? 45 : 30} créditos</strong></span>
+                        {userCredits !== null && userCredits < (duration === 15 ? 45 : 30) && (
+                            <span className={styles.insufficientCredits}>Saldo insuficiente. <a href="/dashboard/billing">Cargar créditos</a></span>
+                        )}
+                    </div>
+                    <Button
+                        className={styles.createBtn}
+                        onClick={handleGenerate}
+                        loading={loading}
+                        disabled={!imageFile || !message || (userCredits !== null && userCredits < (duration === 15 ? 45 : 30))}
+                    >
                         Crear anuncio
                     </Button>
-                    <p className={styles.subtext}>Consume créditos</p>
                 </div>
             </div>
         </div>

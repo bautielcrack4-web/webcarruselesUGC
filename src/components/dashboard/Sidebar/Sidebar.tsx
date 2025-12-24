@@ -1,6 +1,8 @@
 import styles from './Sidebar.module.css';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export const Sidebar = () => {
     const pathname = usePathname();
@@ -9,8 +11,26 @@ export const Sidebar = () => {
         { href: '/dashboard', label: 'Proyectos', icon: '📁' },
         { href: '/dashboard/studio', label: 'Studio (IA)', icon: '🎬' },
         { href: '/dashboard/assets', label: 'Mis Assets', icon: '🖼️' },
+        { href: '/dashboard/billing', label: 'Facturación', icon: '💳' },
         { href: '/dashboard/settings', label: 'Ajustes', icon: '⚙️' },
     ];
+
+    const [credits, setCredits] = useState<number | null>(null);
+
+    useEffect(() => {
+        const fetchCredits = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                const { data } = await supabase
+                    .from('user_subscriptions')
+                    .select('credits_remaining')
+                    .eq('user_id', user.id)
+                    .single();
+                if (data) setCredits(data.credits_remaining);
+            }
+        };
+        fetchCredits();
+    }, []);
 
     return (
         <aside className={styles.sidebar}>
@@ -43,6 +63,11 @@ export const Sidebar = () => {
             </nav>
 
             <div className={styles.footer}>
+                <Link href="/dashboard/billing" className={styles.creditBadge}>
+                    <span className={styles.creditIcon}>🪙</span>
+                    <span className={styles.creditLabel}>Créditos:</span>
+                    <span className={styles.creditValue}>{credits !== null ? credits : '...'}</span>
+                </Link>
                 <div className={styles.userProfile}>
                     <div className={styles.avatar} />
                     <div className={styles.userInfo}>
