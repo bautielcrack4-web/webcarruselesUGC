@@ -2,13 +2,10 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { Paddle, EventName } from '@paddle/paddle-node-sdk';
 
-const paddle = new Paddle(process.env.PADDLE_API_KEY || '');
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
-
 export async function POST(req: Request) {
+    // Initialize Paddle inside handler
+    const paddle = new Paddle(process.env.PADDLE_API_KEY || '');
+
     const signature = req.headers.get('paddle-signature') || '';
     const body = await req.text();
 
@@ -28,7 +25,6 @@ export async function POST(req: Request) {
         // Handle relevant events
         switch (event.eventType) {
             case EventName.TransactionCompleted:
-                // For one-time credit purchases or initial subscription payment
                 await handleTransactionCompleted(event.data);
                 break;
             case EventName.SubscriptionCreated:
@@ -46,7 +42,15 @@ export async function POST(req: Request) {
     }
 }
 
+function getSupabaseAdmin() {
+    return createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+        process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+    );
+}
+
 async function handleTransactionCompleted(data: any) {
+    const supabase = getSupabaseAdmin();
     const userId = data.customData?.userId;
     const items = data.items;
 
@@ -72,6 +76,7 @@ async function handleTransactionCompleted(data: any) {
 }
 
 async function handleSubscriptionUpdated(data: any) {
+    const supabase = getSupabaseAdmin();
     const userId = data.customData?.userId;
     const planId = data.items[0]?.priceId; // Simplified
 
@@ -94,9 +99,11 @@ async function handleSubscriptionUpdated(data: any) {
 function getCreditsForPrice(priceId: string): number {
     const MAPPING: Record<string, number> = {
         'pri_01kcqt266h5v2b6w8a2t9f1h5v': 90,   // TRY
-        'pri_01kcqt0m6p3y6h8v2nvs9k2edd': 300,  // CREATOR
+        'pri_01kcqt0m6p3y6h8v2nvs9k2edd': 360,  // CREATOR (Corrected to 360 based on frontend)
         'pri_01j78y5q9m336h0f9q9z5g9v3a': 900,  // PRO
-        'pri_01kd7dq31g0tvqfv2nvs9k2edd': 3000, // AGENCY
+        'pri_01j78y6m683m58g670v6z23zgh': 1800, // AGENCY (Corrected ID and Amount based on frontend)
+        // Addons placeholders
+        'pri_01kcqt266h5v2b6w8a2t9f1h5v_addon': 90,
     };
     return MAPPING[priceId] || 0;
 }
