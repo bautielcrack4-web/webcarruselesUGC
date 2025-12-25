@@ -134,6 +134,17 @@
     transform: scale(1.1);
 }
 
+.activeAudio {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+}
+
+.activeAudio:hover {
+    background: white;
+    color: black;
+}
+
 @media (max-width: 768px) {
     .fanCard {
         width: 200px;

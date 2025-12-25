@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Volume2, VolumeX } from 'lucide-react';
 import styles from './VideoCarousel.module.css';
 
 const EXAMPLES = [
@@ -52,6 +52,7 @@ const EXAMPLES = [
 
 export const VideoCarousel = () => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [isMuted, setIsMuted] = useState(true);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
     const next = () => setActiveIndex((prev) => (prev + 1) % EXAMPLES.length);
@@ -63,14 +64,20 @@ export const VideoCarousel = () => {
             if (!video) return;
 
             if (index === activeIndex) {
-                video.muted = true; // Required for autoplay
-                video.play().catch(err => console.log("Autoplay blocked:", err));
+                video.muted = isMuted;
+                video.play().catch(err => {
+                    // If play fails with sound, try playing muted
+                    if (!isMuted) {
+                        video.muted = true;
+                        video.play();
+                    }
+                });
             } else {
                 video.pause();
-                video.currentTime = 0; // Reset others
+                video.currentTime = 0;
             }
         });
-    }, [activeIndex]);
+    }, [activeIndex, isMuted]);
 
     return (
         <div className={styles.fanWrapper}>
@@ -110,9 +117,10 @@ export const VideoCarousel = () => {
                                         ref={el => { videoRefs.current[index] = el; }}
                                         src={item.video}
                                         className={styles.video}
-                                        muted
+                                        muted={isMuted}
                                         loop
                                         playsInline
+                                        onClick={() => isCenter && setIsMuted(!isMuted)}
                                     />
                                     <div className={styles.metaBadge}>{item.language}</div>
 
@@ -148,6 +156,13 @@ export const VideoCarousel = () => {
             <div className={styles.fanControls}>
                 <button onClick={prev} className={styles.navBtn} aria-label="Previous">
                     <ChevronLeft size={24} />
+                </button>
+                <button
+                    onClick={() => setIsMuted(!isMuted)}
+                    className={`${styles.navBtn} ${!isMuted ? styles.activeAudio : ''}`}
+                    aria-label={isMuted ? "Unmute" : "Mute"}
+                >
+                    {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
                 </button>
                 <button onClick={next} className={styles.navBtn} aria-label="Next">
                     <ChevronRight size={24} />
