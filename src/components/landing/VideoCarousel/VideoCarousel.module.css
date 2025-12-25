@@ -129,20 +129,8 @@
     opacity: 1;
 }
 
-.cardFooter {
-    padding: 16px;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.02), transparent);
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
 
-.inputPreview {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+
 
 .inputLabel {
     font-size: 0.7rem;
@@ -150,7 +138,12 @@
     letter-spacing: 0.05em;
     color: var(--fg-muted);
     font-weight: 600;
-    min-width: 45px;
+    min-width: 50px;
+    transition: color 0.3s ease;
+}
+
+.card:hover .inputLabel {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .imgWrapper {
@@ -159,12 +152,25 @@
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover .imgWrapper {
+    width: 48px;
+    height: 48px;
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
 }
 
 .inputImg {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover .inputImg {
+    transform: scale(1.05);
 }
 
 .noImagePlaceholder {
@@ -177,12 +183,26 @@
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover .noImagePlaceholder {
+    width: 48px;
+    height: 48px;
+    background: rgba(139, 92, 246, 0.1);
+    border-color: rgba(139, 92, 246, 0.3);
+    font-size: 1.5rem;
 }
 
 .promptPreview {
     display: flex;
     align-items: flex-start;
     gap: 10px;
+    transition: gap 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover .promptPreview {
+    gap: 14px;
 }
 
 .promptText {
@@ -193,4 +213,11 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover .promptText {
+    -webkit-line-clamp: 3;
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 0.85rem;
 }

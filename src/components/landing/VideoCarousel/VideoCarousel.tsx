@@ -121,16 +121,16 @@ export const VideoCarousel = () => {
                         <div className={styles.cardFooter}>
                             {item.image ? (
                                 <div className={styles.inputPreview}>
-                                    <span className={styles.inputLabel}>Input</span>
+                                    <span className={styles.inputLabel}>Product</span>
                                     <div className={styles.imgWrapper}>
-                                        <img src={item.image} alt="Input" className={styles.inputImg} />
+                                        <img src={item.image} alt="Product" className={styles.inputImg} />
                                     </div>
                                 </div>
                             ) : (
                                 <div className={styles.inputPreview}>
-                                    <span className={styles.inputLabel}>No Input</span>
+                                    <span className={styles.inputLabel}>From Scratch</span>
                                     <div className={styles.noImagePlaceholder}>
-                                        <span>📱</span>
+                                        <span>✨</span>
                                     </div>
                                 </div>
                             )}
