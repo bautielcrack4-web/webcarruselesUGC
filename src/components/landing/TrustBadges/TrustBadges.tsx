@@ -21,8 +21,7 @@ const PLATFORMS = [
     },
     {
         name: 'Dropi',
-        viewBox: "0 0 96 96",
-        path: "M60.69487,21.673C36.32952-16.43663,12.40754,3.31346.20742,23.263c-.814,1.33109.94383,2.706,2.22588,1.81663,7.07656-4.90845,11.44988-3.192,17.00432,3.67924a1.4652,1.4652,0,0,0,2.22093.05757c7.701-8.59776,12.30419-8.64962,19.321-.20426a1.47688,1.47688,0,0,0,2.32432-.08341c4.9051-6.83887,8.9398-8.63686,14.9432-4.77049C59.6048,24.63272,61.56492,23.03377,60.69487,21.673Z"
+        image: '/logos/dropi.png'
     },
     {
         name: 'Shopify',
@@ -43,9 +42,13 @@ export const TrustBadges = () => {
                     {items.map((platform, index) => (
                         <div key={index} className={styles.platformBadge}>
                             <div className={styles.platformIcon}>
-                                <svg viewBox={platform.viewBox} fill="currentColor">
-                                    <path d={platform.path} />
-                                </svg>
+                                {platform.image ? (
+                                    <img src={platform.image} alt={platform.name} className={styles.platformImg} />
+                                ) : (
+                                    <svg viewBox={platform.viewBox} fill="currentColor">
+                                        <path d={platform.path} />
+                                    </svg>
+                                )}
                             </div>
                             <span className={styles.platformName}>{platform.name}</span>
                         </div>

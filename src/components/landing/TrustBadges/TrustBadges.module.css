@@ -71,9 +71,11 @@
     color: white;
 }
 
-.platformIcon svg {
+.platformIcon svg,
+.platformImg {
     width: 100%;
     height: 100%;
+    object-fit: contain;
 }
 
 .platformName {
