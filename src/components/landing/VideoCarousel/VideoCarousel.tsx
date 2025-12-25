@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import styles from './VideoCarousel.module.css';
@@ -52,9 +52,25 @@ const EXAMPLES = [
 
 export const VideoCarousel = () => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
     const next = () => setActiveIndex((prev) => (prev + 1) % EXAMPLES.length);
     const prev = () => setActiveIndex((prev) => (prev - 1 + EXAMPLES.length) % EXAMPLES.length);
+
+    useEffect(() => {
+        // Ensure ONLY the active video is playing
+        videoRefs.current.forEach((video, index) => {
+            if (!video) return;
+
+            if (index === activeIndex) {
+                video.muted = true; // Required for autoplay
+                video.play().catch(err => console.log("Autoplay blocked:", err));
+            } else {
+                video.pause();
+                video.currentTime = 0; // Reset others
+            }
+        });
+    }, [activeIndex]);
 
     return (
         <div className={styles.fanWrapper}>
@@ -91,9 +107,9 @@ export const VideoCarousel = () => {
                             >
                                 <div className={styles.videoBox}>
                                     <video
+                                        ref={el => { videoRefs.current[index] = el; }}
                                         src={item.video}
                                         className={styles.video}
-                                        autoPlay={isCenter}
                                         muted
                                         loop
                                         playsInline
