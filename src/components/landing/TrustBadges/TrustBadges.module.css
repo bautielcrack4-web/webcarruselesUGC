@@ -32,8 +32,8 @@
 .marqueeTrack {
     display: flex;
     gap: 48px;
-    animation: marquee 25s linear infinite;
-    width: fit-content;
+    animation: marquee 30s linear infinite;
+    width: max-content;
 }
 
 @keyframes marquee {
@@ -42,7 +42,7 @@
     }
 
     100% {
-        transform: translateX(-33.33%);
+        transform: translateX(-25%);
     }
 }
 
