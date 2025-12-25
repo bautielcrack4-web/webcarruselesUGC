@@ -4,11 +4,13 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ArrowRight, Play, CheckCircle2, Zap, Layout, Smartphone } from 'lucide-react';
+import { Zap, Layout, Smartphone } from 'lucide-react';
 import styles from './page.module.css';
 import { Button } from '@/components/ui/Button/Button';
 import { GlassCard } from '@/components/ui/GlassCard/GlassCard';
 import { VideoCarousel } from '@/components/landing/VideoCarousel/VideoCarousel';
+import { AvatarShowcase } from '@/components/landing/AvatarShowcase/AvatarShowcase';
+import { TrustBadges } from '@/components/landing/TrustBadges/TrustBadges';
 
 /* Animation Variants */
 const fadeIn = {
@@ -33,7 +35,10 @@ export default function Home() {
     <main className={styles.main}>
       <div className="nebula-bg" />
 
-      {/* Navigation */}
+      {/* Background Glow */}
+      <div className={styles.heroGlow} />
+
+      {/* Navigation - Simplified like Forkads */}
       <nav className={styles.nav}>
         <div className={styles.container}>
           <div className={styles.navInner}>
@@ -42,15 +47,10 @@ export default function Home() {
               <Image src="/logo-white.png" alt="Adfork" width={160} height={50} style={{ height: '40px', width: 'auto' }} priority />
             </Link>
 
-            {/* Links Center */}
-            <div className={styles.navLinks}>
-              <a href="#products">Productos</a>
-              <a href="#pricing">Precios</a>
-              <a href="#examples">Ejemplos</a>
-              <a href="#support">Soporte</a>
-            </div>
+            {/* Empty spacer for center alignment */}
+            <div className={styles.navSpacer} />
 
-            {/* Auth Right */}
+            {/* Auth Right - Simplified */}
             <div className={styles.authActions}>
               <Link href="/login" className={styles.secondaryLink}>
                 Ejemplos
@@ -67,7 +67,7 @@ export default function Home() {
       <section className={styles.hero}>
         <div className={styles.container}>
 
-          {/* Badge Pill */}
+          {/* Badge Pill with Gradient */}
           <motion.div
             initial="hidden"
             animate="visible"
@@ -75,10 +75,12 @@ export default function Home() {
             variants={fadeIn}
             className={styles.pillBadge}
           >
-            <span className={styles.pillText}>Escribe tu Script <span className={styles.arrow}>→</span> Selecciona Un Avatar <span className={styles.arrow}>→</span> Genera tu video</span>
+            <span className={styles.pillText}>
+              Escribe tu Script <span className={styles.arrow}>→</span> Selecciona Un Avatar <span className={styles.arrow}>→</span> Genera tu video
+            </span>
           </motion.div>
 
-          {/* Title */}
+          {/* Title - Bigger and Bolder */}
           <motion.h1
             initial="hidden"
             animate="visible"
@@ -90,7 +92,7 @@ export default function Home() {
             Efectivos y Rápido
           </motion.h1>
 
-          {/* Subtitle */}
+          {/* Subtitle - More subtle */}
           <motion.p
             initial="hidden"
             animate="visible"
@@ -98,11 +100,11 @@ export default function Home() {
             variants={fadeIn}
             className={styles.subtitle}
           >
-            Genera contenido que conecta con tu audiencia y aumenta tus <br className="hidden md:block" />
+            Genera contenido que conecta con tu audiencia y aumenta tus
             conversiones, todo desde una plataforma fácil de usar.
           </motion.p>
 
-          {/* CTA */}
+          {/* CTA - More rounded and generous */}
           <motion.div
             initial="hidden"
             animate="visible"
@@ -117,17 +119,26 @@ export default function Home() {
             </Link>
           </motion.div>
 
-
-          {/* Video Showcase (Replaces Placeholder) */}
+          {/* Avatar Showcase - NEW Forkads style */}
           <motion.div
             initial="hidden"
             animate="visible"
             custom={4}
             variants={fadeIn}
-            className={styles.showcaseSection}
           >
-            <VideoCarousel />
+            <AvatarShowcase />
           </motion.div>
+
+        </div>
+      </section>
+
+      {/* Trust Badges - NEW */}
+      <TrustBadges />
+
+      {/* Video Carousel Section */}
+      <section className={styles.videoSection}>
+        <div className={styles.container}>
+          <VideoCarousel />
         </div>
       </section>
 
@@ -174,7 +185,7 @@ export default function Home() {
             <div className={styles.logo}>
               <Image src="/logo-white.png" alt="Adfork" width={100} height={32} style={{ height: '24px', width: 'auto', opacity: 0.8 }} />
             </div>
-            <p>© 2024 Nebula Pro Design. All rights reserved.</p>
+            <p>© 2024 Adfork. All rights reserved.</p>
           </div>
         </div>
       </footer>

@@ -1,0 +1,71 @@
+.trustWrapper {
+    width: 100%;
+    padding: 40px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+.trustLabel {
+    text-align: center;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 24px;
+    letter-spacing: 0.02em;
+}
+
+.marqueeContainer {
+    width: 100%;
+    overflow: hidden;
+    mask-image: linear-gradient(to right,
+            transparent 0%,
+            black 10%,
+            black 90%,
+            transparent 100%);
+    -webkit-mask-image: linear-gradient(to right,
+            transparent 0%,
+            black 10%,
+            black 90%,
+            transparent 100%);
+}
+
+.marqueeTrack {
+    display: flex;
+    gap: 48px;
+    animation: marquee 25s linear infinite;
+    width: fit-content;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-33.33%);
+    }
+}
+
+.platformBadge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+
+.platformBadge:hover {
+    opacity: 1;
+}
+
+.platformIcon {
+    font-size: 1.5rem;
+}
+
+.platformName {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: white;
+    letter-spacing: -0.01em;
+}
