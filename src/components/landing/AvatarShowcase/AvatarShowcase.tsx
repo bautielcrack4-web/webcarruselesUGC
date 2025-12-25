@@ -85,12 +85,8 @@ export const AvatarShowcase = () => {
                             }}
                         >
                             <div className={styles.avatarImageWrapper}>
-                                {/* Placeholder gradient for missing images */}
-                                <div className={styles.avatarPlaceholder}>
-                                    <span>{avatar.name[0]}</span>
-                                </div>
-                                {/* Uncomment when you have actual images */}
-                                {/* <img src={avatar.image} alt={avatar.name} className={styles.avatarImage} /> */}
+                                {/* Real avatar images */}
+                                <img src={avatar.image} alt={avatar.name} className={styles.avatarImage} />
                             </div>
 
                             {isCenter && (

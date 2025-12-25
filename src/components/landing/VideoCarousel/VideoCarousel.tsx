@@ -97,6 +97,7 @@ export const VideoCarousel = () => {
                                 src={item.video}
                                 className={styles.video}
                                 loop
+                                muted
                                 playsInline
                                 onClick={(e) => {
                                     if (e.currentTarget.paused) {
