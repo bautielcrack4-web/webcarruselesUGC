@@ -5,41 +5,28 @@ import { motion } from 'framer-motion';
 import { Play, Pause, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import styles from './VideoCarousel.module.css';
 
-// Data Mapping
+// Data Mapping - Corrected based on actual video content
 const EXAMPLES = [
     {
         id: 1,
         video: '/hero-examples/video 1.mp4',
-        // Assuming video 1 has specific input image if available, else generic placeholder or one of the others if not matched
-        // Based on file list, let's map what we have.
-        // It seems video 1 doesn't have a clear "imagen de video 1" in the list (we have 2,3,4,5,6).
-        // I will use a placeholder or reuse one for demo purposes if strictly needed, or just skip if file missing.
-        // Wait, list has: unique images for 2, 3, 4, 5, 6. And videos 1, 2, 3, 4, 5.
-        // Let's align: 
-        // Video 2 <- imagen de video 2.jpeg
-        // Video 3 <- imagen de video 3.png
-        // Video 4 <- imagen de video 4.webp
-        // Video 5 <- imagen de video 5.png
-        // Video 1 <- Let's treat it as the "Generic" one or maybe "imagen video 6.png" was meant for it?
-        image: '/hero-examples/imagen de video 2.jpeg', // Fallback for 1? Or just start from 2-5
-
-        // Let's use 2-5 as they match perfectly.
+        image: null, // App video - no input image
         language: '🇺🇸 English',
-        prompt: "UGC video of a fitness enthusiast holding a protein shaker..."
+        prompt: "Mobile app showcase with modern UI and smooth animations."
     },
     {
         id: 2,
         video: '/hero-examples/video 2.mp4',
         image: '/hero-examples/imagen de video 2.jpeg',
-        language: '🇪🇸 Spanish',
+        language: '🇲🇽 Spanish (MX)',
         prompt: "Unboxing de zapatillas urbanas, estilo dinámico y juvenil."
     },
     {
         id: 3,
         video: '/hero-examples/video 3.mp4',
         image: '/hero-examples/imagen de video 3.png',
-        language: '🇫🇷 French',
-        prompt: "Review élégante d'un parfum de luxe, ambiance soirée."
+        language: '🇮🇹 Italian',
+        prompt: "Tutorial di cucina veloce con utensili moderni."
     },
     {
         id: 4,
@@ -52,8 +39,8 @@ const EXAMPLES = [
         id: 5,
         video: '/hero-examples/video 5.mp4',
         image: '/hero-examples/imagen de video 5.png',
-        language: '🇮🇹 Italian',
-        prompt: "Tutorial di cucina veloce con utensili moderni."
+        language: '🇫🇷 French',
+        prompt: "Review élégante d'un parfum de luxe, ambiance soirée."
     },
     {
         id: 6,
@@ -96,7 +83,7 @@ export const VideoCarousel = () => {
             </div>
 
             <div className={styles.carouselTrack} ref={scrollRef}>
-                {EXAMPLES.slice(1).map((item) => ( // Skipping 1 for now as it lacks a clear pair, showing 2-6
+                {EXAMPLES.map((item) => ( // Now showing ALL videos including video 1
                     <motion.div
                         key={item.id}
                         className={styles.card}
@@ -110,8 +97,14 @@ export const VideoCarousel = () => {
                                 src={item.video}
                                 className={styles.video}
                                 loop
-                                muted
                                 playsInline
+                                onClick={(e) => {
+                                    if (e.currentTarget.paused) {
+                                        e.currentTarget.play();
+                                    } else {
+                                        e.currentTarget.pause();
+                                    }
+                                }}
                                 onMouseEnter={(e) => e.currentTarget.play()}
                                 onMouseLeave={(e) => {
                                     e.currentTarget.pause();
@@ -126,12 +119,21 @@ export const VideoCarousel = () => {
 
                         {/* Input/Output Info */}
                         <div className={styles.cardFooter}>
-                            <div className={styles.inputPreview}>
-                                <span className={styles.inputLabel}>Input</span>
-                                <div className={styles.imgWrapper}>
-                                    <img src={item.image} alt="Input" className={styles.inputImg} />
+                            {item.image ? (
+                                <div className={styles.inputPreview}>
+                                    <span className={styles.inputLabel}>Input</span>
+                                    <div className={styles.imgWrapper}>
+                                        <img src={item.image} alt="Input" className={styles.inputImg} />
+                                    </div>
                                 </div>
-                            </div>
+                            ) : (
+                                <div className={styles.inputPreview}>
+                                    <span className={styles.inputLabel}>No Input</span>
+                                    <div className={styles.noImagePlaceholder}>
+                                        <span>📱</span>
+                                    </div>
+                                </div>
+                            )}
                             <div className={styles.promptPreview}>
                                 <span className={styles.inputLabel}>Prompt</span>
                                 <p className={styles.promptText}>{item.prompt}</p>
