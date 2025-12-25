@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button/Button';
 import { GlassCard } from '@/components/ui/GlassCard/GlassCard';
 import { VideoCarousel } from '@/components/landing/VideoCarousel/VideoCarousel';
 import { TrustBadges } from '@/components/landing/TrustBadges/TrustBadges';
+import { useMagneticButton } from '@/hooks/useMagneticButton';
 
 /* Animation Variants */
 const fadeIn = {
@@ -30,6 +31,8 @@ const staggerContainer = {
 };
 
 export default function Home() {
+  const magneticButtonRef = useMagneticButton();
+
   return (
     <main className={styles.main}>
       <div className="nebula-bg" />
@@ -111,7 +114,7 @@ export default function Home() {
             className={styles.heroActions}
           >
             <Link href="/dashboard/studio">
-              <button className={styles.mainCta}>
+              <button ref={magneticButtonRef} className={styles.mainCta}>
                 Haz tu primer video ahora
               </button>
             </Link>
