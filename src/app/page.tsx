@@ -46,10 +46,9 @@ export default function Home() {
               <Image src="/logo-white.png" alt="Adfork" width={160} height={50} style={{ height: '40px', width: 'auto' }} priority />
             </Link>
 
-            {/* Empty spacer for center alignment */}
             <div className={styles.navSpacer} />
 
-            {/* Auth Right - Simplified */}
+            {/* Auth Right */}
             <div className={styles.authActions}>
               <Link href="/login" className={styles.secondaryLink}>
                 Ejemplos
@@ -103,7 +102,7 @@ export default function Home() {
             conversiones, todo desde una plataforma fácil de usar.
           </motion.p>
 
-          {/* Hero Actions */}
+          {/* CTA */}
           <motion.div
             initial="hidden"
             animate="visible"
@@ -118,18 +117,22 @@ export default function Home() {
             </Link>
           </motion.div>
 
+          {/* Fan Video Showcase (Forkads style) */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            custom={4}
+            variants={fadeIn}
+            className={styles.showcaseWrapper}
+          >
+            <VideoCarousel />
+          </motion.div>
+
         </div>
       </section>
 
-      {/* Trust Badges */}
+      {/* Trust Badges - BELOW the Showcase like Forkads */}
       <TrustBadges />
-
-      {/* Video Carousel Section */}
-      <section className={styles.videoSection}>
-        <div className={styles.container}>
-          <VideoCarousel />
-        </div>
-      </section>
 
       {/* Features */}
       <section id="features" className={styles.features}>

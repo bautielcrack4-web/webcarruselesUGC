@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Play, Pause, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import styles from './VideoCarousel.module.css';
 
-// Data Mapping - Corrected based on actual video content
 const EXAMPLES = [
     {
         id: 2,
@@ -22,6 +21,13 @@ const EXAMPLES = [
         prompt: "Tutorial di cucina veloce con utensili moderni."
     },
     {
+        id: 6,
+        video: '/hero-examples/video 6.mp4',
+        image: '/hero-examples/imagen video 6.png',
+        language: '🇦🇷 Spanish (ARG)',
+        prompt: "Review de botas de invierno, estilo porteño y auténtico."
+    },
+    {
         id: 4,
         video: '/hero-examples/video 4.mp4',
         image: '/hero-examples/imagen de video 4.webp',
@@ -36,111 +42,100 @@ const EXAMPLES = [
         prompt: "Review élégante d'un parfum de luxe, ambiance soirée."
     },
     {
-        id: 6,
-        video: '/hero-examples/video 6.mp4',
-        image: '/hero-examples/imagen video 6.png',
-        language: '🇦🇷 Spanish (ARG)',
-        prompt: "Review de botas de invierno, estilo porteño y auténtico."
-    },
-    {
         id: 1,
         video: '/hero-examples/video 1.mp4',
-        image: null, // App video - no input image
+        image: null,
         language: '🇺🇸 English',
         prompt: "Mobile app showcase with modern UI and smooth animations."
     },
 ];
 
 export const VideoCarousel = () => {
-    const scrollRef = useRef<HTMLDivElement>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
 
-    const scroll = (direction: 'left' | 'right') => {
-        if (scrollRef.current) {
-            const amount = 320;
-            scrollRef.current.scrollBy({
-                left: direction === 'left' ? -amount : amount,
-                behavior: 'smooth'
-            });
-        }
-    };
+    const next = () => setActiveIndex((prev) => (prev + 1) % EXAMPLES.length);
+    const prev = () => setActiveIndex((prev) => (prev - 1 + EXAMPLES.length) % EXAMPLES.length);
 
     return (
-        <div className={styles.carouselWrapper}>
-            <div className={styles.carouselHeader}>
-                <h2 className={styles.carouselTitle}>
-                    <Sparkles className={styles.titleIcon} />
-                    Made with Adfork
-                </h2>
-                <div className={styles.navButtons}>
-                    <button onClick={() => scroll('left')} className={styles.navBtn} aria-label="Scroll left">
-                        <ChevronLeft size={20} />
-                    </button>
-                    <button onClick={() => scroll('right')} className={styles.navBtn} aria-label="Scroll right">
-                        <ChevronRight size={20} />
-                    </button>
-                </div>
+        <div className={styles.fanWrapper}>
+            <div className={styles.fanContainer}>
+                <AnimatePresence initial={false}>
+                    {EXAMPLES.map((item, index) => {
+                        // Calculate relative position to active index
+                        const diff = (index - activeIndex + EXAMPLES.length) % EXAMPLES.length;
+
+                        // Normalized relative position (-2, -1, 0, 1, 2)
+                        let position = diff;
+                        if (position > EXAMPLES.length / 2) position -= EXAMPLES.length;
+
+                        const isCenter = position === 0;
+                        const isVisible = Math.abs(position) <= 2;
+
+                        if (!isVisible) return null;
+
+                        return (
+                            <motion.div
+                                key={item.id}
+                                className={`${styles.fanCard} ${isCenter ? styles.centerCard : ''}`}
+                                initial={{ opacity: 0, scale: 0.5, x: position * 100 }}
+                                animate={{
+                                    opacity: 1,
+                                    scale: isCenter ? 1 : 0.75,
+                                    x: position * 220,
+                                    zIndex: 10 - Math.abs(position),
+                                    rotateY: position * -15,
+                                    filter: isCenter ? 'brightness(1)' : 'brightness(0.5)',
+                                }}
+                                exit={{ opacity: 0, scale: 0.5 }}
+                                transition={{ type: 'spring', stiffness: 260, damping: 26 }}
+                            >
+                                <div className={styles.videoBox}>
+                                    <video
+                                        src={item.video}
+                                        className={styles.video}
+                                        autoPlay={isCenter}
+                                        muted
+                                        loop
+                                        playsInline
+                                    />
+                                    <div className={styles.metaBadge}>{item.language}</div>
+
+                                    {isCenter && (
+                                        <motion.div
+                                            className={styles.promptOverlay}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                        >
+                                            <p className={styles.promptText}>{item.prompt}</p>
+                                            <div className={styles.productTag}>
+                                                {item.image ? (
+                                                    <div className={styles.productInfo}>
+                                                        <img src={item.image} alt="Product" className={styles.productImg} />
+                                                        <span>Product</span>
+                                                    </div>
+                                                ) : (
+                                                    <div className={styles.productInfo}>
+                                                        <span className={styles.sparkleIcon}>✨</span>
+                                                        <span>From Scratch</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </AnimatePresence>
             </div>
 
-            <div className={styles.carouselTrack} ref={scrollRef}>
-                {EXAMPLES.map((item) => (
-                    <motion.div
-                        key={item.id}
-                        className={styles.card}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        {/* Video Layer */}
-                        <div className={styles.videoContainer}>
-                            <video
-                                src={item.video}
-                                className={styles.video}
-                                loop
-                                muted
-                                playsInline
-                                onMouseEnter={(e) => e.currentTarget.play()}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.pause();
-                                    e.currentTarget.currentTime = 0;
-                                }}
-                                onClick={(e) => {
-                                    if (e.currentTarget.paused) {
-                                        e.currentTarget.play();
-                                    } else {
-                                        e.currentTarget.pause();
-                                    }
-                                }}
-                            />
-                            <div className={styles.langBadge}>{item.language}</div>
-                            <div className={styles.playHint}>
-                                <Play size={24} fill="white" />
-                            </div>
-                        </div>
-
-                        {/* Input/Output Info */}
-                        <div className={styles.cardFooter}>
-                            {item.image ? (
-                                <div className={styles.inputPreview}>
-                                    <span className={styles.inputLabel}>Product</span>
-                                    <div className={styles.imgWrapper}>
-                                        <img src={item.image} alt="Product" className={styles.inputImg} />
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className={styles.inputPreview}>
-                                    <span className={styles.inputLabel}>From Scratch</span>
-                                    <div className={styles.noImagePlaceholder}>
-                                        <span>✨</span>
-                                    </div>
-                                </div>
-                            )}
-                            <div className={styles.promptPreview}>
-                                <span className={styles.inputLabel}>Prompt</span>
-                                <p className={styles.promptText}>{item.prompt}</p>
-                            </div>
-                        </div>
-                    </motion.div>
-                ))}
+            <div className={styles.fanControls}>
+                <button onClick={prev} className={styles.navBtn} aria-label="Previous">
+                    <ChevronLeft size={24} />
+                </button>
+                <button onClick={next} className={styles.navBtn} aria-label="Next">
+                    <ChevronRight size={24} />
+                </button>
             </div>
         </div>
     );
