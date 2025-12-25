@@ -8,13 +8,6 @@ import styles from './VideoCarousel.module.css';
 // Data Mapping - Corrected based on actual video content
 const EXAMPLES = [
     {
-        id: 1,
-        video: '/hero-examples/video 1.mp4',
-        image: null, // App video - no input image
-        language: '🇺🇸 English',
-        prompt: "Mobile app showcase with modern UI and smooth animations."
-    },
-    {
         id: 2,
         video: '/hero-examples/video 2.mp4',
         image: '/hero-examples/imagen de video 2.jpeg',
@@ -48,12 +41,18 @@ const EXAMPLES = [
         image: '/hero-examples/imagen video 6.png',
         language: '🇦🇷 Spanish (ARG)',
         prompt: "Review de botas de invierno, estilo porteño y auténtico."
-    }
+    },
+    {
+        id: 1,
+        video: '/hero-examples/video 1.mp4',
+        image: null, // App video - no input image
+        language: '🇺🇸 English',
+        prompt: "Mobile app showcase with modern UI and smooth animations."
+    },
 ];
 
 export const VideoCarousel = () => {
     const scrollRef = useRef<HTMLDivElement>(null);
-    const [playingId, setPlayingId] = useState<number | null>(null);
 
     const scroll = (direction: 'left' | 'right') => {
         if (scrollRef.current) {
@@ -83,7 +82,7 @@ export const VideoCarousel = () => {
             </div>
 
             <div className={styles.carouselTrack} ref={scrollRef}>
-                {EXAMPLES.map((item) => ( // Now showing ALL videos including video 1
+                {EXAMPLES.map((item) => (
                     <motion.div
                         key={item.id}
                         className={styles.card}
@@ -99,17 +98,17 @@ export const VideoCarousel = () => {
                                 loop
                                 muted
                                 playsInline
+                                onMouseEnter={(e) => e.currentTarget.play()}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.pause();
+                                    e.currentTarget.currentTime = 0;
+                                }}
                                 onClick={(e) => {
                                     if (e.currentTarget.paused) {
                                         e.currentTarget.play();
                                     } else {
                                         e.currentTarget.pause();
                                     }
-                                }}
-                                onMouseEnter={(e) => e.currentTarget.play()}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.pause();
-                                    e.currentTarget.currentTime = 0;
                                 }}
                             />
                             <div className={styles.langBadge}>{item.language}</div>

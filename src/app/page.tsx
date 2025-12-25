@@ -9,7 +9,6 @@ import styles from './page.module.css';
 import { Button } from '@/components/ui/Button/Button';
 import { GlassCard } from '@/components/ui/GlassCard/GlassCard';
 import { VideoCarousel } from '@/components/landing/VideoCarousel/VideoCarousel';
-import { AvatarShowcase } from '@/components/landing/AvatarShowcase/AvatarShowcase';
 import { TrustBadges } from '@/components/landing/TrustBadges/TrustBadges';
 
 /* Animation Variants */
@@ -104,7 +103,7 @@ export default function Home() {
             conversiones, todo desde una plataforma fácil de usar.
           </motion.p>
 
-          {/* CTA - More rounded and generous */}
+          {/* Hero Actions */}
           <motion.div
             initial="hidden"
             animate="visible"
@@ -119,20 +118,10 @@ export default function Home() {
             </Link>
           </motion.div>
 
-          {/* Avatar Showcase - NEW Forkads style */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            custom={4}
-            variants={fadeIn}
-          >
-            <AvatarShowcase />
-          </motion.div>
-
         </div>
       </section>
 
-      {/* Trust Badges - NEW */}
+      {/* Trust Badges */}
       <TrustBadges />
 
       {/* Video Carousel Section */}
