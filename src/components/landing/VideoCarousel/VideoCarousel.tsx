@@ -81,6 +81,7 @@ export const VideoCarousel = () => {
 
     return (
         <div className={styles.fanWrapper}>
+            <div className={styles.ambientGlow} />
             <div className={styles.fanContainer}>
                 <AnimatePresence initial={false}>
                     {EXAMPLES.map((item, index) => {
