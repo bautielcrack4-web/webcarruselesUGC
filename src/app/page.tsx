@@ -46,7 +46,7 @@ export default function Home() {
           <div className={styles.navInner}>
             {/* Logo Left */}
             <Link href="/" className={styles.logo}>
-              <Image src="/logo-white.png" alt="Adfork" width={180} height={45} style={{ height: '36px', width: 'auto' }} priority />
+              <Image src="/logo-white.png" alt="Adfork" width={240} height={60} style={{ height: '48px', width: 'auto' }} priority />
             </Link>
 
             <div className={styles.navSpacer} />
