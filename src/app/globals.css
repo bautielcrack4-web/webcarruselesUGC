@@ -44,6 +44,13 @@ body {
   overflow-x: hidden;
 }
 
+/* Smooth scroll with easing for webkit browsers */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 h1,
 h2,
 h3,
