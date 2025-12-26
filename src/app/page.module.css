@@ -355,11 +355,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
 }
 
-.footerContent p {
+.footerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footerCopy {
   font-size: 0.85rem;
   color: var(--fg-dim);
+  margin: 0;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.footerLinks a {
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footerLinks a:hover {
+  color: var(--fg-main);
 }
 
 @media (max-width: 1024px) {

@@ -177,10 +177,18 @@ export default function Home() {
       <footer className={styles.footer}>
         <div className={styles.container}>
           <div className={styles.footerContent}>
-            <div className={styles.logo}>
-              <Image src="/logo-white.png" alt="Adfork" width={100} height={32} style={{ height: '24px', width: 'auto', opacity: 0.8 }} />
+            <div className={styles.footerLeft}>
+              <div className={styles.logo}>
+                <Image src="/logo-white.png" alt="Adfork" width={100} height={32} style={{ height: '24px', width: 'auto', opacity: 0.8 }} />
+              </div>
+              <p className={styles.footerCopy}>© 2024 Bagasy Studio. All rights reserved.</p>
             </div>
-            <p>© 2024 Adfork. All rights reserved.</p>
+            <div className={styles.footerLinks}>
+              <Link href="/terms">Terms of Service</Link>
+              <Link href="/privacy">Privacy Policy</Link>
+              <Link href="/refund-policy">Refund Policy</Link>
+              <a href="mailto:bagasystudio@gmail.com">Contact</a>
+            </div>
           </div>
         </div>
       </footer>
