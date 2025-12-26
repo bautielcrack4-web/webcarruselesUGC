@@ -298,6 +298,7 @@ export default function Home() {
               <p className={styles.footerCopy}>© 2024 Bagasy Studio. All rights reserved.</p>
             </div>
             <div className={styles.footerLinks}>
+              <Link href="/pricing">Pricing</Link>
               <Link href="/terms">Terms of Service</Link>
               <Link href="/privacy">Privacy Policy</Link>
               <Link href="/refund-policy">Refund Policy</Link>
