@@ -4,6 +4,7 @@ import React from 'react';
 import { MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './FloatingSupport.module.css';
+import Link from 'next/link';
 
 export const FloatingSupport = () => {
     return (
@@ -13,16 +14,16 @@ export const FloatingSupport = () => {
             transition={{ delay: 1, duration: 0.3, type: 'spring' }}
             className={styles.wrapper}
         >
-            <a
-                href="https://wa.me/YOUR_PHONE_NUMBER"
-                target="_blank"
-                rel="noopener noreferrer"
+            <Link
+                href="/contact"
                 className={styles.button}
-                title="Hablar con soporte"
+                title="Contactar Soporte"
             >
-                <MessageCircle size={24} />
+                <div style={{ transform: 'scale(0.8)' }}>
+                    <MessageCircle size={20} />
+                </div>
                 <span className={styles.label}>Soporte</span>
-            </a>
+            </Link>
         </motion.div>
     );
 };

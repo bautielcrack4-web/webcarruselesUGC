@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
+import { ratelimit } from '@/lib/ratelimit';
 
 const ATLAS_API_BASE = 'https://api.atlascloud.ai/api/v1/model';
 const API_KEY = process.env.NEXT_PUBLIC_ATLASCLOUD_API_KEY; // Using the existing one for compatibility
@@ -12,6 +13,15 @@ export async function POST(req: Request) {
 
         // 1. Get User Session using @supabase/ssr
         const cookieStore = await cookies();
+
+        // 2. Rate Limiting Check
+        // We do this EARLY to save resources
+        const ip = req.headers.get("x-forwarded-for") ?? "127.0.0.1";
+
+        // We import ratelimit dynamically or at top? Top is better.
+        // But we need user ID for better limiting.
+        // Let's check session first.
+
 
         // DEBUG: Log received cookies
         const allCookies = cookieStore.getAll();
@@ -60,6 +70,24 @@ export async function POST(req: Request) {
                 debug_cookies: allCookies.map(c => c.name),
                 auth_error: authError
             }, { status: 401 });
+        }
+
+        // 2. Rate Limiting (Strict Protection)
+        const { success: limitSuccess, limit, reset, remaining } = await ratelimit.limit(user.id);
+
+        if (!limitSuccess) {
+            console.warn(`Rate Limit Exceeded for user ${user.id}`);
+            return NextResponse.json({
+                error: 'Too Many Requests',
+                message: 'Has alcanzado el límite de 5 videos por minuto. Por favor espera unos segundos.'
+            }, {
+                status: 429,
+                headers: {
+                    'X-RateLimit-Limit': limit.toString(),
+                    'X-RateLimit-Remaining': remaining.toString(),
+                    'X-RateLimit-Reset': reset.toString()
+                }
+            });
         }
 
         // 2. Calculate Credit Cost
