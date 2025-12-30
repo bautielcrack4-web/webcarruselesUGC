@@ -74,51 +74,56 @@ async function handleOrderCreated(event: any) {
 
     // Get custom data
     const customData = event.meta?.custom_data || data.attributes?.custom_data;
-    const userId = customData?.user_id;
+    let userId = customData?.user_id;
     const packId = customData?.pack_id;
+    const userEmail = data.attributes.user_email;
+    const total = data.attributes.total; // Amount in cents
 
-    if (!userId || !packId) {
-        console.log('Order created but missing user_id or pack_id in custom_data. Ignoring (could be a subscription order handled by other events).');
+    // Fallback: Find user by email if user_id is missing
+    if (!userId && userEmail) {
+        console.log(`Missing user_id in custom_data. Attempting to find user by email: ${userEmail}`);
+        const { data: { users }, error } = await supabase.auth.admin.listUsers();
+        const match = users?.find(u => u.email === userEmail);
+        if (match) {
+            userId = match.id;
+            console.log(`Found user_id ${userId} by email ${userEmail}`);
+        }
+    }
+
+    if (!userId) {
+        console.error('CRITICAL: Order created but missing user_id and could not find by email. ignoring.');
         return;
     }
 
-    console.log(`Processing One-Time Pack: ${packId} for user ${userId}`);
+    console.log(`Processing One-Time Pack for user ${userId}`);
 
     let creditsToAdd = 0;
-    let packName = '';
+    let packName = 'Credit Pack';
 
-    switch (packId) {
-        case 'pack_starter':
-            creditsToAdd = 50;
-            packName = 'Starter Boost';
-            break;
-        case 'pack_pro':
-            creditsToAdd = 150;
-            packName = 'Pro Top-up';
-            break;
-        case 'pack_agency':
-            creditsToAdd = 500;
-            packName = 'Agency Scale';
-            break;
-        default:
-            console.error('Unknown pack_id:', packId);
-            return;
+    // Strategy 1: Use pack_id if available
+    if (packId) {
+        switch (packId) {
+            case 'pack_starter': creditsToAdd = 50; packName = 'Starter Boost'; break;
+            case 'pack_pro': creditsToAdd = 150; packName = 'Pro Top-up'; break;
+            case 'pack_agency': creditsToAdd = 500; packName = 'Agency Scale'; break;
+        }
+    }
+    // Strategy 2: Fallback to Price (Total in cents)
+    else {
+        console.log(`Missing pack_id. Inferring from price: ${total}`);
+        if (total === 4900) { creditsToAdd = 50; packName = 'Starter Boost (Inferred)'; }
+        else if (total === 12900) { creditsToAdd = 150; packName = 'Pro Top-up (Inferred)'; }
+        else if (total === 34900) { creditsToAdd = 500; packName = 'Agency Scale (Inferred)'; }
+        else if (total === 900) { creditsToAdd = 50; packName = 'Test Pack 50'; } // Legacy/Test
     }
 
     if (creditsToAdd > 0) {
         // 1. Get current subscription to add credits to it
         const { data: sub, error: subError } = await supabase
             .from('user_subscriptions')
-            .select('credits_remaining, credits_total')
+            .select('credits_remaining, credits_total, status')
             .eq('user_id', userId)
             .single();
-
-        if (subError && subError.code !== 'PGRST116') { // Ignore not found, we might create one? 
-            // Actually, if they buy a pack they should ideally have a record, 
-            // but if they are new users buying a pack (unlikely flow but possible), we might need to insert.
-            // For now assume they have a row (created at signup).
-            console.error('Error fetching subscription for pack update:', subError);
-        }
 
         const currentRemaining = sub?.credits_remaining || 0;
         const currentTotal = sub?.credits_total || 0;
@@ -130,7 +135,7 @@ async function handleOrderCreated(event: any) {
                 user_id: userId,
                 credits_remaining: currentRemaining + creditsToAdd,
                 credits_total: currentTotal + creditsToAdd,
-                status: sub ? undefined : 'active', // If new, set active
+                status: sub?.status || 'active', // Keep status or set active
                 updated_at: new Date().toISOString()
             }, { onConflict: 'user_id' });
 
@@ -148,6 +153,8 @@ async function handleOrderCreated(event: any) {
         });
 
         console.log(`Successfully added ${creditsToAdd} credits to user ${userId}`);
+    } else {
+        console.warn(`Could not determine credits to add. pack_id: ${packId}, total: ${total}`);
     }
 }
 
