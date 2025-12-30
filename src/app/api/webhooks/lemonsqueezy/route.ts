@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
+import { Resend } from 'resend';
+import { OrderReceiptEmail } from '@/components/emails/OrderReceiptEmail';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || '',
@@ -28,7 +32,7 @@ export async function POST(request: NextRequest) {
 
         const event = JSON.parse(body);
         const eventName = event.meta.event_name;
-        const data = event.data;
+        // const data = event.data; // logic moved inside handlers
 
         console.log('Lemon Squeezy Webhook Event:', eventName);
 
@@ -78,6 +82,8 @@ async function handleOrderCreated(event: any) {
     const packId = customData?.pack_id;
     const userEmail = data.attributes.user_email;
     const total = data.attributes.total; // Amount in cents
+    const currency = data.attributes.currency;
+    const orderId = data.id;
 
     // Fallback: Find user by email if user_id is missing
     if (!userId && userEmail) {
@@ -152,6 +158,28 @@ async function handleOrderCreated(event: any) {
             description: `${packName} - ${creditsToAdd} credits`,
         });
 
+        // 4. Send Receipt Email via Resend
+        if (userEmail) {
+            try {
+                await resend.emails.send({
+                    from: 'Adfork <support@adfork.app>',
+                    to: [userEmail],
+                    subject: 'Your Adfork Credits Receipt',
+                    react: OrderReceiptEmail({
+                        orderId: orderId.toString(),
+                        planName: packName,
+                        amount: `${(total / 100).toFixed(2)} ${currency}`,
+                        creditsAdded: creditsToAdd,
+                        date: new Date().toLocaleDateString(),
+                        customerName: userEmail.split('@')[0]
+                    })
+                });
+                console.log(`Receipt email sent to ${userEmail}`);
+            } catch (emailError) {
+                console.error('Failed to send receipt email:', emailError);
+            }
+        }
+
         console.log(`Successfully added ${creditsToAdd} credits to user ${userId}`);
     } else {
         console.warn(`Could not determine credits to add. pack_id: ${packId}, total: ${total}`);
@@ -165,6 +193,9 @@ async function handleSubscriptionCreated(event: any) {
     const customerId = data.attributes.customer_id;
     const variantId = data.attributes.variant_id;
     const status = data.attributes.status;
+    const userEmail = data.attributes.user_email;
+    const total = data.attributes.total;
+    const currency = data.attributes.currency;
 
     // Get user_id from meta.custom_data (where Lemon Squeezy puts it)
     const userId = event.meta?.custom_data?.user_id ||
@@ -210,6 +241,28 @@ async function handleSubscriptionCreated(event: any) {
         description: `${planTier} plan subscription - ${credits} credits`,
     });
 
+    // Send Welcome/Receipt Email
+    if (userEmail) {
+        try {
+            await resend.emails.send({
+                from: 'Adfork <support@adfork.app>',
+                to: [userEmail],
+                subject: 'Welcome to Adfork - Subscription Confirmed',
+                react: OrderReceiptEmail({
+                    orderId: data.id.toString(),
+                    planName: `${planTier.charAt(0).toUpperCase() + planTier.slice(1)} Plan`,
+                    amount: `${(total / 100).toFixed(2)} ${currency}`,
+                    creditsAdded: credits,
+                    date: new Date().toLocaleDateString(),
+                    customerName: userEmail.split('@')[0]
+                })
+            });
+            console.log(`Subscription email sent to ${userEmail}`);
+        } catch (emailError) {
+            console.error('Failed to send subscription email:', emailError);
+        }
+    }
+
     console.log(`Subscription created for user ${userId}: ${planTier} plan with ${credits} credits`);
 }
 
@@ -243,6 +296,7 @@ async function handleSubscriptionUpdated(event: any) {
             credits_remaining: credits,
             credits_total: credits,
             status: 'active',
+            next_billing_date: data.attributes.renews_at,
             updated_at: new Date().toISOString(),
         })
         .eq('lemonsqueezy_subscription_id', subscriptionId.toString());
@@ -300,6 +354,7 @@ async function handleSubscriptionResumed(event: any) {
             credits_remaining: credits,
             credits_total: credits,
             status: 'active',
+            next_billing_date: data.attributes.renews_at,
             updated_at: new Date().toISOString(),
         })
         .eq('lemonsqueezy_subscription_id', subscriptionId.toString());
