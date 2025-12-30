@@ -23,21 +23,46 @@ export const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
     ];
 
     const [credits, setCredits] = useState<number | null>(null);
+    const [userEmail, setUserEmail] = useState<string>('');
+    const [planId, setPlanId] = useState<string>('free');
 
     useEffect(() => {
-        const fetchCredits = async () => {
+        const fetchUserData = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             if (user) {
+                // Set email from auth user
+                setUserEmail(user.email || '');
+
+                // Fetch subscription data
                 const { data } = await supabase
                     .from('user_subscriptions')
-                    .select('credits_remaining')
+                    .select('credits_remaining, plan_id')
                     .eq('user_id', user.id)
                     .single();
-                if (data) setCredits(data.credits_remaining);
+
+                if (data) {
+                    setCredits(data.credits_remaining);
+                    setPlanId(data.plan_id || 'free');
+                } else {
+                    setCredits(0);
+                    setPlanId('free');
+                }
             }
         };
-        fetchCredits();
+        fetchUserData();
     }, []);
+
+    const getPlanLabel = (plan: string) => {
+        const labels: Record<string, string> = {
+            'starter': 'Starter',
+            'pro': 'Pro',
+            'business': 'Business',
+            'free': 'Free',
+        };
+        return labels[plan] || 'Free';
+    };
+
+    const isPaidPlan = planId && planId !== 'free';
 
     return (
         <>
@@ -94,10 +119,10 @@ export const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
                         <div className={styles.avatar} />
                         <div className={styles.userInfo}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                <p className={styles.userName}>Usuario Pro</p>
-                                <span className={styles.proBadge}>PRO</span>
+                                <p className={styles.userName}>{userEmail ? userEmail.split('@')[0] : 'Usuario'}</p>
+                                {isPaidPlan && <span className={styles.proBadge}>{getPlanLabel(planId).toUpperCase()}</span>}
                             </div>
-                            <p className={styles.userEmail}>bauti@example.com</p>
+                            <p className={styles.userEmail}>{userEmail || 'Cargando...'}</p>
                         </div>
                     </div>
                 </div>
