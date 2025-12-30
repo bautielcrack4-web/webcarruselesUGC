@@ -1,0 +1,37 @@
+# Lemon Squeezy Configuration - PASTE YOUR VALUES HERE
+
+## 1. Checkout URLs (from Lemon Squeezy Products page)
+
+### Starter (Already configured)
+CHECKOUT_URL_STARTER=https://bagasystudio.lemonsqueezy.com/checkout/buy/7afc5d16-2667-42a3-9e51-d127cf764fd7
+
+### Pro (PASTE HERE)
+CHECKOUT_URL_PRO=https://bagasystudio.lemonsqueezy.com/checkout/buy/PASTE_PRO_ID_HERE
+
+### Business (PASTE HERE)
+CHECKOUT_URL_BUSINESS=https://bagasystudio.lemonsqueezy.com/checkout/buy/PASTE_BUSINESS_ID_HERE
+
+---
+
+## 2. Webhook Secret (from Lemon Squeezy Webhooks settings)
+
+LEMONSQUEEZY_WEBHOOK_SECRET=PASTE_WEBHOOK_SECRET_HERE
+
+---
+
+## 3. API Key (Already have this)
+
+LEMONSQUEEZY_API_KEY=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NGQ1OWNlZi1kYmI4LTRlYTUtYjE3OC1kMjU0MGZjZDY5MTkiLCJqdGkiOiI3OWIyNmM5ZGUwZDY5NDZlODY1NGNjNWNlYWQ2ZDE5NGQ2MDFjOTNjMTlkOWFiMDEyZGIwYjViOTk2ZjkzYzU3NTQzYTcwODQ4MjJiMzM3ZiIsImlhdCI6MTc2NzA1ODg3My43NTk4MywibmJmIjoxNzY3MDU4ODczLjc1OTgzMywiZXhwIjoyMDgyNTkxNjczLjc0NTQ2MSwic3ViIjoiNjIyNjQ1MSIsInNjb3BlcyI6W119.ngcfBgE_-pLAQrEMYbRwfRqmt3pshhUTAUSS4Kkxxzv-8jL_4rBvLJYE5yO0MX0R1nBxrEOG290No0HmPm6O1WUDc7Ejes3_AQ2otiZsWVQiDiNyOWY5HjJluYHWdqeBAMSFCCe6Vo2dRJFsQdXuTsWhCBw5hf3WbM6ELqTjezk1OAEeHgHrpw9n8iHJxpXXcyZL-bCtjqMi0yPaP6sXsEFisPZgr9l9L03f-Ooh7pvyVPCQAZcnqFPryYA6BlG_mkXiO5QIaAdYSzR6SEsta94jCDc64J6LBucB4mp3DzKsabx0ZTASBndX-Yvle41yXD-HOOT0LxDg3yZgvz3wqvJlTkgwYQ8c2Z3i012UxdYaSk5cwFUvoVo4hpV9wfx7FxDNa4m5tdmlJimwxggV5rrwmm2OSv6ue5E8-a2m8V-nd_dsy3Eoujns4o6hRTcOdri2HBk4HiDwKBSIRrniDMCMF1MQJb7HXQ0UHBcSOjj-JqZ3g9CIAndi9O4wos4XVyPaVEMpYn7XqjXMZuefRf_KE3_OfQoLloY8b_ou1KEDRqteiwjl2zuUy4_Y21tRKTfoMMiP-BDGpvXmxBF4BmWwJ2dsFRO3bohQ3Bsw4-oIlBXLpVCfqvc3xQxXhHV-LBciTeOaxPzR4hdzoMaQQ17GGai3pUpnoVHonTsMw-o
+
+---
+
+## Instructions:
+
+1. Get Pro checkout URL from Lemon Squeezy → Products → Adfork Pro → Embed code
+2. Get Business checkout URL from Lemon Squeezy → Products → Adfork Business → Embed code
+3. Configure webhook at: https://app.lemonsqueezy.com/settings/webhooks
+   - URL: https://adfork.app/api/webhooks/lemonsqueezy
+   - Events: All subscription and order events
+4. Copy the webhook signing secret
+
+Then paste all values above and send them to me!

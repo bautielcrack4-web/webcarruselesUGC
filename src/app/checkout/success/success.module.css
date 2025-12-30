@@ -1,0 +1,104 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+}
+
+.content {
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
+
+.iconWrapper {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.successIcon {
+    color: #10b981;
+    filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.4));
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(to bottom, #fff, #888);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 3rem;
+    line-height: 1.6;
+}
+
+.actions {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 4rem;
+}
+
+.primaryBtn {
+    background: #fff !important;
+    color: #000 !important;
+    font-weight: 600;
+}
+
+.infoCard {
+    text-align: left;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.infoCard h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #fff;
+}
+
+.infoCard ul {
+    list-style: none;
+    padding: 0;
+}
+
+.infoCard li {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.infoCard li::before {
+    content: "→";
+    color: #10b981;
+}
+
+@media (max-width: 640px) {
+    .title {
+        font-size: 2.25rem;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .actions button {
+        width: 100%;
+    }
+}

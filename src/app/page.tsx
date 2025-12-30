@@ -22,6 +22,29 @@ const fadeIn = {
   })
 };
 
+const titleVariant = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.3,
+    }
+  }
+};
+
+const wordVariant = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1,
+      ease: [0.21, 0.47, 0.32, 0.98] as const
+    }
+  }
+};
+
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
@@ -85,12 +108,20 @@ export default function Home() {
           <motion.h1
             initial="hidden"
             animate="visible"
-            custom={1}
-            variants={fadeIn}
+            variants={titleVariant}
             className={styles.title}
           >
-            Crea UGCs con IA, <br />
-            Efectivos y Rápido
+            {"Crea UGCs con IA,".split(" ").map((word, i) => (
+              <motion.span key={i} variants={wordVariant} style={{ display: 'inline-block', marginRight: '0.25em' }}>
+                {word}
+              </motion.span>
+            ))}
+            <br />
+            {"Efectivos y Rápido".split(" ").map((word, i) => (
+              <motion.span key={i} variants={wordVariant} style={{ display: 'inline-block', marginRight: '0.25em' }}>
+                {word}
+              </motion.span>
+            ))}
           </motion.h1>
 
           {/* Subtitle - More subtle */}
