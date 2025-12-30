@@ -128,7 +128,7 @@ export default function SuccessPage() {
                             <li>✅ Tus créditos ya están disponibles en tu barra lateral.</li>
                             <li>📧 Recibirás un recibo de Lemon Squeezy en tu email.</li>
                             <li>🎬 Ve al Studio y crea tu primer video con IA.</li>
-                            <li>💬 Si tienes alguna duda, escríbenos a bagasystudio@gmail.com</li>
+                            <li>💬 Si tienes alguna duda, escríbenos a support@adfork.app</li>
                         </ul>
                     </GlassCard>
                 </motion.div>

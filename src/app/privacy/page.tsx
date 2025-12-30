@@ -14,7 +14,7 @@ export default function PrivacyPage() {
                 <section>
                     <h2>1. Introduction</h2>
                     <p>
-                        Bagasy Studio ("we," "our," or "us") operates Adfork. This Privacy Policy explains how we collect, use, disclose,
+                        Adfork ("we," "our," or "us") operates Adfork. This Privacy Policy explains how we collect, use, disclose,
                         and safeguard your information when you use our Service.
                     </p>
                 </section>
@@ -88,7 +88,7 @@ export default function PrivacyPage() {
                         <li><strong>Export:</strong> Download your generated content</li>
                         <li><strong>Opt-Out:</strong> Unsubscribe from marketing communications</li>
                     </ul>
-                    <p>To exercise these rights, contact us at <a href="mailto:bagasystudio@gmail.com">bagasystudio@gmail.com</a></p>
+                    <p>To exercise these rights, contact us at <a href="mailto:support@adfork.app">support@adfork.app</a></p>
                 </section>
 
                 <section>
@@ -147,7 +147,7 @@ export default function PrivacyPage() {
                     <h2>13. Contact Us</h2>
                     <p>
                         For questions about this Privacy Policy or our data practices, please contact us at:
-                        <a href="mailto:bagasystudio@gmail.com">bagasystudio@gmail.com</a>
+                        <a href="mailto:support@adfork.app">support@adfork.app</a>
                     </p>
                 </section>
             </div>

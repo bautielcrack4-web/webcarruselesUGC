@@ -34,7 +34,7 @@ export default function CancelPage() {
                             <ArrowLeft size={18} style={{ marginRight: 8 }} /> Volver a Planes
                         </Button>
                     </Link>
-                    <a href="mailto:bagasystudio@gmail.com">
+                    <a href="mailto:support@adfork.app">
                         <Button variant="outline" size="lg">
                             Hablar con Soporte <MessageCircle size={18} style={{ marginLeft: 8 }} />
                         </Button>

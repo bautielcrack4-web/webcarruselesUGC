@@ -14,7 +14,7 @@ export default function TermsPage() {
                 <section>
                     <h2>1. Agreement to Terms</h2>
                     <p>
-                        By accessing and using Adfork ("the Service"), operated by Bagasy Studio, you agree to be bound by these Terms of Service.
+                        By accessing and using Adfork ("the Service"), operated by Adfork, you agree to be bound by these Terms of Service.
                         If you do not agree to these terms, please do not use the Service.
                     </p>
                 </section>
@@ -75,7 +75,7 @@ export default function TermsPage() {
                 <section>
                     <h2>7. Intellectual Property</h2>
                     <p>
-                        You retain ownership of the content you create using the Service. Bagasy Studio retains all rights to the Service itself,
+                        You retain ownership of the content you create using the Service. Adfork retains all rights to the Service itself,
                         including its software, algorithms, and branding.
                     </p>
                     <p>
@@ -112,7 +112,7 @@ export default function TermsPage() {
                 <section>
                     <h2>11. Limitation of Liability</h2>
                     <p>
-                        To the maximum extent permitted by law, Bagasy Studio shall not be liable for any indirect, incidental, special,
+                        To the maximum extent permitted by law, Adfork shall not be liable for any indirect, incidental, special,
                         consequential, or punitive damages resulting from your use of the Service.
                     </p>
                 </section>
@@ -128,7 +128,7 @@ export default function TermsPage() {
                 <section>
                     <h2>13. Contact Information</h2>
                     <p>
-                        For questions about these Terms, please contact us at: <a href="mailto:bagasystudio@gmail.com">bagasystudio@gmail.com</a>
+                        For questions about these Terms, please contact us at: <a href="mailto:support@adfork.app">support@adfork.app</a>
                     </p>
                 </section>
 

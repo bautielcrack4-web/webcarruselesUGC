@@ -7,7 +7,7 @@ export default function ContactPage() {
     return (
         <div className={styles.contactContainer}>
             <div className={styles.contactContent}>
-                <Link href="/" className={styles.backLink}>← Back to Home</Link>
+                <Link href="/" className={styles.backLink}>← Adfork Home</Link>
 
                 <h1>Contact Us</h1>
                 <p className={styles.subtitle}>
@@ -21,8 +21,8 @@ export default function ContactPage() {
                         </div>
                         <h2>Email Support</h2>
                         <p>Get in touch with our support team for any questions or issues.</p>
-                        <a href="mailto:bagasystudio@gmail.com" className={styles.contactButton}>
-                            bagasystudio@gmail.com
+                        <a href="mailto:support@adfork.app" className={styles.contactButton}>
+                            support@adfork.app
                         </a>
                         <p className={styles.responseTime}>We typically respond within 24 hours</p>
                     </div>
@@ -33,7 +33,7 @@ export default function ContactPage() {
                         </div>
                         <h2>General Inquiries</h2>
                         <p>Questions about pricing, features, or partnerships?</p>
-                        <a href="mailto:bagasystudio@gmail.com?subject=General Inquiry" className={styles.contactButton}>
+                        <a href="mailto:support@adfork.app?subject=General Inquiry" className={styles.contactButton}>
                             Send an Inquiry
                         </a>
                         <p className={styles.responseTime}>Business hours: Mon-Fri, 9AM-6PM</p>

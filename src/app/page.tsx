@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button/Button';
 import { GlassCard } from '@/components/ui/GlassCard/GlassCard';
 import { VideoCarousel } from '@/components/landing/VideoCarousel/VideoCarousel';
 import { TrustBadges } from '@/components/landing/TrustBadges/TrustBadges';
+import { FAQ } from '@/components/landing/FAQ/FAQ';
 import { useMagneticButton } from '@/hooks/useMagneticButton';
 
 /* Animation Variants */
@@ -318,6 +319,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <FAQ />
+
       {/* Footer */}
       <footer className={styles.footer}>
         <div className={styles.container}>
@@ -326,14 +330,14 @@ export default function Home() {
               <div className={styles.logo}>
                 <Image src="/logo-white.png" alt="Adfork" width={100} height={32} style={{ height: '24px', width: 'auto', opacity: 0.8 }} />
               </div>
-              <p className={styles.footerCopy}>© 2024 Bagasy Studio. All rights reserved.</p>
+              <p className={styles.footerCopy}>© 2024 Adfork. All rights reserved.</p>
             </div>
             <div className={styles.footerLinks}>
               <Link href="/pricing">Pricing</Link>
               <Link href="/terms">Terms of Service</Link>
               <Link href="/privacy">Privacy Policy</Link>
               <Link href="/refund-policy">Refund Policy</Link>
-              <a href="mailto:bagasystudio@gmail.com">Contact</a>
+              <a href="mailto:support@adfork.app">Contact</a>
             </div>
           </div>
         </div>

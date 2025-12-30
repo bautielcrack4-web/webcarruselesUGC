@@ -14,7 +14,7 @@ export default function RefundPolicyPage() {
                 <section>
                     <h2>1. Overview</h2>
                     <p>
-                        At Adfork (operated by Bagasy Studio), we want you to be completely satisfied with our Service.
+                        At Adfork (operated by Adfork), we want you to be completely satisfied with our Service.
                         This Refund Policy outlines the conditions under which refunds are granted.
                     </p>
                 </section>
@@ -89,7 +89,7 @@ export default function RefundPolicyPage() {
                     <h2>7. How to Request a Refund</h2>
                     <p>To request a refund:</p>
                     <ol>
-                        <li>Contact our support team at <a href="mailto:bagasystudio@gmail.com">bagasystudio@gmail.com</a></li>
+                        <li>Contact our support team at <a href="mailto:support@adfork.app">support@adfork.app</a></li>
                         <li>Include your account email and transaction details</li>
                         <li>Explain the reason for your refund request</li>
                     </ol>
@@ -113,7 +113,7 @@ export default function RefundPolicyPage() {
                     <h2>9. Service Issues</h2>
                     <p>
                         If you experience technical issues that prevent you from using the Service, please contact our support team
-                        immediately at <a href="mailto:bagasystudio@gmail.com">bagasystudio@gmail.com</a>.
+                        immediately at <a href="mailto:support@adfork.app">support@adfork.app</a>.
                         We will work to resolve the issue or provide appropriate compensation.
                     </p>
                 </section>
@@ -143,7 +143,7 @@ export default function RefundPolicyPage() {
                     <h2>12. Contact Information</h2>
                     <p>
                         For questions about this Refund Policy or to request a refund, please contact us at:
-                        <a href="mailto:bagasystudio@gmail.com">bagasystudio@gmail.com</a>
+                        <a href="mailto:support@adfork.app">support@adfork.app</a>
                     </p>
                 </section>
             </div>
