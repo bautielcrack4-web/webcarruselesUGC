@@ -9,11 +9,8 @@ import { supabase } from '@/lib/supabase';
 import styles from './billing.module.css';
 
 // Lemon Squeezy checkout URLs
-const CHECKOUT_URLS = {
-    starter: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/7afc5d16-2667-42a3-9e51-d127cf764fd7',
-    pro: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/a3c69f06-f46c-4ce6-aa51-ac83d686e057',
-    business: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/1c67e47f-4c29-4ca1-bf0e-96b07b3407fb',
-};
+// Lemon Squeezy Store Domain
+const STORE_DOMAIN = 'bagasystudio.lemonsqueezy.com';
 
 const PLANS = [
     {
