@@ -116,15 +116,9 @@ export default function BillingPage() {
         const checkoutUrl = CHECKOUT_URLS[plan.id as keyof typeof CHECKOUT_URLS];
 
         if (checkoutUrl) {
-            const url = new URL(checkoutUrl);
-
-            // Append query parameters
-            url.searchParams.set('checkout[email]', user.email);
-            // Explicitly cast to string to prevent 422 errors with Lemon Squeezy validation
-            url.searchParams.set('checkout[custom][user_id]', String(user.id));
-
-            // Redirect to checkout
-            window.location.href = url.toString();
+            // TEMPORARY: Testing without any parameters to isolate the issue
+            // If this works, the problem is with how we're appending parameters
+            window.location.href = checkoutUrl;
         }
     };
 
