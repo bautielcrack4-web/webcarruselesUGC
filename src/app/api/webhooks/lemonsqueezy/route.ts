@@ -109,8 +109,10 @@ async function handleSubscriptionCreated(data: any) {
             user_id: userId,
             lemonsqueezy_subscription_id: data.id.toString(),
             lemonsqueezy_customer_id: customerId.toString(),
-            plan_tier: planTier,
+            plan_id: planTier,
             credits_remaining: credits,
+            credits_total: credits,
+            status: 'active',
             updated_at: new Date().toISOString(),
         }, {
             onConflict: 'user_id'
@@ -143,7 +145,7 @@ async function handleSubscriptionUpdated(data: any) {
     const { data: subscription, error: findError } = await supabase
         .from('user_subscriptions')
         .select('user_id, credits_remaining')
-        .eq('lemonsqueezy_subscription_id', subscriptionId)
+        .eq('lemonsqueezy_subscription_id', subscriptionId.toString())
         .single();
 
     if (findError || !subscription) {
@@ -152,16 +154,18 @@ async function handleSubscriptionUpdated(data: any) {
     }
 
     // If plan changed, update credits
-    const { planTier, credits } = getPlanDetails(variantId);
+    const { planTier, credits } = getPlanDetails(variantId.toString());
 
     const { error: updateError } = await supabase
         .from('user_subscriptions')
         .update({
-            plan_tier: planTier,
+            plan_id: planTier,
             credits_remaining: credits,
+            credits_total: credits,
+            status: 'active',
             updated_at: new Date().toISOString(),
         })
-        .eq('lemonsqueezy_subscription_id', subscriptionId);
+        .eq('lemonsqueezy_subscription_id', subscriptionId.toString());
 
     if (updateError) {
         console.error('Error updating subscription:', updateError);
@@ -188,10 +192,10 @@ async function handleSubscriptionCancelled(data: any) {
     const { error } = await supabase
         .from('user_subscriptions')
         .update({
-            plan_tier: 'cancelled',
+            status: 'cancelled',
             updated_at: new Date().toISOString(),
         })
-        .eq('lemonsqueezy_subscription_id', subscriptionId);
+        .eq('lemonsqueezy_subscription_id', subscriptionId.toString());
 
     if (error) {
         console.error('Error cancelling subscription:', error);
@@ -204,17 +208,19 @@ async function handleSubscriptionResumed(data: any) {
     const subscriptionId = data.id;
     const variantId = data.attributes.variant_id;
 
-    const { planTier, credits } = getPlanDetails(variantId);
+    const { planTier, credits } = getPlanDetails(variantId.toString());
 
     // Reactivate subscription
     const { error } = await supabase
         .from('user_subscriptions')
         .update({
-            plan_tier: planTier,
+            plan_id: planTier,
             credits_remaining: credits,
+            credits_total: credits,
+            status: 'active',
             updated_at: new Date().toISOString(),
         })
-        .eq('lemonsqueezy_subscription_id', subscriptionId);
+        .eq('lemonsqueezy_subscription_id', subscriptionId.toString());
 
     if (error) {
         console.error('Error resuming subscription:', error);
@@ -230,11 +236,12 @@ async function handleSubscriptionExpired(data: any) {
     const { error } = await supabase
         .from('user_subscriptions')
         .update({
-            plan_tier: 'free',
+            plan_id: 'free',
             credits_remaining: 0,
+            status: 'expired',
             updated_at: new Date().toISOString(),
         })
-        .eq('lemonsqueezy_subscription_id', subscriptionId);
+        .eq('lemonsqueezy_subscription_id', subscriptionId.toString());
 
     if (error) {
         console.error('Error expiring subscription:', error);

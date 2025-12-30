@@ -95,7 +95,7 @@ export default function BillingPage() {
                     .single();
 
                 if (sub) {
-                    setCurrentPlan(sub.plan_tier);
+                    setCurrentPlan(sub.plan_id);
                     setCredits(sub.credits_remaining);
                 }
             }
