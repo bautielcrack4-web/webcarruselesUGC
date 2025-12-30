@@ -12,11 +12,11 @@ const faqs = [
     },
     {
         q: "¿Cuál es la duración máxima de los UGCs?",
-        a: "Actualmente cada video tiene una duración máxima de 60 segundos, pero estamos trabajando en ampliar este límite muy pronto."
+        a: "Actualmente cada video tiene una duración máxima de 15 segundos. Es el estándar ideal para retener la atención en TikTok y Reels."
     },
     {
         q: "¿Puedo subir mi propio avatar o rostro?",
-        a: "Sí. Puedes crear y subir tu avatar personal, y será privado y exclusivo en tu cuenta. Nadie más podrá usarlo."
+        a: "Por el momento no. Lo único que está disponible es subir foto de tu producto y describir al avatar que quieres para que la IA lo genere."
     },
     {
         q: "¿Puedo generar anuncios en diferentes idiomas?",
@@ -24,15 +24,11 @@ const faqs = [
     },
     {
         q: "¿Puedo mostrar productos físicos en los videos?",
-        a: "Sí. Elige la opción de “producto en mano” o “try on” y el avatar aparecerá mostrándolo o usando prendas/accesorios."
+        a: "Sí, solo pídele en el prompt que el avatar muestre o use el producto y la IA lo integrará en el video."
     },
     {
         q: "¿Los rostros generados son consistentes entre un video y otro?",
-        a: "Sí. Una vez que eliges o creas un avatar, su rostro se mantiene consistente en todos tus videos. No cambia cada vez que generas."
-    },
-    {
-        q: "¿Qué pasa si no me gusta el resultado?",
-        a: "Puedes ponerte en contacto con soporte y te recargaremos créditos nuevamente para que generes otra versión sin costo adicional."
+        a: "No por el momento, pero puedes describir físicamente al avatar que quieres y la IA lo hará tal y como se lo pidas con palabras."
     },
     {
         q: "¿Hay versión gratuita?",
