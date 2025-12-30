@@ -8,7 +8,7 @@ import styles from './FAQ.module.css';
 const faqs = [
     {
         q: "¿Cuántos videos puedo hacer con cada plan?",
-        a: "Depende de la duración y estilo que elijas, pero en promedio: Starter ~1-2, Pro ~5, Business ~16 al mes (basado en videos estándar de 30 créditos)."
+        a: "Depende de la duración: un video de 10s cuesta 30 créditos y uno de 15s cuesta 45. Por tanto: Starter ~1-2 videos, Pro ~3-5 videos y Business ~11-16 videos al mes."
     },
     {
         q: "¿Cuál es la duración máxima de los UGCs?",
