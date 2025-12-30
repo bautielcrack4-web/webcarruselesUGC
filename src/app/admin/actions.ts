@@ -11,7 +11,7 @@ const ADMIN_EMAILS = [
 
 // Admin Server Action to Add/Remove Credits
 export async function manageCredits(userId: string, amount: number, reason: string) {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
 
     // 1. Verify Admin Identity (Double check)
     // We can't use cookie-based auth easily with service_role client, 
