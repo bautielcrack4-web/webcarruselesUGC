@@ -116,9 +116,12 @@ export default function BillingPage() {
         const checkoutUrl = CHECKOUT_URLS[plan.id as keyof typeof CHECKOUT_URLS];
 
         if (checkoutUrl) {
-            // TEMPORARY: Testing without any parameters to isolate the issue
-            // If this works, the problem is with how we're appending parameters
-            window.location.href = checkoutUrl;
+            // Add redirect URL to bring users back to the app after payment
+            const url = new URL(checkoutUrl);
+            const successUrl = `${window.location.origin}/checkout/success`;
+            url.searchParams.set('checkout[success_url]', successUrl);
+
+            window.location.href = url.toString();
         }
     };
 
