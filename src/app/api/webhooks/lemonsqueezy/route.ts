@@ -34,27 +34,27 @@ export async function POST(request: NextRequest) {
 
         switch (eventName) {
             case 'order_created':
-                await handleOrderCreated(data);
+                await handleOrderCreated(event);
                 break;
 
             case 'subscription_created':
-                await handleSubscriptionCreated(data);
+                await handleSubscriptionCreated(event);
                 break;
 
             case 'subscription_updated':
-                await handleSubscriptionUpdated(data);
+                await handleSubscriptionUpdated(event);
                 break;
 
             case 'subscription_cancelled':
-                await handleSubscriptionCancelled(data);
+                await handleSubscriptionCancelled(event);
                 break;
 
             case 'subscription_resumed':
-                await handleSubscriptionResumed(data);
+                await handleSubscriptionResumed(event);
                 break;
 
             case 'subscription_expired':
-                await handleSubscriptionExpired(data);
+                await handleSubscriptionExpired(event);
                 break;
 
             default:
@@ -68,7 +68,8 @@ export async function POST(request: NextRequest) {
     }
 }
 
-async function handleOrderCreated(data: any) {
+async function handleOrderCreated(event: any) {
+    const data = event.data;
     console.log('Order created:', data.id);
 
     const customerId = data.attributes.customer_id;
@@ -79,21 +80,20 @@ async function handleOrderCreated(data: any) {
     console.log(`Order ${data.id} created for ${userEmail} - Total: $${total / 100}`);
 }
 
-async function handleSubscriptionCreated(data: any) {
+async function handleSubscriptionCreated(event: any) {
+    const data = event.data;
     console.log('Subscription created:', data.id);
 
     const customerId = data.attributes.customer_id;
     const variantId = data.attributes.variant_id;
     const status = data.attributes.status;
 
-    // Get user_id from custom_data passed through checkout URL
-    // The event structure has meta.custom_data.user_id
-    const event = data; // data is already the full event
-    const userId = data.attributes?.first_order_item?.custom_data?.user_id ||
-        data.meta?.custom_data?.user_id;
+    // Get user_id from meta.custom_data (where Lemon Squeezy puts it)
+    const userId = event.meta?.custom_data?.user_id ||
+        data.attributes?.first_order_item?.custom_data?.user_id;
 
     if (!userId) {
-        console.error('No user_id found in custom_data. Full data:', JSON.stringify(data, null, 2));
+        console.error('No user_id found in custom_data. Full event meta:', JSON.stringify(event.meta, null, 2));
         return;
     }
 
@@ -134,7 +134,8 @@ async function handleSubscriptionCreated(data: any) {
     console.log(`Subscription created for user ${userId}: ${planTier} plan with ${credits} credits`);
 }
 
-async function handleSubscriptionUpdated(data: any) {
+async function handleSubscriptionUpdated(event: any) {
+    const data = event.data;
     console.log('Subscription updated:', data.id);
 
     const subscriptionId = data.id;
@@ -183,7 +184,8 @@ async function handleSubscriptionUpdated(data: any) {
     console.log(`Subscription ${subscriptionId} updated to ${planTier} plan`);
 }
 
-async function handleSubscriptionCancelled(data: any) {
+async function handleSubscriptionCancelled(event: any) {
+    const data = event.data;
     console.log('Subscription cancelled:', data.id);
 
     const subscriptionId = data.id;
@@ -202,7 +204,8 @@ async function handleSubscriptionCancelled(data: any) {
     }
 }
 
-async function handleSubscriptionResumed(data: any) {
+async function handleSubscriptionResumed(event: any) {
+    const data = event.data;
     console.log('Subscription resumed:', data.id);
 
     const subscriptionId = data.id;
@@ -227,7 +230,8 @@ async function handleSubscriptionResumed(data: any) {
     }
 }
 
-async function handleSubscriptionExpired(data: any) {
+async function handleSubscriptionExpired(event: any) {
+    const data = event.data;
     console.log('Subscription expired:', data.id);
 
     const subscriptionId = data.id;
