@@ -116,10 +116,12 @@ export default function BillingPage() {
         const checkoutUrl = CHECKOUT_URLS[plan.id as keyof typeof CHECKOUT_URLS];
 
         if (checkoutUrl) {
-            // Add redirect URL to bring users back to the app after payment
+            // Add redirect URL and user data for webhook processing
             const url = new URL(checkoutUrl);
             const successUrl = `${window.location.origin}/checkout/success`;
             url.searchParams.set('checkout[success_url]', successUrl);
+            // Pass user_id for webhook to identify the user
+            url.searchParams.set('checkout[custom][user_id]', String(user.id));
 
             window.location.href = url.toString();
         }

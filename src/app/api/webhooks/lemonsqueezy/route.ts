@@ -83,33 +83,31 @@ async function handleSubscriptionCreated(data: any) {
     console.log('Subscription created:', data.id);
 
     const customerId = data.attributes.customer_id;
-    const userEmail = data.attributes.user_email;
     const variantId = data.attributes.variant_id;
     const status = data.attributes.status;
 
-    // Find user by email
-    const { data: users, error: userError } = await supabase
-        .from('profiles')
-        .select('id')
-        .eq('email', userEmail)
-        .single();
+    // Get user_id from custom_data passed through checkout URL
+    // The event structure has meta.custom_data.user_id
+    const event = data; // data is already the full event
+    const userId = data.attributes?.first_order_item?.custom_data?.user_id ||
+        data.meta?.custom_data?.user_id;
 
-    if (userError || !users) {
-        console.error('User not found:', userEmail);
+    if (!userId) {
+        console.error('No user_id found in custom_data. Full data:', JSON.stringify(data, null, 2));
         return;
     }
 
-    const userId = users.id;
+    console.log('Processing subscription for user:', userId);
 
     // Determine plan tier and credits based on variant
-    const { planTier, credits } = getPlanDetails(variantId);
+    const { planTier, credits } = getPlanDetails(variantId.toString());
 
     // Create or update subscription
     const { error: subError } = await supabase
         .from('user_subscriptions')
         .upsert({
             user_id: userId,
-            lemonsqueezy_subscription_id: data.id,
+            lemonsqueezy_subscription_id: data.id.toString(),
             lemonsqueezy_customer_id: customerId.toString(),
             plan_tier: planTier,
             credits_remaining: credits,
