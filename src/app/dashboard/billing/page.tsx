@@ -20,7 +20,7 @@ const CREDIT_PACKS = [
     {
         id: 'pack_starter',
         name: 'Starter Boost',
-        description: 'Capacidad extra inmediata',
+        description: 'Capacidad para ~1 video. Pago único.',
         credits: 50,
         price: 49, // ~$1/credit (vs $0.58 in plan)
         variantId: 'TODO_VARIANT_ID_1',
@@ -29,7 +29,7 @@ const CREDIT_PACKS = [
     {
         id: 'pack_pro',
         name: 'Pro Top-up',
-        description: 'Para picos de demanda',
+        description: 'Capacidad para 3-5 videos. Pago único.',
         credits: 150,
         price: 129, // ~$0.86/credit (vs $0.53 in plan)
         variantId: 'TODO_VARIANT_ID_2',
@@ -38,7 +38,7 @@ const CREDIT_PACKS = [
     {
         id: 'pack_agency',
         name: 'Agency Scale',
-        description: 'Volumen masivo sin contrato',
+        description: 'Capacidad para 10-15 videos. Pago único.',
         credits: 500,
         price: 349, // ~$0.70/credit (vs $0.40 in plan)
         variantId: 'TODO_VARIANT_ID_3',
