@@ -54,7 +54,7 @@ export default function ContactPage() {
                     <div className={styles.faqItem}>
                         <h3>What payment methods do you accept?</h3>
                         <p>
-                            We accept all major credit cards, debit cards, and PayPal through our secure payment processor, Paddle.
+                            We accept all major credit cards, debit cards, and PayPal through our secure payment processor, Lemon Squeezy.
                         </p>
                     </div>
 

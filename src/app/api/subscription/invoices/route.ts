@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { Paddle } from '@paddle/paddle-node-sdk';
+import { listOrders, lemonSqueezySetup } from '@/lib/lemonsqueezy';
+
+// Initialize Lemon Squeezy
+lemonSqueezySetup({
+    apiKey: process.env.LEMONSQUEEZY_API_KEY!,
+});
 
 export async function GET(req: Request) {
     try {
@@ -16,36 +21,36 @@ export async function GET(req: Request) {
         // 2. Get Customer/Subscription ID from DB
         const { data: subscription } = await supabase
             .from('user_subscriptions')
-            .select('paddle_subscription_id, paddle_customer_id')
+            .select('lemonsqueezy_subscription_id, lemonsqueezy_customer_id')
             .eq('user_id', user.id)
             .single();
 
-        if (!subscription?.paddle_subscription_id) {
-            return NextResponse.json({ invoices: [] }); // No sub, no invoices
+        if (!subscription?.lemonsqueezy_customer_id) {
+            return NextResponse.json({ invoices: [] }); // No customer, no orders
         }
 
-        // 3. Initialize Paddle
-        const paddle = new Paddle(process.env.PADDLE_API_KEY || '');
-
-        // 4. Fetch Transactions for this subscription
-        const transactionCollection: any = await paddle.transactions.list({
-            subscriptionId: [subscription.paddle_subscription_id],
-            perPage: 20,
-            status: ['completed', 'refunded', 'adjusted'] as any
+        // 3. Fetch Orders for this customer from Lemon Squeezy
+        const { data: ordersData, error } = await listOrders({
+            filter: {
+                storeId: process.env.LEMONSQUEEZY_STORE_ID,
+                userEmail: user.email,
+            },
         });
 
-        // 5. Map to simple format
-        // Check if structure matches expected iteration
-        const dataItems = transactionCollection.items || [];
-        const invoices = dataItems.map((txn: any) => ({
-            id: txn.id,
-            date: txn.createdAt,
-            amount: txn.details?.totals?.total || '0',
-            currency: txn.currencyCode,
-            status: txn.status,
-            invoiceId: txn.invoiceId,
-            receiptUrl: txn.receiptNumber ? `https://paddle.com/receipt/${txn.receiptNumber}` : null
-        }));
+        if (error) {
+            throw new Error(error.message);
+        }
+
+        // 4. Map to simple format
+        const invoices = ordersData?.data.map((order: any) => ({
+            id: order.id,
+            date: order.attributes.created_at,
+            amount: (order.attributes.total / 100).toFixed(2),
+            currency: order.attributes.currency,
+            status: order.attributes.status,
+            invoiceId: order.attributes.identifier,
+            receiptUrl: order.attributes.urls.receipt
+        })) || [];
 
         return NextResponse.json({ invoices });
 

@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { Paddle, Environment } from '@paddle/paddle-node-sdk';
+import { cancelSubscription, lemonSqueezySetup } from '@/lib/lemonsqueezy';
+
+// Initialize Lemon Squeezy
+lemonSqueezySetup({
+    apiKey: process.env.LEMONSQUEEZY_API_KEY!,
+});
 
 export async function POST(req: Request) {
     try {
@@ -16,34 +21,29 @@ export async function POST(req: Request) {
         // 2. Get Subscription ID from DB
         const { data: subscription } = await supabase
             .from('user_subscriptions')
-            .select('paddle_subscription_id')
+            .select('lemonsqueezy_subscription_id')
             .eq('user_id', user.id)
             .single();
 
-        if (!subscription?.paddle_subscription_id) {
+        if (!subscription?.lemonsqueezy_subscription_id) {
             return NextResponse.json({ error: 'No active subscription found' }, { status: 404 });
         }
 
-        // 3. Initialize Paddle
-        const paddle = new Paddle(process.env.PADDLE_API_KEY || '');
+        // 3. Cancel via Lemon Squeezy
+        // Lemon Squeezy cancelSubscription defaults to cancelling at the end of the period
+        const { error, data } = await cancelSubscription(subscription.lemonsqueezy_subscription_id);
 
-        // 4. Cancel via Paddle
-        // "immediate" means it cancels now. user might want "at period end".
-        // Usually safer to set effectiveFrom: 'next_billing_period' to let them finish the month.
-        const canceledParams = {
-            effectiveFrom: 'next_billing_period' as const // or 'immediately'
-        };
+        if (error) {
+            throw new Error(error.message);
+        }
 
-        const result = await paddle.subscriptions.cancel(subscription.paddle_subscription_id, canceledParams);
-
-        // 5. Update local DB (Optional here, webhook will confirm, but specific UI feedback is good)
-        // We can optimistically mark as 'canceled' or 'canceling'
+        // 4. Update local DB (Optional here, webhook will confirm)
         await supabase
             .from('user_subscriptions')
-            .update({ status: 'canceled' }) // Simplified, webhook should be source of truth
+            .update({ status: 'cancelled' })
             .eq('user_id', user.id);
 
-        return NextResponse.json({ success: true, data: result });
+        return NextResponse.json({ success: true, data });
 
     } catch (error: any) {
         console.error('Cancel Subscription Error:', error);
