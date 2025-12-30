@@ -15,33 +15,33 @@ const CHECKOUT_URLS = {
     business: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/1c67e47f-4c29-4ca1-bf0e-96b07b3407fb',
 };
 
-// Credit Packs (One-time payments) - TODO: Replace with real Variant IDs
+// Credit Packs (One-time payments)
 const CREDIT_PACKS = [
     {
         id: 'pack_starter',
         name: 'Starter Boost',
-        description: 'Genera 1 video completo (o más cortos).',
+        description: 'Capacidad extra inmediata',
         credits: 50,
         price: 49,
-        variantId: 'TODO_VARIANT_ID_1',
+        checkoutUrl: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/e2ddff42-1226-401c-bd96-a0adc5764c10',
         color: '#60a5fa'
     },
     {
         id: 'pack_pro',
         name: 'Pro Top-up',
-        description: 'Genera hasta 5 videos estándar.',
+        description: 'Para picos de demanda',
         credits: 150,
         price: 129,
-        variantId: 'TODO_VARIANT_ID_2',
+        checkoutUrl: '', // TODO: Add link
         color: '#a78bfa'
     },
     {
         id: 'pack_agency',
         name: 'Agency Scale',
-        description: 'Genera hasta 16 videos estándar.',
+        description: 'Volumen masivo sin contrato',
         credits: 500,
         price: 349,
-        variantId: 'TODO_VARIANT_ID_3',
+        checkoutUrl: '', // TODO: Add link
         color: '#34d399'
     }
 ];
@@ -165,8 +165,21 @@ export default function BillingPage() {
     };
 
     const handleBuyCredits = (pack: any) => {
-        alert("Integración de packs de créditos pendiente (Falta configurar Variant IDs de Lemon Squeezy)");
-        // Logic similar to subscription but using pack.variantId and different checkout links
+        if (!pack.checkoutUrl) {
+            alert("Este pack estará disponible muy pronto.");
+            return;
+        }
+
+        if (!user) {
+            window.location.href = '/signup';
+            return;
+        }
+
+        const url = new URL(pack.checkoutUrl);
+        const successUrl = `${window.location.origin}/checkout/success`;
+        url.searchParams.set('checkout[success_url]', successUrl);
+        url.searchParams.set('checkout[custom][user_id]', String(user.id));
+        window.location.href = url.toString();
     };
 
     const formatDate = (dateString: string | null) => {
