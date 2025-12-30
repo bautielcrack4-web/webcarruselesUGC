@@ -38,7 +38,7 @@ export default function PrivacyPage() {
 
                     <h3>2.3 Third-Party Information</h3>
                     <ul>
-                        <li><strong>Payment Information:</strong> Processed and stored by Paddle.com (our payment processor)</li>
+                        <li><strong>Payment Information:</strong> Processed and stored by Lemon Squeezy (our payment processor)</li>
                         <li><strong>Authentication:</strong> If you sign in with Google or other providers</li>
                     </ul>
                 </section>
@@ -72,7 +72,7 @@ export default function PrivacyPage() {
                     <h2>5. Data Sharing and Disclosure</h2>
                     <p>We do not sell your personal information. We may share your data with:</p>
                     <ul>
-                        <li><strong>Service Providers:</strong> Third-party vendors who assist in operating our Service (Supabase, AtlasCloud, Paddle)</li>
+                        <li><strong>Service Providers:</strong> Third-party vendors who assist in operating our Service (Supabase, AtlasCloud, Lemon Squeezy)</li>
                         <li><strong>Legal Requirements:</strong> When required by law or to protect our rights</li>
                         <li><strong>Business Transfers:</strong> In connection with a merger, acquisition, or sale of assets</li>
                     </ul>

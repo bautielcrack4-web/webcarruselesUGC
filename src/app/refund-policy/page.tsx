@@ -101,11 +101,11 @@ export default function RefundPolicyPage() {
                 <section>
                     <h2>8. Merchant of Record</h2>
                     <p>
-                        All payments are processed by Paddle.com, our Merchant of Record. Paddle handles all payment-related inquiries
-                        and refund processing. While we initiate refunds, the final processing is managed by Paddle.
+                        All payments are processed by Lemon Squeezy, our Merchant of Record. Lemon Squeezy handles all payment-related inquiries
+                        and refund processing. While we initiate refunds, the final processing is managed by Lemon Squeezy.
                     </p>
                     <p>
-                        <strong>Note:</strong> Paddle retains the original processing fee even when a refund is issued.
+                        <strong>Note:</strong> Lemon Squeezy retains the original processing fee even when a refund is issued.
                     </p>
                 </section>
 
