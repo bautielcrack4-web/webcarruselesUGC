@@ -30,8 +30,8 @@ export default function TermsPage() {
                 <section>
                     <h2>3. Merchant of Record</h2>
                     <p className={styles.important}>
-                        <strong>Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders.
-                            Paddle provides all customer service inquiries and handles returns.</strong>
+                        <strong>Our order process is conducted by our online reseller Lemon Squeezy. Lemon Squeezy is the Merchant of Record for all our orders.
+                            Lemon Squeezy provides all customer service inquiries and handles returns.</strong>
                     </p>
                 </section>
 
@@ -90,7 +90,7 @@ export default function TermsPage() {
                         You can cancel your subscription at any time through your account dashboard.
                     </p>
                     <p>
-                        All payments are processed securely through Paddle.com. We do not store or have access to your payment card details.
+                        All payments are processed securely through Lemon Squeezy. We do not store or have access to your payment card details.
                     </p>
                 </section>
 
