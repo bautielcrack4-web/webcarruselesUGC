@@ -9,8 +9,12 @@ import { supabase } from '@/lib/supabase';
 import styles from './billing.module.css';
 
 // Lemon Squeezy checkout URLs
-// Lemon Squeezy Store Domain
-const STORE_DOMAIN = 'bagasystudio.lemonsqueezy.com';
+// Lemon Squeezy checkout URLs
+const CHECKOUT_URLS = {
+    starter: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/7afc5d16-2667-42a3-9e51-d127cf764fd7',
+    pro: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/a3c69f06-f46c-4ce6-aa51-ac83d686e057',
+    business: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/1c67e47f-4c29-4ca1-bf0e-96b07b3407fb',
+};
 
 const PLANS = [
     {
@@ -107,23 +111,21 @@ export default function BillingPage() {
             return;
         }
 
-        if (!plan.variantId) {
-            console.error('Variant ID missing for plan:', plan.name);
-            return;
+        // Open Lemon Squeezy checkout using Permalinks (UUIDs)
+        // We use these specific URLs because the integer variant IDs cause 404s
+        const checkoutUrl = CHECKOUT_URLS[plan.id as keyof typeof CHECKOUT_URLS];
+
+        if (checkoutUrl) {
+            const url = new URL(checkoutUrl);
+
+            // Append query parameters
+            url.searchParams.set('checkout[email]', user.email);
+            // Explicitly cast to string to prevent 422 errors with Lemon Squeezy validation
+            url.searchParams.set('checkout[custom][user_id]', String(user.id));
+
+            // Redirect to checkout
+            window.location.href = url.toString();
         }
-
-        // Construct standard Lemon Squeezy checkout URL
-        // Format: https://store_domain/checkout/buy/variant_id
-        const baseUrl = `https://${STORE_DOMAIN}/checkout/buy/${plan.variantId}`;
-        const url = new URL(baseUrl);
-
-        // Append query parameters
-        url.searchParams.set('checkout[email]', user.email);
-        // Explicitly cast to string to prevent 422 errors with Lemon Squeezy validation
-        url.searchParams.set('checkout[custom][user_id]', String(user.id));
-
-        // Redirect to checkout
-        window.location.href = url.toString();
     };
 
     if (loading) {
