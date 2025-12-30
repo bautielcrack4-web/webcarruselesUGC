@@ -18,26 +18,29 @@ const CHECKOUT_URLS = {
 // Credit Packs (One-time payments) - TODO: Replace with real Variant IDs
 const CREDIT_PACKS = [
     {
-        id: 'pack_small',
-        name: 'Starter Pack',
+        id: 'pack_starter',
+        name: 'Starter Boost',
+        description: 'Capacidad extra inmediata',
         credits: 50,
-        price: 9,
+        price: 49, // ~$1/credit (vs $0.58 in plan)
         variantId: 'TODO_VARIANT_ID_1',
         color: '#60a5fa'
     },
     {
-        id: 'pack_medium',
-        name: 'Growth Pack',
-        credits: 200,
-        price: 29,
+        id: 'pack_pro',
+        name: 'Pro Top-up',
+        description: 'Para picos de demanda',
+        credits: 150,
+        price: 129, // ~$0.86/credit (vs $0.53 in plan)
         variantId: 'TODO_VARIANT_ID_2',
         color: '#a78bfa'
     },
     {
-        id: 'pack_large',
-        name: 'Agency Pack',
+        id: 'pack_agency',
+        name: 'Agency Scale',
+        description: 'Volumen masivo sin contrato',
         credits: 500,
-        price: 59,
+        price: 349, // ~$0.70/credit (vs $0.40 in plan)
         variantId: 'TODO_VARIANT_ID_3',
         color: '#34d399'
     }
@@ -305,20 +308,33 @@ export default function BillingPage() {
             </div>
 
             <div className={styles.addonsSection}>
-                <h2 className={styles.addonsTitle}>¿Necesitas más créditos extra?</h2>
+                <div style={{ maxWidth: 600, margin: '0 auto 40px' }}>
+                    <h2 className={styles.addonsTitle}>Packs de Velocidad (One-time)</h2>
+                    <p className={styles.subtitle} style={{ fontSize: '0.95rem', marginBottom: 0 }}>
+                        Ideales para picos de trabajo. Si necesitas más capacidad constante,
+                        <span style={{ color: '#818cf8', fontWeight: 600 }}> subir de plan es siempre más conveniente.</span>
+                    </p>
+                </div>
+
                 <div className={styles.addonsContent}>
                     {CREDIT_PACKS.map((pack) => (
                         <div key={pack.id} className={styles.addonCard}>
                             <div className={styles.packGlow} style={{ '--pack-color': pack.color } as any} />
                             <div className={styles.packName}>{pack.name}</div>
+                            <div style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center', marginBottom: 8 }}>
+                                {pack.description}
+                            </div>
                             <div className={styles.packCredits}>{pack.credits}</div>
-                            <div className={styles.packPrice}>créditos por ${pack.price}</div>
+                            <div className={styles.packPrice}>
+                                <span style={{ fontSize: '1.2rem', color: 'white', fontWeight: 700 }}>${pack.price}</span>
+                                <span style={{ opacity: 0.7 }}> / pago único</span>
+                            </div>
                             <Button
                                 className={styles.packBtn}
                                 variant="outline"
                                 onClick={() => handleBuyCredits(pack)}
                             >
-                                Comprar
+                                Recargar
                             </Button>
                         </div>
                     ))}
