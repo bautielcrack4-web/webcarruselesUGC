@@ -4,9 +4,18 @@ import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 import { OrderReceiptEmail } from '@/components/emails/OrderReceiptEmail';
 
-const resend = process.env.RESEND_API_KEY
-    ? new Resend(process.env.RESEND_API_KEY)
-    : { emails: { send: async () => console.log('Resend not configured') } } as any;
+let resend: any;
+try {
+    if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY.startsWith('re_')) {
+        resend = new Resend(process.env.RESEND_API_KEY);
+    } else {
+        console.warn('Resend API Key missing or invalid during build');
+        resend = { emails: { send: async () => console.log('Resend Mock: No Key') } };
+    }
+} catch (error) {
+    console.warn('Resend init failed:', error);
+    resend = { emails: { send: async () => console.log('Resend Mock: Init Failed') } };
+}
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || '',
