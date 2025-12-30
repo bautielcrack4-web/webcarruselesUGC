@@ -108,7 +108,7 @@ export default function PricingPage() {
                     <div className={styles.creditGrid}>
                         <div className={styles.creditItem}>
                             <h3>📹 Video Generation</h3>
-                            <p>Each video costs credits based on length. A 30-second video typically costs 5-10 credits.</p>
+                            <p>Each video costs credits based on length. A 10-second video costs 30 credits and a 15-second video costs 45 credits.</p>
                         </div>
                         <div className={styles.creditItem}>
                             <h3>🔄 Monthly Reset</h3>
