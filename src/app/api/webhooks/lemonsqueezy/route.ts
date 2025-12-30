@@ -113,6 +113,7 @@ async function handleSubscriptionCreated(event: any) {
             credits_remaining: credits,
             credits_total: credits,
             status: 'active',
+            next_billing_date: data.attributes.renews_at,
             updated_at: new Date().toISOString(),
         }, {
             onConflict: 'user_id'
