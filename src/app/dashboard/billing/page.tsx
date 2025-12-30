@@ -119,7 +119,8 @@ export default function BillingPage() {
             // Note: checkout[email] can sometimes cause 422 if the customer already exists 
             // with different data. We prioritize custom user_id for webhook syncing.
             url.searchParams.set('checkout[email]', user.email);
-            url.searchParams.set('checkout[custom][user_id]', user.id);
+            // Explicitly cast to string to prevent 422 errors with Lemon Squeezy validation
+            url.searchParams.set('checkout[custom][user_id]', String(user.id));
 
             // Redirect instead of opening in a new tab to avoid popup blockers and 422 session issues
             window.location.href = url.toString();
