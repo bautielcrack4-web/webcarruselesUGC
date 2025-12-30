@@ -113,12 +113,16 @@ export default function BillingPage() {
         // Open Lemon Squeezy checkout
         const checkoutUrl = CHECKOUT_URLS[plan.id as keyof typeof CHECKOUT_URLS];
         if (checkoutUrl) {
-            // Add user email as custom data
+            // Updated to use a more reliable parameter format for Lemon Squeezy
             const url = new URL(checkoutUrl);
+
+            // Note: checkout[email] can sometimes cause 422 if the customer already exists 
+            // with different data. We prioritize custom user_id for webhook syncing.
             url.searchParams.set('checkout[email]', user.email);
             url.searchParams.set('checkout[custom][user_id]', user.id);
 
-            window.open(url.toString(), '_blank');
+            // Redirect instead of opening in a new tab to avoid popup blockers and 422 session issues
+            window.location.href = url.toString();
         }
     };
 
@@ -135,8 +139,8 @@ export default function BillingPage() {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h1 className={styles.title}>Plans & Credits</h1>
-                <p className={styles.subtitle}>Choose the perfect plan to scale your UGC content</p>
+                <h1 className={styles.title}>Planes y Créditos</h1>
+                <p className={styles.subtitle}>Elige el plan perfecto para escalar tu contenido UGC</p>
 
                 <div className={styles.statsRow}>
                     <GlassCard className={styles.statCard}>

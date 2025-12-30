@@ -18,7 +18,7 @@ export default function PricingPage() {
                 'Email support',
                 'Credits expire monthly'
             ],
-            cta: 'Start Free Trial',
+            cta: 'Elegir Plan',
             popular: false
         },
         {
@@ -35,7 +35,7 @@ export default function PricingPage() {
                 'Credits expire monthly',
                 'Early access to new features'
             ],
-            cta: 'Start Free Trial',
+            cta: 'Elegir Plan',
             popular: true
         },
         {
@@ -53,7 +53,7 @@ export default function PricingPage() {
                 'Early access to new features',
                 'Dedicated account manager'
             ],
-            cta: 'Start Free Trial',
+            cta: 'Elegir Plan',
             popular: false
         }
     ];
@@ -66,7 +66,7 @@ export default function PricingPage() {
                 <div className={styles.header}>
                     <h1>Simple, Transparent Pricing</h1>
                     <p className={styles.subtitle}>
-                        Choose the plan that fits your needs. All plans include a 7-day money-back guarantee.
+                        Elige el plan que mejor se adapte a tus necesidades.
                     </p>
                 </div>
 
@@ -136,7 +136,7 @@ export default function PricingPage() {
 
                     <div className={styles.faqItem}>
                         <h3>Do you offer refunds?</h3>
-                        <p>Yes! We offer a 7-day money-back guarantee if you haven't used any credits. See our <Link href="/refund-policy">Refund Policy</Link> for details.</p>
+                        <p>Sí, ofrecemos una garantía de satisfacción. Consulta nuestra <Link href="/refund-policy">Política de Reembolso</Link> para más detalles.</p>
                     </div>
 
                     <div className={styles.faqItem}>
@@ -149,7 +149,7 @@ export default function PricingPage() {
                     <h2>Ready to Get Started?</h2>
                     <p>Join hundreds of creators using Adfork to generate high-converting UGC videos.</p>
                     <Link href="/signup" className={styles.mainCta}>
-                        Start Your Free Trial
+                        Empezar ahora
                     </Link>
                 </div>
             </div>
