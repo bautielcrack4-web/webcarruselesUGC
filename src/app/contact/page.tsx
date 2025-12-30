@@ -1,9 +1,44 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { Mail, MessageSquare } from 'lucide-react';
+import { Mail, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
 import styles from './contact.module.css';
 
+const FAQ_ITEMS = [
+    {
+        question: "How do I get started?",
+        answer: "Simply sign up for an account, choose a plan, and start creating videos immediately. Our intuitive interface guides you through the process."
+    },
+    {
+        question: "What payment methods do you accept?",
+        answer: "We accept all major credit cards, debit cards, and PayPal through our secure payment processor, Lemon Squeezy."
+    },
+    {
+        question: "Can I cancel my subscription anytime?",
+        answer: "Yes! You can cancel your subscription at any time from your account dashboard. You'll retain access until the end of your billing period."
+    },
+    {
+        question: "Do you offer refunds?",
+        answer: "We offer a 7-day money-back guarantee if you haven't used any credits. See our Refund Policy for details."
+    },
+    {
+        question: "What languages are supported for video generation?",
+        answer: "We support multiple languages including English, Spanish, Italian, German, French, and more. Check the avatar selection for available language options."
+    },
+    {
+        question: "How long does it take to generate a video?",
+        answer: "Most videos are generated within 2-5 minutes, depending on length and complexity. You'll receive a notification when your video is ready."
+    }
+];
+
 export default function ContactPage() {
+    const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+    const toggleFaq = (index: number) => {
+        setOpenIndex(openIndex === index ? null : index);
+    };
+
     return (
         <div className={styles.contactContainer}>
             <div className={styles.contactContent}>
@@ -43,51 +78,26 @@ export default function ContactPage() {
                 <div className={styles.faqSection}>
                     <h2>Frequently Asked Questions</h2>
 
-                    <div className={styles.faqItem}>
-                        <h3>How do I get started?</h3>
-                        <p>
-                            Simply sign up for an account, choose a plan, and start creating videos immediately.
-                            Our intuitive interface guides you through the process.
-                        </p>
-                    </div>
-
-                    <div className={styles.faqItem}>
-                        <h3>What payment methods do you accept?</h3>
-                        <p>
-                            We accept all major credit cards, debit cards, and PayPal through our secure payment processor, Lemon Squeezy.
-                        </p>
-                    </div>
-
-                    <div className={styles.faqItem}>
-                        <h3>Can I cancel my subscription anytime?</h3>
-                        <p>
-                            Yes! You can cancel your subscription at any time from your account dashboard.
-                            You'll retain access until the end of your billing period.
-                        </p>
-                    </div>
-
-                    <div className={styles.faqItem}>
-                        <h3>Do you offer refunds?</h3>
-                        <p>
-                            We offer a 7-day money-back guarantee if you haven't used any credits.
-                            See our <Link href="/refund-policy">Refund Policy</Link> for details.
-                        </p>
-                    </div>
-
-                    <div className={styles.faqItem}>
-                        <h3>What languages are supported for video generation?</h3>
-                        <p>
-                            We support multiple languages including English, Spanish, Italian, German, French, and more.
-                            Check the avatar selection for available language options.
-                        </p>
-                    </div>
-
-                    <div className={styles.faqItem}>
-                        <h3>How long does it take to generate a video?</h3>
-                        <p>
-                            Most videos are generated within 2-5 minutes, depending on length and complexity.
-                            You'll receive a notification when your video is ready.
-                        </p>
+                    <div className={styles.faqList}>
+                        {FAQ_ITEMS.map((item, index) => (
+                            <div
+                                key={index}
+                                className={`${styles.faqItem} ${openIndex === index ? styles.active : ''}`}
+                                onClick={() => toggleFaq(index)}
+                            >
+                                <div className={styles.faqHeader}>
+                                    <h3>{item.question}</h3>
+                                    <div className={styles.faqIcon}>
+                                        {openIndex === index ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                                    </div>
+                                </div>
+                                {openIndex === index && (
+                                    <div className={styles.faqAnswer}>
+                                        <p>{item.answer}</p>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </div>
 
