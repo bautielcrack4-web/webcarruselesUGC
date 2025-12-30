@@ -72,12 +72,83 @@ async function handleOrderCreated(event: any) {
     const data = event.data;
     console.log('Order created:', data.id);
 
-    const customerId = data.attributes.customer_id;
-    const userEmail = data.attributes.user_email;
-    const total = data.attributes.total;
+    // Get custom data
+    const customData = event.meta?.custom_data || data.attributes?.custom_data;
+    const userId = customData?.user_id;
+    const packId = customData?.pack_id;
 
-    // Log the order for tracking
-    console.log(`Order ${data.id} created for ${userEmail} - Total: $${total / 100}`);
+    if (!userId || !packId) {
+        console.log('Order created but missing user_id or pack_id in custom_data. Ignoring (could be a subscription order handled by other events).');
+        return;
+    }
+
+    console.log(`Processing One-Time Pack: ${packId} for user ${userId}`);
+
+    let creditsToAdd = 0;
+    let packName = '';
+
+    switch (packId) {
+        case 'pack_starter':
+            creditsToAdd = 50;
+            packName = 'Starter Boost';
+            break;
+        case 'pack_pro':
+            creditsToAdd = 150;
+            packName = 'Pro Top-up';
+            break;
+        case 'pack_agency':
+            creditsToAdd = 500;
+            packName = 'Agency Scale';
+            break;
+        default:
+            console.error('Unknown pack_id:', packId);
+            return;
+    }
+
+    if (creditsToAdd > 0) {
+        // 1. Get current subscription to add credits to it
+        const { data: sub, error: subError } = await supabase
+            .from('user_subscriptions')
+            .select('credits_remaining, credits_total')
+            .eq('user_id', userId)
+            .single();
+
+        if (subError && subError.code !== 'PGRST116') { // Ignore not found, we might create one? 
+            // Actually, if they buy a pack they should ideally have a record, 
+            // but if they are new users buying a pack (unlikely flow but possible), we might need to insert.
+            // For now assume they have a row (created at signup).
+            console.error('Error fetching subscription for pack update:', subError);
+        }
+
+        const currentRemaining = sub?.credits_remaining || 0;
+        const currentTotal = sub?.credits_total || 0;
+
+        // 2. Update Subscription (Add credits)
+        const { error: updateError } = await supabase
+            .from('user_subscriptions')
+            .upsert({
+                user_id: userId,
+                credits_remaining: currentRemaining + creditsToAdd,
+                credits_total: currentTotal + creditsToAdd,
+                status: sub ? undefined : 'active', // If new, set active
+                updated_at: new Date().toISOString()
+            }, { onConflict: 'user_id' });
+
+        if (updateError) {
+            console.error('Error updating credits for pack:', updateError);
+            return;
+        }
+
+        // 3. Log Transaction
+        await supabase.from('credit_transactions').insert({
+            user_id: userId,
+            amount: creditsToAdd,
+            type: 'purchase_pack',
+            description: `${packName} - ${creditsToAdd} credits`,
+        });
+
+        console.log(`Successfully added ${creditsToAdd} credits to user ${userId}`);
+    }
 }
 
 async function handleSubscriptionCreated(event: any) {

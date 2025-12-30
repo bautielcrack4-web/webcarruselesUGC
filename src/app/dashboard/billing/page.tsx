@@ -32,7 +32,7 @@ const CREDIT_PACKS = [
         description: 'Para picos de demanda',
         credits: 150,
         price: 129,
-        checkoutUrl: '', // TODO: Add link
+        checkoutUrl: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/da689d0d-16be-4a81-87b0-10098b19026a',
         color: '#a78bfa'
     },
     {
@@ -41,10 +41,14 @@ const CREDIT_PACKS = [
         description: 'Volumen masivo sin contrato',
         credits: 500,
         price: 349,
-        checkoutUrl: '', // TODO: Add link
+        checkoutUrl: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/9a8ac655-6180-430a-a8b3-3bf5bfafbb34',
         color: '#34d399'
     }
 ];
+
+// ... (existing code) ...
+
+
 
 const PLANS = [
     {
