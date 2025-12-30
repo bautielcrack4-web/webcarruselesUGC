@@ -4,7 +4,9 @@ import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 import { OrderReceiptEmail } from '@/components/emails/OrderReceiptEmail';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY
+    ? new Resend(process.env.RESEND_API_KEY)
+    : { emails: { send: async () => console.log('Resend not configured') } } as any;
 
 const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || '',
