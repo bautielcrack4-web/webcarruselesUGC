@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: 'files.heygen.ai',
         pathname: '/avatar/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'files2.heygen.ai',
+        pathname: '/avatar/**',
+      },
     ],
   },
 };
