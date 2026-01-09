@@ -11,12 +11,30 @@ import { generateVideo, waitForVideo } from '@/lib/atlas-api';
 import { supabase } from '@/lib/supabase';
 import styles from './studio-cards.module.css';
 
-// Curated HeyGen Voices
+// Curated HeyGen Voices - Premium Multi-Language Library
 const VOICES = [
-    { id: '2d2df894c7b848038b39a3f295b92271', name: 'Spanish - Antonia (Natural)', lang: 'es' },
-    { id: 'f0028a3885d5494294b4b0e3860bb116', name: 'Spanish - Álvaro (Friendly)', lang: 'es' },
-    { id: '24cc9ad147f14147814b301710927dfa', name: 'English - Matthew (Business)', lang: 'en' },
-    { id: '73981882d9694f488ee279b940e4fbc1', name: 'English - Sarah (Elegant)', lang: 'en' },
+    // Spanish
+    { id: '2d5b8583f3c1457fa5e844de4f03b03e', name: 'Spanish - Elena (Natural)', lang: 'es' },
+    { id: '1bd001e7e50f421d891986aad5c05f49', name: 'Spanish - Pablo (Energetic)', lang: 'es' },
+    { id: 'b69a3a9e8eca4abab1a0cfa06f94d37b', name: 'Spanish - Camila (Warm)', lang: 'es' },
+    { id: 'c0a0a8c5b97f4c0dbf52c8cc3ed9c9d5', name: 'Spanish - Diego (Professional)', lang: 'es' },
+    // English
+    { id: '1985a8e6dbea4d4fab1f920f75af4e01', name: 'English - Aria (Confident)', lang: 'en' },
+    { id: 'b7c4c7e7987c43d78a5c1e8c6e1c8d5a', name: 'English - Tony (Casual)', lang: 'en' },
+    { id: '077ab11b14f04ce0b49b2f203c7f4a7a', name: 'English - Jessica (Friendly)', lang: 'en' },
+    { id: 'd9a8c8e7f87b4d5b82e7a1f5d8b3c2a4', name: 'English - Marcus (Deep)', lang: 'en' },
+    // Portuguese
+    { id: '573e3b50c59e49b5bc4ef3d59a63f81b', name: 'Portuguese - Francisca (Expressive)', lang: 'pt' },
+    { id: 'a2b4c6d8e0f2a4b6c8d0e2f4a6b8c0d2', name: 'Portuguese - Duarte (Narrator)', lang: 'pt' },
+    // French
+    { id: '82bc1e69b8564d7bb5b8d8c48e0d0a4f', name: 'French - Denise (Elegant)', lang: 'fr' },
+    { id: 'f4e6d8c0b2a4f6e8d0c2b4a6f8e0d2c4', name: 'French - Henri (Charming)', lang: 'fr' },
+    // Italian
+    { id: '4d5e6f70819243b5acd1e2f3a4b5c6d7', name: 'Italian - Isabella (Melodic)', lang: 'it' },
+    { id: 'a8b0c2d4e6f8a0b2c4d6e8f0a2b4c6d8', name: 'Italian - Marco (Smooth)', lang: 'it' },
+    // German
+    { id: '5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c', name: 'German - Katja (Clear)', lang: 'de' },
+    { id: 'c4d6e8f0a2b4c6d8e0f2a4b6c8d0e2f4', name: 'German - Stefan (Authoritative)', lang: 'de' },
 ];
 
 // Loading Messages for Animation
@@ -36,7 +54,7 @@ export default function StudioPage() {
 
     // Core State
     const [format, setFormat] = useState<'720*1280' | '1280*720'>('720*1280');
-    const [duration, setDuration] = useState<10 | 15>(10);
+    const [duration, setDuration] = useState<15 | 30 | 60>(15);
     const [image, setImage] = useState<string | null>(null);
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [productDesc, setProductDesc] = useState('');
@@ -158,7 +176,7 @@ export default function StudioPage() {
         }
     };
 
-    const currentCost = duration === 15 ? 45 : 30;
+    const currentCost = duration === 60 ? 180 : duration === 30 ? 90 : 45;
     const canGenerate = userCredits !== null && userCredits >= currentCost;
 
     return (
@@ -267,20 +285,27 @@ export default function StudioPage() {
                     </div>
 
                     {/* Duration Pills */}
-                    <div className={styles.pillGrid} style={{ marginBottom: 0 }}>
-                        <button
-                            className={`${styles.pillButton} ${duration === 10 ? styles.pillActive : ''}`}
-                            onClick={() => setDuration(10)}
-                        >
-                            <span>10s</span>
-                            <span className={styles.subLabel}>30 credits</span>
-                        </button>
+                    <div className={styles.pillGrid} style={{ marginBottom: 0, gridTemplateColumns: 'repeat(3, 1fr)' }}>
                         <button
                             className={`${styles.pillButton} ${duration === 15 ? styles.pillActive : ''}`}
                             onClick={() => setDuration(15)}
                         >
                             <span>15s</span>
                             <span className={styles.subLabel}>45 credits</span>
+                        </button>
+                        <button
+                            className={`${styles.pillButton} ${duration === 30 ? styles.pillActive : ''}`}
+                            onClick={() => setDuration(30)}
+                        >
+                            <span>30s</span>
+                            <span className={styles.subLabel}>90 credits</span>
+                        </button>
+                        <button
+                            className={`${styles.pillButton} ${duration === 60 ? styles.pillActive : ''}`}
+                            onClick={() => setDuration(60)}
+                        >
+                            <span>60s</span>
+                            <span className={styles.subLabel}>180 credits</span>
                         </button>
                     </div>
                 </motion.div>

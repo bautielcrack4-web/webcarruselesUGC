@@ -8,8 +8,10 @@ const API_KEY = process.env.NEXT_PUBLIC_ATLASCLOUD_API_KEY;
 export interface GenerationParams {
     image: string; // Public URL
     prompt: string;
-    duration?: 10 | 15;
+    duration?: 15 | 30 | 60;
     size?: '720*1280' | '1280*720';
+    message?: string; // HeyGen: Script for the talking photo
+    voice_id?: string; // HeyGen: Selected voice ID
 }
 
 export interface PredictionResponse {

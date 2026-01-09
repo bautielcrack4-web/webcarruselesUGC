@@ -22,7 +22,7 @@ const CREDIT_PACKS = [
         name: 'Starter Boost',
         description: 'Capacidad extra inmediata',
         credits: 50,
-        yieldNote: 'Genera ~1.5 videos de 10s',
+        yieldNote: 'Genera ~1 video de 15s',
         price: 49,
         checkoutUrl: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/e2ddff42-1226-401c-bd96-a0adc5764c10',
         color: '#60a5fa'
@@ -32,7 +32,7 @@ const CREDIT_PACKS = [
         name: 'Pro Top-up',
         description: 'Para picos de demanda',
         credits: 150,
-        yieldNote: 'Genera 5 videos de 10s',
+        yieldNote: 'Genera ~3 videos de 15s',
         price: 129,
         checkoutUrl: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/da689d0d-16be-4a81-87b0-10098b19026a',
         color: '#a78bfa'
@@ -42,7 +42,7 @@ const CREDIT_PACKS = [
         name: 'Agency Scale',
         description: 'Volumen masivo sin contrato',
         credits: 500,
-        yieldNote: 'Genera ~16 videos de 10s',
+        yieldNote: 'Genera ~11 videos de 15s',
         price: 349,
         checkoutUrl: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/9a8ac655-6180-430a-a8b3-3bf5bfafbb34',
         color: '#34d399'
@@ -329,7 +329,7 @@ export default function BillingPage() {
 
             <div className={styles.yieldInfoBanner}>
                 <AlertCircle size={18} />
-                <span>Cada video de 10s consume 30 créditos. Uno de 15s consume 45 créditos.</span>
+                <span>Cada video de 15s consume 45 créditos. Uno de 30s consume 90 créditos. Uno de 60s consume 180.</span>
             </div>
 
             <div className={styles.addonsSection}>
