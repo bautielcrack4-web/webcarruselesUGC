@@ -92,7 +92,7 @@ export async function generateHeyGenVideo(params: HeyGenGenerateParams): Promise
     }
 
     // Generate the video
-    const response = await fetch(`${HEYGEN_API_BASE}/v2/video_generate`, {
+    const response = await fetch(`${HEYGEN_API_BASE}/v2/video/generate`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ export async function generateHeyGenVideo(params: HeyGenGenerateParams): Promise
 export async function getHeyGenVideoStatus(videoId: string) {
     if (!API_KEY) throw new Error('HEYGEN_API_KEY is not configured');
 
-    const response = await fetch(`${HEYGEN_API_BASE}/v2/video_status/${videoId}`, {
+    const response = await fetch(`${HEYGEN_API_BASE}/v2/video/status/${videoId}`, {
         method: 'GET',
         headers: {
             'X-Api-Key': API_KEY
