@@ -38,6 +38,14 @@ const VOICES = [
     { id: 'c4d6e8f0a2b4c6d8e0f2a4b6c8d0e2f4', name: 'German - Stefan (Authoritative)', lang: 'de' },
 ];
 
+// Plan Limits Configuration
+const PLAN_LIMITS = {
+    starter: { maxDuration: 15, maxChars: 150, durations: [15] },
+    pro: { maxDuration: 30, maxChars: 300, durations: [15, 30] },
+    business: { maxDuration: 60, maxChars: 600, durations: [15, 30, 60] },
+    free: { maxDuration: 15, maxChars: 150, durations: [15] } // Default for users without plan
+};
+
 // Loading Messages for Animation
 const LOADING_MESSAGES = [
     "Analyzing your product...",
@@ -65,6 +73,9 @@ export default function StudioPage() {
     // Avatar Mode State
     const [avatarMode, setAvatarMode] = useState<'upload' | 'stock'>('stock');
     const [selectedAvatar, setSelectedAvatar] = useState<string | null>(STOCK_AVATARS[0]?.id || null);
+
+    // User Plan State
+    const [userPlan, setUserPlan] = useState<'starter' | 'pro' | 'business' | 'free'>('free');
 
     // System State
     const [loading, setLoading] = useState(false);
@@ -95,10 +106,13 @@ export default function StudioPage() {
             if (user) {
                 const { data } = await supabase
                     .from('user_subscriptions')
-                    .select('credits_remaining')
+                    .select('credits_remaining, plan_id')
                     .eq('user_id', user.id)
                     .single();
-                if (data) setUserCredits(data.credits_remaining);
+                if (data) {
+                    setUserCredits(data.credits_remaining);
+                    setUserPlan(data.plan_id || 'free');
+                }
             }
         };
         fetchCredits();
@@ -332,7 +346,7 @@ export default function StudioPage() {
                         </button>
                     </div>
 
-                    {/* Duration Pills */}
+                    {/* Duration Pills - Plan-based */}
                     <div className={styles.pillGrid} style={{ marginBottom: 0, gridTemplateColumns: 'repeat(3, 1fr)' }}>
                         <button
                             className={`${styles.pillButton} ${duration === 15 ? styles.pillActive : ''}`}
@@ -342,18 +356,32 @@ export default function StudioPage() {
                             <span className={styles.subLabel}>45 credits</span>
                         </button>
                         <button
-                            className={`${styles.pillButton} ${duration === 30 ? styles.pillActive : ''}`}
-                            onClick={() => setDuration(30)}
+                            className={`${styles.pillButton} ${duration === 30 ? styles.pillActive : ''} ${!PLAN_LIMITS[userPlan].durations.includes(30) ? styles.pillDisabled : ''}`}
+                            onClick={() => {
+                                if (PLAN_LIMITS[userPlan].durations.includes(30)) {
+                                    setDuration(30);
+                                } else {
+                                    alert(`Upgrade to Pro plan for 30s videos!`);
+                                }
+                            }}
+                            disabled={!PLAN_LIMITS[userPlan].durations.includes(30)}
                         >
                             <span>30s</span>
-                            <span className={styles.subLabel}>90 credits</span>
+                            <span className={styles.subLabel}>{PLAN_LIMITS[userPlan].durations.includes(30) ? '90 credits' : '🔒 Pro'}</span>
                         </button>
                         <button
-                            className={`${styles.pillButton} ${duration === 60 ? styles.pillActive : ''}`}
-                            onClick={() => setDuration(60)}
+                            className={`${styles.pillButton} ${duration === 60 ? styles.pillActive : ''} ${!PLAN_LIMITS[userPlan].durations.includes(60) ? styles.pillDisabled : ''}`}
+                            onClick={() => {
+                                if (PLAN_LIMITS[userPlan].durations.includes(60)) {
+                                    setDuration(60);
+                                } else {
+                                    alert(`Upgrade to Business plan for 60s videos!`);
+                                }
+                            }}
+                            disabled={!PLAN_LIMITS[userPlan].durations.includes(60)}
                         >
                             <span>60s</span>
-                            <span className={styles.subLabel}>180 credits</span>
+                            <span className={styles.subLabel}>{PLAN_LIMITS[userPlan].durations.includes(60) ? '180 credits' : '🔒 Business'}</span>
                         </button>
                     </div>
                 </motion.div>
@@ -367,11 +395,20 @@ export default function StudioPage() {
                         placeholder="Since I started using this product, my sales doubled. It's incredible how easy it is to use..."
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
+                        maxLength={PLAN_LIMITS[userPlan].maxChars}
                     />
 
                     <div className={styles.helperText}>
                         <Sparkles size={12} color="#8b5cf6" />
-                        Don't worry if it's not perfect. The AI will optimize it.
+                        <span style={{
+                            color: message.length > PLAN_LIMITS[userPlan].maxChars * 0.9 ? '#f87171' : 'inherit'
+                        }}>
+                            {message.length} / {PLAN_LIMITS[userPlan].maxChars} characters
+                        </span>
+                    </div>
+
+                    <div className={styles.helperText} style={{ marginTop: 4 }}>
+                        💡 Keep it concise for better engagement! (~{Math.ceil(message.length / 10)}-{Math.ceil(message.length / 8)} seconds estimated)
                     </div>
                 </motion.div>
 

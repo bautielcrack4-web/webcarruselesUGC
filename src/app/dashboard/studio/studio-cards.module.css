@@ -330,6 +330,16 @@
     background: white;
 }
 
+.pillDisabled {
+    opacity: 0.4;
+    cursor: not-allowed !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.pillDisabled:hover {
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+
 .subLabel {
     font-size: 0.75rem;
     opacity: 0.6;
