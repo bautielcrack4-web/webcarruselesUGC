@@ -12,6 +12,7 @@ export interface GenerationParams {
     size?: '720*1280' | '1280*720';
     message?: string; // HeyGen: Script for the talking photo
     voice_id?: string; // HeyGen: Selected voice ID
+    avatar_id?: string; // HeyGen: Stock avatar ID (alternative to image)
 }
 
 export interface PredictionResponse {

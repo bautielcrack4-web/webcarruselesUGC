@@ -75,7 +75,8 @@ export async function POST(req: Request) {
 
         try {
             const videoId = await generateHeyGenVideo({
-                image_url: image,
+                image_url: body.avatar_id ? undefined : image,
+                avatar_id: body.avatar_id,
                 script,
                 dimension: size === '720*1280' ? { width: 720, height: 1280 } : { width: 1280, height: 720 },
                 voice_id: body.voice_id

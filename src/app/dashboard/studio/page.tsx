@@ -4,11 +4,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import {
-    Upload, Video, Sparkles, ChevronDown, ChevronUp, Zap, Image as ImageIcon
+    Upload, Video, Sparkles, ChevronDown, ChevronUp, Zap, Image as ImageIcon, Users
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button/Button';
 import { generateVideo, waitForVideo } from '@/lib/atlas-api';
 import { supabase } from '@/lib/supabase';
+import { STOCK_AVATARS } from '@/lib/heygen';
 import styles from './studio-cards.module.css';
 
 // Curated HeyGen Voices - Premium Multi-Language Library
@@ -61,6 +62,10 @@ export default function StudioPage() {
     const [message, setMessage] = useState('');
     const [selectedVoice, setSelectedVoice] = useState(VOICES[0].id);
 
+    // Avatar Mode State
+    const [avatarMode, setAvatarMode] = useState<'upload' | 'stock'>('stock');
+    const [selectedAvatar, setSelectedAvatar] = useState<string | null>(STOCK_AVATARS[0]?.id || null);
+
     // System State
     const [loading, setLoading] = useState(false);
     const [loadingMessage, setLoadingMessage] = useState('Initializing AI...');
@@ -112,8 +117,17 @@ export default function StudioPage() {
     };
 
     const handleGenerate = async () => {
-        if (!imageFile || !message) {
-            alert("Missing image or prompt");
+        // Validation based on mode
+        if (avatarMode === 'upload' && !imageFile) {
+            alert("Please upload a photo with a visible face");
+            return;
+        }
+        if (avatarMode === 'stock' && !selectedAvatar) {
+            alert("Please select an avatar");
+            return;
+        }
+        if (!message) {
+            alert("Please enter a message for the avatar to say");
             return;
         }
 
@@ -121,10 +135,10 @@ export default function StudioPage() {
             setLoading(true);
             setVideoUrl(null);
 
-            // Upload Logic
-            let publicUrl = "";
+            let publicUrl: string | undefined = undefined;
 
-            if (imageFile instanceof File) {
+            // Only upload if in upload mode
+            if (avatarMode === 'upload' && imageFile) {
                 const fileName = `${Math.random()}.${imageFile.name.split('.').pop()}`;
                 const filePath = `product-uploads/${fileName}`;
 
@@ -133,20 +147,19 @@ export default function StudioPage() {
 
                 const { data } = supabase.storage.from('assets').getPublicUrl(filePath);
                 publicUrl = data.publicUrl;
-            } else {
-                publicUrl = imageFile as string;
             }
 
-            const fullPrompt = `UGC talking photo video. Message: "${message}". Product: ${productDesc}. Authentic, 4k.`;
+            const fullPrompt = `UGC talking avatar video. Message: "${message}". Product: ${productDesc}. Authentic, 4k.`;
 
             const id = await generateVideo({
-                image: publicUrl,
+                image: avatarMode === 'upload' ? publicUrl! : '',
                 prompt: fullPrompt,
                 duration: duration,
                 size: format,
                 // @ts-ignore - Adding extras for HeyGen
                 message: message,
-                voice_id: selectedVoice
+                voice_id: selectedVoice,
+                avatar_id: avatarMode === 'stock' ? selectedAvatar! : undefined
             });
 
             const finalVideo = await waitForVideo(id);
@@ -238,25 +251,60 @@ export default function StudioPage() {
             <div className={styles.stackPanel}>
                 <h1 className={styles.panelTitle}>Create new ad</h1>
 
-                {/* CARD 1: PRODUCT */}
+                {/* CARD 1: AVATAR / PHOTO SOURCE */}
                 <motion.div className={styles.card} initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
-                    <div className={styles.cardTitle}><ImageIcon size={14} /> Your Product</div>
+                    <div className={styles.cardTitle}><Users size={14} /> Choose Your Avatar</div>
 
-                    <div className={styles.uploadArea} onClick={() => fileInputRef.current?.click()}>
-                        {image ? (
-                            <img src={image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Product" />
-                        ) : (
-                            <div className={styles.uploadPlaceholder}>
-                                <Upload size={32} />
-                                <span className={styles.uploadLabel}>Upload product image</span>
-                            </div>
-                        )}
-                        <input type="file" hidden ref={fileInputRef} onChange={handleImageUpload} accept="image/*" />
+                    {/* Mode Toggle */}
+                    <div className={styles.pillGrid} style={{ marginBottom: 16 }}>
+                        <button
+                            className={`${styles.pillButton} ${avatarMode === 'stock' ? styles.pillActive : ''}`}
+                            onClick={() => setAvatarMode('stock')}
+                        >
+                            <span>🎭 Stock Avatars</span>
+                        </button>
+                        <button
+                            className={`${styles.pillButton} ${avatarMode === 'upload' ? styles.pillActive : ''}`}
+                            onClick={() => setAvatarMode('upload')}
+                        >
+                            <span>📷 Upload Photo</span>
+                        </button>
                     </div>
+
+                    {avatarMode === 'stock' ? (
+                        /* Stock Avatar Grid */
+                        <div className={styles.avatarGrid}>
+                            {STOCK_AVATARS.map(avatar => (
+                                <div
+                                    key={avatar.id}
+                                    className={`${styles.avatarCard} ${selectedAvatar === avatar.id ? styles.avatarSelected : ''}`}
+                                    onClick={() => setSelectedAvatar(avatar.id)}
+                                >
+                                    <img src={avatar.preview} alt={avatar.name} className={styles.avatarImage} />
+                                    <span className={styles.avatarName}>{avatar.name}</span>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        /* Upload Photo Mode */
+                        <>
+                            <div className={styles.uploadArea} onClick={() => fileInputRef.current?.click()}>
+                                {image ? (
+                                    <img src={image} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Your Photo" />
+                                ) : (
+                                    <div className={styles.uploadPlaceholder}>
+                                        <Upload size={32} />
+                                        <span className={styles.uploadLabel}>Upload a photo with a face</span>
+                                    </div>
+                                )}
+                                <input type="file" hidden ref={fileInputRef} onChange={handleImageUpload} accept="image/*" />
+                            </div>
+                        </>
+                    )}
 
                     <input
                         className={styles.productInput}
-                        placeholder="What are you selling? (e.g. Nike Sneakers)"
+                        placeholder="What are you promoting? (e.g. Nike Sneakers)"
                         value={productDesc}
                         onChange={(e) => setProductDesc(e.target.value)}
                     />

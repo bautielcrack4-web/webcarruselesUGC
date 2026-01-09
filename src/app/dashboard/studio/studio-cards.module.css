@@ -711,3 +711,61 @@
     border-radius: 4px;
     box-shadow: 0 0 10px rgba(124, 58, 237, 0.5);
 }
+
+/* AVATAR GALLERY STYLES */
+.avatarGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding: 4px;
+    margin-bottom: 16px;
+}
+
+.avatarCard {
+    position: relative;
+    aspect-ratio: 3/4;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.avatarCard:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+}
+
+.avatarSelected {
+    border-color: white;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.avatarImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatarName {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 8px 6px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: white;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .avatarGrid {
+        grid-template-columns: repeat(3, 1fr);
+        max-height: 220px;
+    }
+}
