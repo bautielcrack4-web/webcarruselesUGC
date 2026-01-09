@@ -77,7 +77,8 @@ export async function POST(req: Request) {
             const videoId = await generateHeyGenVideo({
                 image_url: image,
                 script,
-                dimension: size === '720*1280' ? { width: 720, height: 1280 } : { width: 1280, height: 720 }
+                dimension: size === '720*1280' ? { width: 720, height: 1280 } : { width: 1280, height: 720 },
+                voice_id: body.voice_id
             });
 
             return NextResponse.json({ id: videoId, status: 'processing' });

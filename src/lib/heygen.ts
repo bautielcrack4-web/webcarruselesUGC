@@ -75,7 +75,10 @@ export async function generateHeyGenVideo(params: HeyGenGenerateParams): Promise
             script: {
                 type: 'text',
                 input_text: params.script
-            }
+            },
+            voice: params.voice_id ? {
+                voice_id: params.voice_id
+            } : undefined
         })
     });
 

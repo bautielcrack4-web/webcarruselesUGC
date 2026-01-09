@@ -11,27 +11,12 @@ import { generateVideo, waitForVideo } from '@/lib/atlas-api';
 import { supabase } from '@/lib/supabase';
 import styles from './studio-cards.module.css';
 
-// Configuration Options (English)
-const AVATAR_GENDERS = ['Female', 'Male', 'Any'];
-const AVATAR_AGES = ['Young', 'Adult', 'Senior', 'Any'];
-const AVATAR_STYLES = ['Natural', 'Fitness', 'Professional', 'Elegant', 'Any'];
-const AVATAR_CLOTHING = ['Casual', 'Sport', 'Business', 'Formal', 'Any'];
-const AVATAR_MOODS = ['Enthusiastic', 'Professional', 'Friendly', 'Energetic', 'Any'];
-
-const SCENE_LOCATIONS = ['Indoor', 'Outdoor', 'Studio', 'Any'];
-const SCENE_LIGHTING = ['Natural', 'Studio', 'Neon', 'Sunset', 'Any'];
-const SCENE_SHOT_TYPES = ['Selfie', 'Static', 'Moving', 'Any'];
-const SCENE_PACE = ['Fast', 'Relaxed', 'Cinematic', 'Any'];
-
-// Loading Messages for Animation
-const LOADING_MESSAGES = [
-    "Analyzing your product...",
-    "Writing the perfect script...",
-    "Hiring the AI actor...",
-    "Setting up the lighting...",
-    "Recording voiceover...",
-    "Editing final cut...",
-    "Polishing pixels..."
+// Curated HeyGen Voices
+const VOICES = [
+    { id: '2d2df894c7b848038b39a3f295b92271', name: 'Spanish - Antonia (Natural)', lang: 'es' },
+    { id: 'f0028a3885d5494294b4b0e3860bb116', name: 'Spanish - Álvaro (Friendly)', lang: 'es' },
+    { id: '24cc9ad147f14147814b301710927dfa', name: 'English - Matthew (Business)', lang: 'en' },
+    { id: '73981882d9694f488ee279b940e4fbc1', name: 'English - Sarah (Elegant)', lang: 'en' },
 ];
 
 export default function StudioPage() {
@@ -45,17 +30,7 @@ export default function StudioPage() {
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [productDesc, setProductDesc] = useState('');
     const [message, setMessage] = useState('');
-
-    // Advanced State
-    const [gender, setGender] = useState('Any');
-    const [age, setAge] = useState('Any');
-    const [avatarStyle, setAvatarStyle] = useState('Any');
-    const [clothing, setClothing] = useState('Any');
-    const [mood, setMood] = useState('Any');
-    const [location, setLocation] = useState('Any');
-    const [lighting, setLighting] = useState('Any');
-    const [shotType, setShotType] = useState('Any');
-    const [pace, setPace] = useState('Any');
+    const [selectedVoice, setSelectedVoice] = useState(VOICES[0].id);
 
     // System State
     const [loading, setLoading] = useState(false);
@@ -330,92 +305,24 @@ export default function StudioPage() {
                                 exit={{ height: 0, opacity: 0 }}
                                 className={styles.advancedContent}
                             >
-                                {/* AVATAR SECTION */}
                                 <div className={styles.advancedSection}>
-                                    <h4 className={styles.sectionTitle}>Avatar Personality</h4>
+                                    <h4 className={styles.sectionTitle}>AI Voice Selection</h4>
+                                    <p style={{ fontSize: '0.8rem', color: '#94a3b8', marginBottom: 16 }}>
+                                        Choose the personality and language for your AI avatar.
+                                    </p>
 
                                     <div className={styles.optionGroup}>
-                                        <label className={styles.subLabel}>Gender</label>
-                                        <div className={styles.tagsContainer}>
-                                            {AVATAR_GENDERS.map(opt => (
-                                                <button key={opt} className={`${styles.tag} ${gender === opt ? styles.tagActive : ''}`} onClick={() => setGender(opt)}>{opt}</button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.optionGroup}>
-                                        <label className={styles.subLabel}>Age</label>
-                                        <div className={styles.tagsContainer}>
-                                            {AVATAR_AGES.map(opt => (
-                                                <button key={opt} className={`${styles.tag} ${age === opt ? styles.tagActive : ''}`} onClick={() => setAge(opt)}>{opt}</button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.optionGroup}>
-                                        <label className={styles.subLabel}>Style</label>
-                                        <div className={styles.tagsContainer}>
-                                            {AVATAR_STYLES.map(opt => (
-                                                <button key={opt} className={`${styles.tag} ${avatarStyle === opt ? styles.tagActive : ''}`} onClick={() => setAvatarStyle(opt)}>{opt}</button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.optionGroup}>
-                                        <label className={styles.subLabel}>Clothing</label>
-                                        <div className={styles.tagsContainer}>
-                                            {AVATAR_CLOTHING.map(opt => (
-                                                <button key={opt} className={`${styles.tag} ${clothing === opt ? styles.tagActive : ''}`} onClick={() => setClothing(opt)}>{opt}</button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.optionGroup}>
-                                        <label className={styles.subLabel}>Mood</label>
-                                        <div className={styles.tagsContainer}>
-                                            {AVATAR_MOODS.map(opt => (
-                                                <button key={opt} className={`${styles.tag} ${mood === opt ? styles.tagActive : ''}`} onClick={() => setMood(opt)}>{opt}</button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* SCENE SECTION */}
-                                <div className={styles.advancedSection}>
-                                    <h4 className={styles.sectionTitle}>Scene & Camera</h4>
-
-                                    <div className={styles.optionGroup}>
-                                        <label className={styles.subLabel}>Location</label>
-                                        <div className={styles.tagsContainer}>
-                                            {SCENE_LOCATIONS.map(opt => (
-                                                <button key={opt} className={`${styles.tag} ${location === opt ? styles.tagActive : ''}`} onClick={() => setLocation(opt)}>{opt}</button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.optionGroup}>
-                                        <label className={styles.subLabel}>Lighting</label>
-                                        <div className={styles.tagsContainer}>
-                                            {SCENE_LIGHTING.map(opt => (
-                                                <button key={opt} className={`${styles.tag} ${lighting === opt ? styles.tagActive : ''}`} onClick={() => setLighting(opt)}>{opt}</button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.optionGroup}>
-                                        <label className={styles.subLabel}>Shot Type</label>
-                                        <div className={styles.tagsContainer}>
-                                            {SCENE_SHOT_TYPES.map(opt => (
-                                                <button key={opt} className={`${styles.tag} ${shotType === opt ? styles.tagActive : ''}`} onClick={() => setShotType(opt)}>{opt}</button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.optionGroup}>
-                                        <label className={styles.subLabel}>Pace</label>
-                                        <div className={styles.tagsContainer}>
-                                            {SCENE_PACE.map(opt => (
-                                                <button key={opt} className={`${styles.tag} ${pace === opt ? styles.tagActive : ''}`} onClick={() => setPace(opt)}>{opt}</button>
+                                        <div className={styles.tagsContainer} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                            {VOICES.map(voice => (
+                                                <button
+                                                    key={voice.id}
+                                                    className={`${styles.tag} ${selectedVoice === voice.id ? styles.tagActive : ''}`}
+                                                    onClick={() => setSelectedVoice(voice.id)}
+                                                    style={{ justifyContent: 'space-between', padding: '12px 16px', width: '100%' }}
+                                                >
+                                                    <span>{voice.name}</span>
+                                                    <span style={{ opacity: 0.5, fontSize: '0.7rem' }}>{voice.lang.toUpperCase()}</span>
+                                                </button>
                                             ))}
                                         </div>
                                     </div>
