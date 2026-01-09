@@ -19,6 +19,17 @@ const VOICES = [
     { id: '73981882d9694f488ee279b940e4fbc1', name: 'English - Sarah (Elegant)', lang: 'en' },
 ];
 
+// Loading Messages for Animation
+const LOADING_MESSAGES = [
+    "Analyzing your product...",
+    "Writing the perfect script...",
+    "Hiring the AI actor...",
+    "Setting up the lighting...",
+    "Recording voiceover...",
+    "Editing final cut...",
+    "Polishing pixels..."
+];
+
 export default function StudioPage() {
     // UI State
     const [showAdvanced, setShowAdvanced] = useState(false);
@@ -108,15 +119,16 @@ export default function StudioPage() {
                 publicUrl = imageFile as string;
             }
 
-            const fullPrompt = `UGC video of a ${gender} ${age} holding the product. ${location} setting. Talking to camera saying: "${message}". Product: ${productDesc}. Authentic, 4k.`;
+            const fullPrompt = `UGC talking photo video. Message: "${message}". Product: ${productDesc}. Authentic, 4k.`;
 
             const id = await generateVideo({
                 image: publicUrl,
                 prompt: fullPrompt,
                 duration: duration,
                 size: format,
-                // @ts-ignore - Adding message for HeyGen
-                message: message
+                // @ts-ignore - Adding extras for HeyGen
+                message: message,
+                voice_id: selectedVoice
             });
 
             const finalVideo = await waitForVideo(id);
