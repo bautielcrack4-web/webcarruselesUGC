@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-
-const ATLAS_API_BASE = 'https://api.atlascloud.ai/api/v1/model';
-const API_KEY = process.env.NEXT_PUBLIC_ATLASCLOUD_API_KEY;
+import { getHeyGenVideoStatus } from '@/lib/heygen';
 
 export async function GET(
     req: Request,
@@ -9,15 +7,15 @@ export async function GET(
 ) {
     try {
         const { id } = await params;
-        const response = await fetch(`${ATLAS_API_BASE}/prediction/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${API_KEY}`
-            }
-        });
 
-        const json = await response.json();
-        return NextResponse.json(json);
+        if (!process.env.HEYGEN_API_KEY) {
+            return NextResponse.json({ error: 'Config error' }, { status: 500 });
+        }
+
+        const status = await getHeyGenVideoStatus(id);
+        return NextResponse.json(status);
     } catch (err: any) {
+        console.error('Prediction Status Error:', err);
         return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }

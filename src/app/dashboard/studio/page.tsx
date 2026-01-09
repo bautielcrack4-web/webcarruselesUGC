@@ -139,7 +139,9 @@ export default function StudioPage() {
                 image: publicUrl,
                 prompt: fullPrompt,
                 duration: duration,
-                size: format
+                size: format,
+                // @ts-ignore - Adding message for HeyGen
+                message: message
             });
 
             const finalVideo = await waitForVideo(id);
