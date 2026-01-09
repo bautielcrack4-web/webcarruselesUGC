@@ -22,6 +22,7 @@ const CREDIT_PACKS = [
         name: 'Starter Boost',
         description: 'Capacidad extra inmediata',
         credits: 50,
+        yieldNote: 'Genera ~1.5 videos de 10s',
         price: 49,
         checkoutUrl: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/e2ddff42-1226-401c-bd96-a0adc5764c10',
         color: '#60a5fa'
@@ -31,6 +32,7 @@ const CREDIT_PACKS = [
         name: 'Pro Top-up',
         description: 'Para picos de demanda',
         credits: 150,
+        yieldNote: 'Genera 5 videos de 10s',
         price: 129,
         checkoutUrl: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/da689d0d-16be-4a81-87b0-10098b19026a',
         color: '#a78bfa'
@@ -40,6 +42,7 @@ const CREDIT_PACKS = [
         name: 'Agency Scale',
         description: 'Volumen masivo sin contrato',
         credits: 500,
+        yieldNote: 'Genera ~16 videos de 10s',
         price: 349,
         checkoutUrl: 'https://bagasystudio.lemonsqueezy.com/checkout/buy/9a8ac655-6180-430a-a8b3-3bf5bfafbb34',
         color: '#34d399'
@@ -324,6 +327,11 @@ export default function BillingPage() {
                 })}
             </div>
 
+            <div className={styles.yieldInfoBanner}>
+                <AlertCircle size={18} />
+                <span>Cada video de 10s consume 30 créditos. Uno de 15s consume 45 créditos.</span>
+            </div>
+
             <div className={styles.addonsSection}>
                 <div style={{ maxWidth: 600, margin: '0 auto 40px' }}>
                     <h2 className={styles.addonsTitle}>Packs de Velocidad (One-time)</h2>
@@ -337,21 +345,31 @@ export default function BillingPage() {
                     {CREDIT_PACKS.map((pack) => (
                         <div key={pack.id} className={styles.addonCard}>
                             <div className={styles.packGlow} style={{ '--pack-color': pack.color } as any} />
+
+                            <div className={styles.packTypeLabel}>PACK DE RECARGA</div>
                             <div className={styles.packName}>{pack.name}</div>
-                            <div style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center', marginBottom: 8 }}>
-                                {pack.description}
+
+                            <div className={styles.packMainInfo}>
+                                <div className={styles.packCreditsValue}>{pack.credits}</div>
+                                <div className={styles.packCreditsLabel}>CRÉDITOS</div>
                             </div>
-                            <div className={styles.packCredits}>{pack.credits}</div>
-                            <div className={styles.packPrice}>
-                                <span style={{ fontSize: '1.2rem', color: 'white', fontWeight: 700 }}>${pack.price}</span>
-                                <span style={{ opacity: 0.7 }}> / pago único</span>
+
+                            <div className={styles.packYieldInfo}>
+                                <Zap size={14} />
+                                <span>{pack.yieldNote}</span>
                             </div>
+
+                            <div className={styles.packPriceRow}>
+                                <span className={styles.packPriceValue}>${pack.price}</span>
+                                <span className={styles.packPriceDetails}>pago único</span>
+                            </div>
+
                             <Button
                                 className={styles.packBtn}
                                 variant="outline"
                                 onClick={() => handleBuyCredits(pack)}
                             >
-                                Recargar
+                                Comprar Créditos
                             </Button>
                         </div>
                     ))}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import { FloatingSupport } from "@/components/ui/FloatingSupport/FloatingSupport";
+import { CookieBanner } from "@/components/ui/CookieBanner/CookieBanner";
 
 const outfit = Outfit({
   variable: "--font-heading",
@@ -39,6 +40,7 @@ export default function RootLayout({
         <div className="nebula-bg" aria-hidden="true" />
         {children}
         <FloatingSupport />
+        <CookieBanner />
       </body>
     </html>
   );
