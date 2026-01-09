@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import {
@@ -294,7 +295,14 @@ export default function StudioPage() {
                                     className={`${styles.avatarCard} ${selectedAvatar === avatar.id ? styles.avatarSelected : ''}`}
                                     onClick={() => setSelectedAvatar(avatar.id)}
                                 >
-                                    <img src={avatar.preview} alt={avatar.name} className={styles.avatarImage} />
+                                    <Image
+                                        src={avatar.preview}
+                                        alt={avatar.name}
+                                        width={200}
+                                        height={300}
+                                        className={styles.avatarImage}
+                                        unoptimized
+                                    />
                                     <span className={styles.avatarName}>{avatar.name}</span>
                                 </div>
                             ))}
