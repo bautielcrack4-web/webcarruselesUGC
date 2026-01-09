@@ -8,31 +8,31 @@ import styles from './FAQ.module.css';
 const faqs = [
     {
         q: "¿Cuántos videos puedo hacer con cada plan?",
-        a: "Depende de la duración: un video de 10s cuesta 30 créditos y uno de 15s cuesta 45. Por tanto: Starter ~1-2 videos, Pro ~3-5 videos y Business ~11-16 videos al mes."
+        a: "Depende de la duración elegida. Por ejemplo, en el plan Starter puedes generar hasta 12 videos de 15s. En el plan Pro hasta 40 videos de 15s (o 20 de 30s), y en el plan Business hasta 120 videos de 15s (o 30 de 60s)."
     },
     {
         q: "¿Cuál es la duración máxima de los UGCs?",
-        a: "Actualmente cada video tiene una duración máxima de 15 segundos. Es el estándar ideal para retener la atención en TikTok y Reels."
+        a: "Varía según tu plan: Starter permite hasta 15 segundos, Pro hasta 30 segundos y Business hasta 60 segundos por video. Ofrecemos total flexibilidad para adaptarnos a tu estrategia de TikTok, Reels o YouTube."
     },
     {
-        q: "¿Puedo subir mi propio avatar o rostro?",
-        a: "Por el momento no. Lo único que está disponible es subir foto de tu producto y describir al avatar que quieres para que la IA lo genere."
+        q: "¿Puedo usar mi propio rostro para los videos?",
+        a: "¡Sí! Puedes usar la función 'Talking Photo' para subir una foto tuya o de cualquier persona y la IA la hará hablar de forma realista. También disponemos de una galería de avatares stock premium listos para usar."
     },
     {
         q: "¿Puedo generar anuncios en diferentes idiomas?",
-        a: "Sí. Adfork soporta español, inglés, portugués, francés, alemán y más. Estamos ampliando a más idiomas poco a poco."
+        a: "Sí. Soportamos más de 10 idiomas con voces premium, incluyendo español, inglés, portugués, francés, alemán, italiano y más. Cada video suena natural y profesional."
     },
     {
-        q: "¿Puedo mostrar productos físicos en los videos?",
-        a: "Sí, solo pídele en el prompt que el avatar muestre o use el producto y la IA lo integrará en el video."
+        q: "¿Cómo funcionan los créditos?",
+        a: "Cada duración tiene un costo fijo: 15s cuesta 45 créditos, 30s cuesta 90 créditos y 60s cuesta 180 créditos. Los créditos de tu plan se renuevan cada mes y puedes comprar packs extra si los necesitas."
     },
     {
-        q: "¿Los rostros generados son consistentes entre un video y otro?",
-        a: "No por el momento, pero puedes describir físicamente al avatar que quieres y la IA lo hará tal y como se lo pidas con palabras."
+        q: "¿Los videos tienen marca de agua?",
+        a: "No. Todos nuestros planes de pago incluyen exportaciones en alta definición (4k/HD) sin marcas de agua y con derechos de uso comercial completo."
     },
     {
         q: "¿Hay versión gratuita?",
-        a: "No tenemos versión gratuita, pero todos los planes incluyen descargas sin marca de agua y uso comercial desde el inicio. Así te aseguras de que cada anuncio que hagas ya es usable y profesional."
+        a: "No tenemos versión gratuita permanentemente, pero nuestro plan Starter es la forma más económica de empezar a generar contenido publicitario de alta conversión con tecnología HeyGen de última generación."
     }
 ];
 

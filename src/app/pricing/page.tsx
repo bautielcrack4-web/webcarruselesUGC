@@ -9,14 +9,15 @@ export default function PricingPage() {
             name: 'Starter',
             price: '$29',
             period: '/month',
-            credits: '50 credits/month',
+            credits: '540 credits/month',
             features: [
-                '50 video generation credits per month',
+                '540 video generation credits per month',
+                'Generate up to 12 videos (15s each)',
+                'Max duration: 15 seconds per video',
                 'Access to all AI avatars',
                 'Multi-language support',
                 '9:16 vertical format export',
-                'Email support',
-                'Credits expire monthly'
+                'Email support'
             ],
             cta: 'Elegir Plan',
             popular: false
@@ -25,14 +26,15 @@ export default function PricingPage() {
             name: 'Pro',
             price: '$79',
             period: '/month',
-            credits: '150 credits/month',
+            credits: '1,800 credits/month',
             features: [
-                '150 video generation credits per month',
+                '1,800 video generation credits per month',
+                'Generate up to 40 videos (15s each)',
+                'Max duration: 30 seconds per video',
                 'Access to all AI avatars',
                 'Multi-language support',
                 '9:16 vertical format export',
                 'Priority email support',
-                'Credits expire monthly',
                 'Early access to new features'
             ],
             cta: 'Elegir Plan',
@@ -42,14 +44,15 @@ export default function PricingPage() {
             name: 'Business',
             price: '$199',
             period: '/month',
-            credits: '500 credits/month',
+            credits: '5,400 credits/month',
             features: [
-                '500 video generation credits per month',
+                '5,400 video generation credits per month',
+                'Generate up to 120 videos (15s each)',
+                'Max duration: 60 seconds per video',
                 'Access to all AI avatars',
                 'Multi-language support',
                 '9:16 vertical format export',
                 'Priority support',
-                'Credits expire monthly',
                 'Early access to new features',
                 'Dedicated account manager'
             ],
@@ -108,7 +111,7 @@ export default function PricingPage() {
                     <div className={styles.creditGrid}>
                         <div className={styles.creditItem}>
                             <h3>📹 Video Generation</h3>
-                            <p>Each video costs credits based on length. A 10-second video costs 30 credits and a 15-second video costs 45 credits.</p>
+                            <p>Each video costs credits based on length. 15s costs 45 credits, 30s costs 90 credits, and 60s costs 180 credits.</p>
                         </div>
                         <div className={styles.creditItem}>
                             <h3>🔄 Monthly Reset</h3>
