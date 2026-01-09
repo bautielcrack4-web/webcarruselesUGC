@@ -7,18 +7,18 @@ const API_KEY = process.env.HEYGEN_API_KEY;
 
 // Curated Stock Avatars from HeyGen (UGC-optimized selection)
 export const STOCK_AVATARS = [
-    { id: 'Kristin_pubblic_2_20240108', name: 'Kristin', gender: 'female', style: 'casual', preview: 'https://files.heygen.ai/avatar/v3/Kristin_pubblic_2_20240108/full_body.webp' },
-    { id: 'Josh_lite2_20230714', name: 'Josh', gender: 'male', style: 'casual', preview: 'https://files.heygen.ai/avatar/v3/Josh_lite2_20230714/full_body.webp' },
-    { id: 'Anna_public_3_20240108', name: 'Anna', gender: 'female', style: 'professional', preview: 'https://files.heygen.ai/avatar/v3/Anna_public_3_20240108/full_body.webp' },
-    { id: 'Tyler-incasualsuit-20220721', name: 'Tyler', gender: 'male', style: 'professional', preview: 'https://files.heygen.ai/avatar/v3/Tyler-incasualsuit-20220721/full_body.webp' },
-    { id: 'Kayla-incasualsuit-20220818', name: 'Kayla', gender: 'female', style: 'energetic', preview: 'https://files.heygen.ai/avatar/v3/Kayla-incasualsuit-20220818/full_body.webp' },
-    { id: 'Edward_public_pro2_20230615', name: 'Edward', gender: 'male', style: 'friendly', preview: 'https://files.heygen.ai/avatar/v3/Edward_public_pro2_20230615/full_body.webp' },
-    { id: 'Monica_public_2_20240108', name: 'Monica', gender: 'female', style: 'warm', preview: 'https://files.heygen.ai/avatar/v3/Monica_public_2_20240108/full_body.webp' },
-    { id: 'Wayne_public_2_20240108', name: 'Wayne', gender: 'male', style: 'confident', preview: 'https://files.heygen.ai/avatar/v3/Wayne_public_2_20240108/full_body.webp' },
-    { id: 'Susan_public_2_20240108', name: 'Susan', gender: 'female', style: 'elegant', preview: 'https://files.heygen.ai/avatar/v3/Susan_public_2_20240108/full_body.webp' },
-    { id: 'Max_public_2_20240108', name: 'Max', gender: 'male', style: 'dynamic', preview: 'https://files.heygen.ai/avatar/v3/Max_public_2_20240108/full_body.webp' },
-    { id: 'Lily_public_pro1_20230614', name: 'Lily', gender: 'female', style: 'youthful', preview: 'https://files.heygen.ai/avatar/v3/Lily_public_pro1_20230614/full_body.webp' },
-    { id: 'Paul_public_pro3_20230616', name: 'Paul', gender: 'male', style: 'mature', preview: 'https://files.heygen.ai/avatar/v3/Paul_public_pro3_20230616/full_body.webp' },
+    { id: 'Kristin_public_2_20240108', name: 'Kristin', gender: 'female', style: 'casual', preview: 'https://files.heygen.ai/avatar/v3/f94222a03cee4adaa110761a374cfadc_13181/preview_talk_5.webp' },
+    { id: 'josh_lite3_20230714', name: 'Josh', gender: 'male', style: 'casual', preview: 'https://files.heygen.ai/avatar/v3/10063c743f114722ab6538b35905c51c_3013/preview_target.webp' },
+    { id: 'Anna_public_3_20240108', name: 'Anna', gender: 'female', style: 'professional', preview: 'https://files.heygen.ai/avatar/v3/3c427d8c81414355b04c2b25a1e7873a_13216/preview_talk_3.webp' },
+    { id: 'Tyler-incasualsuit-20220721', name: 'Tyler', gender: 'male', style: 'professional', preview: 'https://files.heygen.ai/avatar/v3/79b245561ad448e796b7e77cd2773d0b_14263/preview_talk_11.webp' },
+    { id: 'Kayla-incasualsuit-20220818', name: 'Kayla', gender: 'female', style: 'energetic', preview: 'https://files.heygen.ai/avatar/v3/bf83f0f830794d90b509ba6524962e05_1079/preview_talk_2.webp' },
+    { id: 'Eric_public_pro2_20230608', name: 'Edward', gender: 'male', style: 'friendly', preview: 'https://files.heygen.ai/avatar/v3/bab998cb82fb4423b521341a9e962017_2662/preview_target.webp' },
+    { id: 'Briana_public_3_20240110', name: 'Briana', gender: 'female', style: 'warm', preview: 'https://files.heygen.ai/avatar/v3/e50a097f50b541749c318dfedfe9c640_13311/preview_talk_4.webp' },
+    { id: 'Wayne_20240711', name: 'Wayne', gender: 'male', style: 'confident', preview: 'https://files2.heygen.ai/avatar/v3/a3fdb0c652024f79984aaec11ebf2694_34350/preview_target.webp' },
+    { id: 'Susan_public_2_20240328', name: 'Susan', gender: 'female', style: 'elegant', preview: 'https://files.heygen.ai/avatar/v3/5dc05aef0295473da983300f43abf7fd_17860/preview_talk_5.webp' },
+    { id: 'Justin_public_3_20240308', name: 'Justin', gender: 'male', style: 'dynamic', preview: 'https://files.heygen.ai/avatar/v3/9ae54bef2c444d68bbbb63021df4bbbb_14944/preview_target.webp' },
+    { id: 'Lily_public_pro1_20230614', name: 'Lily', gender: 'female', style: 'youthful', preview: 'https://files.heygen.ai/avatar/v3/51267c0f0f2045518a8c66bb1709bf2a_2654/preview_target.webp' },
+    { id: 'Wade_public_2_20240228', name: 'Wade', gender: 'male', style: 'mature', preview: 'https://files.heygen.ai/avatar/v3/2bf6af4afbc24ad0ae8e1f2f5a8ac25b_15204/preview_talk_3.webp' },
 ];
 
 export interface HeyGenVideoSettings {
